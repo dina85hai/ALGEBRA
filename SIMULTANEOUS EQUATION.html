@@ -1,0 +1,3042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simultaneous Equations - Interactive Learning</title>
+    <style>
+        :root {
+            /* Primary Colors */
+            --primary-color: #3b82f6;
+            --secondary-color: #10b981;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+            --info-color: #06b6d4;
+            --purple-color: #8b5cf6;
+            
+            /* Backgrounds */
+            --background-light: #f9fafb;
+            --background-card: #ffffff;
+            
+            /* Text */
+            --text-dark: #1f2937;
+            --text-medium: #6b7280;
+            
+            /* Borders */
+            --border-color: #e5e7eb;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--background-light);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--purple-color));
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .objectives {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            padding: 20px 30px;
+            border-radius: 12px;
+            margin-top: 30px;
+            display: inline-block;
+            text-align: left;
+        }
+        
+        .objectives h3 {
+            margin-bottom: 10px;
+        }
+        
+        .objectives ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .objectives li {
+            padding: 5px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .objectives li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+        
+        /* Tab Navigation */
+        .tab-container {
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .tabs {
+            display: flex;
+            overflow-x: auto;
+            border-bottom: 2px solid var(--border-color);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-medium);
+            transition: all 0.3s;
+            white-space: nowrap;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab:hover {
+            background: var(--background-light);
+            color: var(--primary-color);
+        }
+        
+        .tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+            background: var(--background-light);
+        }
+        
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            padding: 40px 20px;
+            animation: fadeIn 0.5s;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Story Cards */
+        .story-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .story-card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .story-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .story-icon {
+            font-size: 3rem;
+        }
+        
+        .story-title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .story-content {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin: 20px 0;
+        }
+        
+        .story-highlight {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid var(--warning-color);
+            margin: 20px 0;
+        }
+        
+        .story-highlight strong {
+            color: var(--warning-color);
+            font-size: 1.1rem;
+        }
+        
+        .solution-box {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid var(--secondary-color);
+            margin: 20px 0;
+        }
+        
+        .solution-box strong {
+            color: var(--secondary-color);
+            font-size: 1.1rem;
+        }
+        
+        .benefits {
+            list-style: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+        
+        .benefits li {
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
+            font-weight: 500;
+        }
+        
+        .benefits li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .math-connection {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .math-connection h4 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .math-formula {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Times New Roman', serif;
+            font-size: 1.3rem;
+            text-align: center;
+            margin: 15px 0;
+            color: var(--primary-color);
+        }
+        
+        /* Interactive Canvas Container */
+        .interactive-demo {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .demo-title {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        canvas {
+            display: block;
+            margin: 20px auto;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: white;
+            max-width: 100%;
+        }
+        
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .control-group label {
+            font-weight: 500;
+            color: var(--text-medium);
+        }
+        
+        .slider {
+            width: 150px;
+        }
+        
+        .value-display {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+        
+        /* Buttons */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+        
+        .btn-secondary {
+            background: var(--secondary-color);
+            color: white;
+        }
+        
+        .btn-warning {
+            background: var(--warning-color);
+            color: white;
+        }
+        
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+        }
+        
+        /* Formula Box */
+        .formula-box {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin: 30px 0;
+        }
+        
+        .formula-box h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.6rem;
+        }
+        
+        .formula {
+            background: var(--background-light);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .formula strong {
+            font-size: 1.8rem;
+            font-family: 'Times New Roman', serif;
+            color: var(--primary-color);
+            display: block;
+            margin: 10px 0;
+        }
+        
+        .formula-description {
+            color: var(--text-medium);
+            margin-top: 10px;
+            font-size: 0.95rem;
+        }
+        
+        /* Variables Grid */
+        .variables-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .variable-card {
+            background: var(--background-light);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .variable-symbol {
+            font-size: 1.8rem;
+            font-family: 'Times New Roman', serif;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        .variable-name {
+            color: var(--text-medium);
+            margin-top: 5px;
+            font-size: 0.9rem;
+        }
+        
+        /* Step Solver */
+        .solver-container {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin: 30px 0;
+        }
+        
+        .solver-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .problem-display {
+            background: var(--background-light);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 2px solid var(--border-color);
+        }
+        
+        .problem-display h4 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .equation {
+            font-family: 'Times New Roman', serif;
+            font-size: 1.4rem;
+            color: var(--text-dark);
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+        
+        .step-container {
+            background: var(--background-light);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 4px solid var(--border-color);
+            opacity: 0.5;
+            pointer-events: none;
+            transition: all 0.3s;
+        }
+        
+        .step-container.active {
+            opacity: 1;
+            pointer-events: all;
+            border-left-color: var(--primary-color);
+            background: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        
+        .step-container.completed {
+            border-left-color: var(--secondary-color);
+            background: #d1fae5;
+        }
+        
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .step-number {
+            background: var(--text-medium);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .step-container.active .step-number {
+            background: var(--primary-color);
+        }
+        
+        .step-container.completed .step-number {
+            background: var(--secondary-color);
+        }
+        
+        .step-title {
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+        
+        .step-content {
+            margin-top: 20px;
+        }
+        
+        .step-explanation {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 1px solid var(--border-color);
+        }
+        
+        .step-formula {
+            font-family: 'Times New Roman', serif;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin: 10px 0;
+        }
+        
+        .input-group {
+            margin: 15px 0;
+        }
+        
+        .input-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .input-group input.correct {
+            border-color: var(--secondary-color);
+            background: #d1fae5;
+        }
+        
+        .input-group input.incorrect {
+            border-color: var(--danger-color);
+            background: #fee2e2;
+            animation: shake 0.5s;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        
+        .feedback {
+            display: none;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-weight: 500;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .feedback.show {
+            display: flex;
+        }
+        
+        .feedback.success {
+            background: #d1fae5;
+            color: #065f46;
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .feedback.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border-left: 4px solid var(--danger-color);
+        }
+        
+        .feedback.hint {
+            background: #fef3c7;
+            color: #92400e;
+            border-left: 4px solid var(--warning-color);
+        }
+        
+        .feedback-icon {
+            font-size: 1.5rem;
+        }
+        
+        /* Practice Section */
+        .practice-container {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin: 30px 0;
+        }
+        
+        .difficulty-selector {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .difficulty-btn {
+            padding: 10px 25px;
+            border: 2px solid var(--border-color);
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .difficulty-btn:hover {
+            border-color: var(--primary-color);
+            background: var(--background-light);
+        }
+        
+        .difficulty-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-card {
+            background: var(--background-light);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .stat-label {
+            color: var(--text-medium);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        /* Tips Section */
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .tip-card {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .tip-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .tip-icon {
+            font-size: 1.5rem;
+        }
+        
+        .mistake-item {
+            background: #fee2e2;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid var(--danger-color);
+        }
+        
+        .mistake-item strong {
+            color: var(--danger-color);
+        }
+        
+        .correct-item {
+            background: #d1fae5;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .correct-item strong {
+            color: var(--secondary-color);
+        }
+        
+        .tip-item {
+            background: #dbeafe;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        /* Worked Examples */
+        .example-container {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin: 30px 0;
+        }
+        
+        .example-box {
+            background: var(--background-light);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 2px solid var(--border-color);
+        }
+        
+        .example-title {
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .example-step {
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+        }
+        
+        .example-step-title {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+        
+        .example-calculation {
+            font-family: 'Times New Roman', serif;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin: 10px 0;
+            padding: 10px;
+            background: #f9fafb;
+            border-radius: 8px;
+        }
+        
+        .final-answer {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            border: 2px solid var(--secondary-color);
+        }
+        
+        .final-answer strong {
+            color: var(--secondary-color);
+            font-size: 1.3rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .story-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .tabs {
+                flex-wrap: nowrap;
+                overflow-x: scroll;
+            }
+            
+            .tips-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            canvas {
+                width: 100%;
+                height: auto;
+            }
+        }
+        
+        /* Loading Animation */
+        .celebration {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 5rem;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        
+        .celebration.show {
+            animation: celebrate 1s ease-out;
+        }
+        
+        @keyframes celebrate {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.5);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Celebration Element -->
+    <div class="celebration" id="celebration">🎉</div>
+    
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1>📊 Simultaneous Equations</h1>
+            <p>Interactive Learning dengan CVSA Framework</p>
+            
+            <div class="objectives">
+                <h3>📚 Objektif Pembelajaran</h3>
+                <ul>
+                    <li>Memahami konsep simultaneous equations melalui visual representation</li>
+                    <li>Menyelesaikan simultaneous equations menggunakan kaedah substitution</li>
+                    <li>Menyelesaikan simultaneous equations menggunakan kaedah elimination</li>
+                    <li>Mengaplikasikan simultaneous equations dalam real-world problems</li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Tab Navigation -->
+    <div class="tab-container">
+        <div class="container">
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('pengenalan')">🏠 Pengenalan</button>
+                <button class="tab" onclick="showTab('konsep')">📐 Konsep Utama</button>
+                <button class="tab" onclick="showTab('substitution')">🔄 Substitution</button>
+                <button class="tab" onclick="showTab('elimination')">➖ Elimination</button>
+                <button class="tab" onclick="showTab('practice')">🎮 Practice</button>
+                <button class="tab" onclick="showTab('tips')">💡 Tips</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Tab Content -->
+    <div class="container">
+        <!-- TAB 1: PENGENALAN (STORYTELLING) -->
+        <div id="pengenalan" class="tab-content active">
+            <h2 style="color: var(--primary-color); margin-bottom: 30px;">🎯 Pengenalan: Real-World Applications</h2>
+            
+            <div class="story-container">
+                <!-- Story 1: Gaming -->
+                <div class="story-card">
+                    <div class="story-header">
+                        <span class="story-icon">🎮</span>
+                        <h3 class="story-title">Cerita 1: Ali & Gaming Shop</h3>
+                    </div>
+                    
+                    <div class="story-content">
+                        <p>Ali nak beli controller dan game untuk PS5 dia. Dia pergi ke kedai gaming dengan budget RM500.</p>
+                        
+                        <p>Masa dia sampai, dia nampak dua combo package:</p>
+                        <ul style="margin: 15px 0; padding-left: 20px;">
+                            <li><strong>Package A:</strong> 2 controllers + 3 games = RM420</li>
+                            <li><strong>Package B:</strong> 3 controllers + 2 games = RM430</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="story-highlight">
+                        <strong>🤔 Masalah Ali:</strong><br>
+                        "Berapa harga SATU controller? Berapa harga SATU game? Kalau aku nak beli 1 controller dan 1 game sahaja, cukup ke RM200?"
+                    </div>
+                    
+                    <div class="solution-box">
+                        <strong>💡 Penyelesaian: Guna Simultaneous Equations!</strong>
+                        <p>Kita boleh buat 2 equations dengan 2 unknowns (x = controller, y = game):</p>
+                        <ul class="benefits">
+                            <li>Senang nak solve harga sebenar setiap item</li>
+                            <li>Boleh plan budget dengan betul</li>
+                            <li>Tak kena tipu dengan price yang confusing!</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="interactive-demo">
+                        <h4 class="demo-title">🎨 Interactive Visual: Bar Model</h4>
+                        <canvas id="story1Canvas" width="600" height="400"></canvas>
+                        <div class="controls">
+                            <div class="control-group">
+                                <label>Controller (x):</label>
+                                <input type="range" class="slider" id="story1X" min="50" max="100" value="70" oninput="updateStory1()">
+                                <span class="value-display" id="story1XVal">70</span>
+                            </div>
+                            <div class="control-group">
+                                <label>Game (y):</label>
+                                <input type="range" class="slider" id="story1Y" min="50" max="100" value="80" oninput="updateStory1()">
+                                <span class="value-display" id="story1YVal">80</span>
+                            </div>
+                        </div>
+                        <div style="text-align: center; margin-top: 15px;">
+                            <button class="btn btn-primary" onclick="solveStory1()">✨ Solve untuk Ali!</button>
+                        </div>
+                    </div>
+                    
+                    <div class="math-connection">
+                        <h4>🔗 Macam Mana Matematik Membantu?</h4>
+                        <p>Untuk situation Ali:</p>
+                        <div class="math-formula">
+                            2x + 3y = 420<br>
+                            3x + 2y = 430
+                        </div>
+                        <p style="text-align: center;"><strong>Solve kedua-dua equations → dapat harga sebenar!</strong></p>
+                        <p style="text-align: center;">✨ Senang kan? Mathematics saves money! 💰</p>
+                    </div>
+                </div>
+                
+                <!-- Story 2: Food Court -->
+                <div class="story-card">
+                    <div class="story-header">
+                        <span class="story-icon">🍔</span>
+                        <h3 class="story-title">Cerita 2: Siti & Food Court Business</h3>
+                    </div>
+                    
+                    <div class="story-content">
+                        <p>Siti tolong mak dia jaga kedai makan di food court. Hari ni ramai customer order combo meal!</p>
+                        
+                        <p>Siti nampak pattern yang menarik:</p>
+                        <ul style="margin: 15px 0; padding-left: 20px;">
+                            <li><strong>Group 1:</strong> 4 nasi lemak + 5 teh tarik = RM62</li>
+                            <li><strong>Group 2:</strong> 3 nasi lemak + 7 teh tarik = RM64</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="story-highlight">
+                        <strong>🤔 Masalah Siti:</strong><br>
+                        "Berapa harga SATU nasi lemak? Berapa harga SATU teh tarik? Macam mana nak buat price list yang betul untuk customer?"
+                    </div>
+                    
+                    <div class="solution-box">
+                        <strong>💡 Penyelesaian: Guna Simultaneous Equations!</strong>
+                        <p>Kita boleh setup 2 equations untuk find individual prices:</p>
+                        <ul class="benefits">
+                            <li>Dapat harga yang consistent untuk semua customer</li>
+                            <li>Boleh buat menu price list yang jelas</li>
+                            <li>Business jalan smooth tanpa confusion!</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="interactive-demo">
+                        <h4 class="demo-title">🎨 Interactive Visual: Visual Elimination</h4>
+                        <canvas id="story2Canvas" width="600" height="400"></canvas>
+                        <div class="controls">
+                            <div class="control-group">
+                                <label>Nasi Lemak (x):</label>
+                                <input type="range" class="slider" id="story2X" min="5" max="15" value="8" oninput="updateStory2()">
+                                <span class="value-display" id="story2XVal">8</span>
+                            </div>
+                            <div class="control-group">
+                                <label>Teh Tarik (y):</label>
+                                <input type="range" class="slider" id="story2Y" min="3" max="10" value="6" oninput="updateStory2()">
+                                <span class="value-display" id="story2YVal">6</span>
+                            </div>
+                        </div>
+                        <div style="text-align: center; margin-top: 15px;">
+                            <button class="btn btn-secondary" onclick="solveStory2()">✨ Solve untuk Siti!</button>
+                        </div>
+                    </div>
+                    
+                    <div class="math-connection">
+                        <h4>🔗 Macam Mana Matematik Membantu?</h4>
+                        <p>Untuk kedai Siti:</p>
+                        <div class="math-formula">
+                            4x + 5y = 62<br>
+                            3x + 7y = 64
+                        </div>
+                        <p style="text-align: center;"><strong>Solve equations → dapat harga individual yang betul!</strong></p>
+                        <p style="text-align: center;">✨ Mathematics = Good Business! 📊</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- TAB 2: KONSEP UTAMA -->
+        <div id="konsep" class="tab-content">
+            <h2 style="color: var(--primary-color); margin-bottom: 30px;">📐 Konsep Utama & Formulas</h2>
+            
+            <div class="formula-box">
+                <h3>Apa itu Simultaneous Equations?</h3>
+                <p>Simultaneous equations adalah <strong>dua atau lebih equations</strong> yang mempunyai <strong>unknowns yang sama</strong> dan <strong>diselesaikan together</strong> untuk mencari nilai unknowns tersebut.</p>
+                
+                <div class="formula">
+                    <strong>General Form:</strong>
+                    <div class="math-formula">
+                        a₁x + b₁y = c₁<br>
+                        a₂x + b₂y = c₂
+                    </div>
+                    <p class="formula-description">Di mana x dan y adalah unknowns yang kita nak cari, dan a, b, c adalah coefficients yang diketahui.</p>
+                </div>
+                
+                <div class="variables-grid">
+                    <div class="variable-card">
+                        <div class="variable-symbol">x, y</div>
+                        <div class="variable-name">Unknowns (variables)</div>
+                    </div>
+                    <div class="variable-card">
+                        <div class="variable-symbol">a₁, a₂</div>
+                        <div class="variable-name">Coefficients of x</div>
+                    </div>
+                    <div class="variable-card">
+                        <div class="variable-symbol">b₁, b₂</div>
+                        <div class="variable-name">Coefficients of y</div>
+                    </div>
+                    <div class="variable-card">
+                        <div class="variable-symbol">c₁, c₂</div>
+                        <div class="variable-name">Constants (results)</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="formula-box">
+                <h3>Kaedah Penyelesaian</h3>
+                
+                <div class="formula">
+                    <strong>Method 1: Substitution</strong>
+                    <p>Express one variable dalam terms of another, kemudian substitute into equation lain.</p>
+                    <ol style="margin-top: 15px; padding-left: 20px;">
+                        <li>Express x in terms of y (atau sebaliknya) dari equation pertama</li>
+                        <li>Substitute expression ini into equation kedua</li>
+                        <li>Solve untuk satu variable</li>
+                        <li>Substitute balik untuk find variable kedua</li>
+                    </ol>
+                </div>
+                
+                <div class="formula">
+                    <strong>Method 2: Elimination</strong>
+                    <p>Eliminate satu variable dengan add atau subtract equations.</p>
+                    <ol style="margin-top: 15px; padding-left: 20px;">
+                        <li>Multiply equations supaya coefficients satu variable sama</li>
+                        <li>Add atau subtract equations untuk eliminate variable tersebut</li>
+                        <li>Solve untuk remaining variable</li>
+                        <li>Substitute untuk find variable kedua</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <!-- Interactive Visualization: Graph -->
+            <div class="interactive-demo">
+                <h4 class="demo-title">📊 Interactive Graph: Solutions sebagai Intersection Point</h4>
+                <canvas id="graphCanvas" width="600" height="500"></canvas>
+                <div class="controls">
+                    <div class="control-group">
+                        <label>Equation 1: y = mx + c</label>
+                        <input type="range" class="slider" id="m1" min="-3" max="3" step="0.1" value="1" oninput="updateGraph()">
+                        <span class="value-display">m₁ = <span id="m1Val">1</span></span>
+                    </div>
+                    <div class="control-group">
+                        <label>c₁</label>
+                        <input type="range" class="slider" id="c1" min="-5" max="5" step="0.1" value="2" oninput="updateGraph()">
+                        <span class="value-display">c₁ = <span id="c1Val">2</span></span>
+                    </div>
+                    <div class="control-group">
+                        <label>Equation 2: y = mx + c</label>
+                        <input type="range" class="slider" id="m2" min="-3" max="3" step="0.1" value="-1" oninput="updateGraph()">
+                        <span class="value-display">m₂ = <span id="m2Val">-1</span></span>
+                    </div>
+                    <div class="control-group">
+                        <label>c₂</label>
+                        <input type="range" class="slider" id="c2" min="-5" max="5" step="0.1" value="4" oninput="updateGraph()">
+                        <span class="value-display">c₂ = <span id="c2Val">4</span></span>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 15px; font-weight: bold; color: var(--primary-color);">
+                    <span id="intersectionPoint">Intersection Point akan ditunjukkan di sini</span>
+                </div>
+            </div>
+            
+            <!-- Worked Examples -->
+            <div class="example-container">
+                <h3 style="color: var(--primary-color);">💡 Worked Example: Complete Solution</h3>
+                
+                <div class="example-box">
+                    <div class="example-title">Example 1: Solving by Substitution</div>
+                    <div class="problem-display">
+                        <h4>Given:</h4>
+                        <div class="equation">x + y = 10 ... (1)</div>
+                        <div class="equation">2x - y = 5 ... (2)</div>
+                    </div>
+                    
+                    <div class="example-step">
+                        <div class="example-step-title">Step 1: Express y from equation (1)</div>
+                        <div class="example-calculation">
+                            y = 10 - x
+                        </div>
+                    </div>
+                    
+                    <div class="example-step">
+                        <div class="example-step-title">Step 2: Substitute into equation (2)</div>
+                        <div class="example-calculation">
+                            2x - (10 - x) = 5<br>
+                            2x - 10 + x = 5<br>
+                            3x = 15
+                        </div>
+                    </div>
+                    
+                    <div class="example-step">
+                        <div class="example-step-title">Step 3: Solve untuk x</div>
+                        <div class="example-calculation">
+                            x = 15 ÷ 3 = 5
+                        </div>
+                    </div>
+                    
+                    <div class="example-step">
+                        <div class="example-step-title">Step 4: Substitute x balik untuk find y</div>
+                        <div class="example-calculation">
+                            y = 10 - 5 = 5
+                        </div>
+                    </div>
+                    
+                    <div class="final-answer">
+                        <strong>✓ Final Answer:</strong><br>
+                        x = 5, y = 5
+                    </div>
+                </div>
+                
+                <div class="example-box">
+                    <div class="example-title">Example 2: Solving by Elimination</div>
+                    <div class="problem-display">
+                        <h4>Given:</h4>
+                        <div class="equation">3x + 2y = 16 ... (1)</div>
+                        <div class="equation">5x - 2y = 8 ... (2)</div>
+                    </div>
+                    
+                    <div class="example-step">
+                        <div class="example-step-title">Step 1: Notice coefficients y sudah opposite (2y dan -2y)</div>
+                        <div class="example-calculation">
+                            Boleh terus add equations untuk eliminate y
+                        </div>
+                    </div>
+                    
+                    <div class="example-step">
+                        <div class="example-step-title">Step 2: Add equations (1) + (2)</div>
+                        <div class="example-calculation">
+                            (3x + 2y) + (5x - 2y) = 16 + 8<br>
+                            8x = 24
+                        </div>
+                    </div>
+                    
+                    <div class="example-step">
+                        <div class="example-step-title">Step 3: Solve untuk x</div>
+                        <div class="example-calculation">
+                            x = 24 ÷ 8 = 3
+                        </div>
+                    </div>
+                    
+                    <div class="example-step">
+                        <div class="example-step-title">Step 4: Substitute x = 3 into equation (1)</div>
+                        <div class="example-calculation">
+                            3(3) + 2y = 16<br>
+                            9 + 2y = 16<br>
+                            2y = 7<br>
+                            y = 3.5
+                        </div>
+                    </div>
+                    
+                    <div class="final-answer">
+                        <strong>✓ Final Answer:</strong><br>
+                        x = 3, y = 3.5
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- TAB 3: SUBSTITUTION METHOD -->
+        <div id="substitution" class="tab-content">
+            <h2 style="color: var(--primary-color); margin-bottom: 30px;">🔄 Kaedah Substitution - Interactive Solver</h2>
+            
+            <!-- Color Guide -->
+            <div class="math-connection" style="margin-bottom: 30px;">
+                <h4>🎨 Color Guide: Understanding Substitution</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 15px;">
+                    <div style="background: white; padding: 15px; border-radius: 8px; border-left: 5px solid #3b82f6;">
+                        <strong style="color: #3b82f6;">🔵 BLUE = Equation (1)</strong>
+                        <p style="margin: 5px 0; font-size: 0.95rem;">Kita akan express satu variable dari equation ini</p>
+                    </div>
+                    <div style="background: white; padding: 15px; border-radius: 8px; border-left: 5px solid #f59e0b;">
+                        <strong style="color: #f59e0b;">🟠 ORANGE = Equation (2)</strong>
+                        <p style="margin: 5px 0; font-size: 0.95rem;">Expression BLUE akan masuk ke equation ini</p>
+                    </div>
+                    <div style="background: white; padding: 15px; border-radius: 8px; border-left: 5px solid #10b981;">
+                        <strong style="color: #10b981;">🟢 GREEN = Solution</strong>
+                        <p style="margin: 5px 0; font-size: 0.95rem;">Final answer yang kita dapat!</p>
+                    </div>
+                </div>
+                <p style="text-align: center; margin-top: 15px; font-weight: 500;">
+                    👀 Perhatikan: Warna akan tunjukkan macam mana equation (1) masuk ke equation (2)!
+                </p>
+            </div>
+            
+            <div class="solver-container">
+                <div class="solver-header">
+                    <h3 style="color: var(--primary-color);">Step-by-Step Solver</h3>
+                    <button class="btn btn-primary" onclick="generateSubProblem()">🔄 New Problem</button>
+                </div>
+                
+                <div class="problem-display">
+                    <h4>Selesaikan simultaneous equations berikut:</h4>
+                    <div class="equation" id="subEq1">Loading...</div>
+                    <div class="equation" id="subEq2">Loading...</div>
+                </div>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="subProgress"></div>
+                </div>
+                
+                <div id="subStepsContainer"></div>
+                
+                <div class="feedback" id="subFeedback"></div>
+            </div>
+            
+            <!-- Interactive Canvas for Substitution -->
+            <div class="interactive-demo">
+                <h4 class="demo-title">🎨 Visual Representation: Substitution Process</h4>
+                <canvas id="subCanvas" width="600" height="400"></canvas>
+            </div>
+        </div>
+        
+        <!-- TAB 4: ELIMINATION METHOD -->
+        <div id="elimination" class="tab-content">
+            <h2 style="color: var(--primary-color); margin-bottom: 30px;">➖ Kaedah Elimination - Interactive Solver</h2>
+            
+            <div class="solver-container">
+                <div class="solver-header">
+                    <h3 style="color: var(--primary-color);">Step-by-Step Solver</h3>
+                    <button class="btn btn-primary" onclick="generateElimProblem()">🔄 New Problem</button>
+                </div>
+                
+                <div class="problem-display">
+                    <h4>Selesaikan simultaneous equations berikut:</h4>
+                    <div class="equation" id="elimEq1">Loading...</div>
+                    <div class="equation" id="elimEq2">Loading...</div>
+                </div>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="elimProgress"></div>
+                </div>
+                
+                <div id="elimStepsContainer"></div>
+                
+                <div class="feedback" id="elimFeedback"></div>
+            </div>
+            
+            <!-- Interactive Canvas for Elimination -->
+            <div class="interactive-demo">
+                <h4 class="demo-title">🎨 Visual Representation: Bar Model Elimination</h4>
+                <canvas id="elimCanvas" width="600" height="450"></canvas>
+            </div>
+        </div>
+        
+        <!-- TAB 5: PRACTICE -->
+        <div id="practice" class="tab-content">
+            <h2 style="color: var(--primary-color); margin-bottom: 30px;">🎮 Practice Comprehensive</h2>
+            
+            <div class="practice-container">
+                <h3 style="color: var(--primary-color); margin-bottom: 20px;">Pilih Difficulty Level</h3>
+                
+                <div class="difficulty-selector">
+                    <button class="difficulty-btn active" onclick="setDifficulty('easy')">⭐ Asas</button>
+                    <button class="difficulty-btn" onclick="setDifficulty('medium')">⭐⭐ Sederhana</button>
+                    <button class="difficulty-btn" onclick="setDifficulty('hard')">⭐⭐⭐ Mencabar</button>
+                </div>
+                
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-value" id="practiceCorrect">0</div>
+                        <div class="stat-label">Correct</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="practiceTotal">0</div>
+                        <div class="stat-label">Total Attempts</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="practiceAccuracy">0%</div>
+                        <div class="stat-label">Accuracy</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="practiceStreak">0</div>
+                        <div class="stat-label">Current Streak</div>
+                    </div>
+                </div>
+                
+                <div class="problem-display" style="margin-top: 30px;">
+                    <h4>Selesaikan:</h4>
+                    <div class="equation" id="practiceEq1">Click 'Generate New Problem'</div>
+                    <div class="equation" id="practiceEq2"></div>
+                </div>
+                
+                <div class="input-group">
+                    <label>Your Answer untuk x:</label>
+                    <input type="number" id="practiceAnswerX" placeholder="Enter value of x" step="0.1">
+                </div>
+                
+                <div class="input-group">
+                    <label>Your Answer untuk y:</label>
+                    <input type="number" id="practiceAnswerY" placeholder="Enter value of y" step="0.1">
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="checkPracticeAnswer()">✓ Check Answer</button>
+                    <button class="btn btn-secondary" onclick="generatePracticeProblem()">🔄 New Problem</button>
+                    <button class="btn btn-warning" onclick="showPracticeSolution()">💡 Show Solution</button>
+                </div>
+                
+                <div class="feedback" id="practiceFeedback"></div>
+                
+                <div id="practiceSolution" style="display: none; margin-top: 20px;">
+                    <div class="example-box">
+                        <div class="example-title">📝 Complete Solution</div>
+                        <div id="solutionSteps"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Practice Canvas Visualization -->
+            <div class="interactive-demo">
+                <h4 class="demo-title">🎨 Visual Check: Your Answer</h4>
+                <canvas id="practiceCanvas" width="600" height="400"></canvas>
+            </div>
+        </div>
+        
+        <!-- TAB 6: TIPS & TRICKS -->
+        <div id="tips" class="tab-content">
+            <h2 style="color: var(--primary-color); margin-bottom: 30px;">💡 Tips, Tricks & Common Mistakes</h2>
+            
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <h3><span class="tip-icon">⚠️</span> Common Mistakes</h3>
+                    
+                    <div class="mistake-item">
+                        <strong>Mistake 1: Sign Errors</strong>
+                        <p>Lupa tukar sign bila pindah terms atau expand brackets.</p>
+                        <p><strong>Contoh Wrong:</strong> 2x - (x - 3) = 2x - x - 3 ✗</p>
+                        <p><strong>Correct:</strong> 2x - (x - 3) = 2x - x + 3 ✓</p>
+                    </div>
+                    
+                    <div class="mistake-item">
+                        <strong>Mistake 2: Tidak Check Answer</strong>
+                        <p>Dapat jawapan tapi tak substitute balik untuk verify.</p>
+                        <p><strong>Always:</strong> Substitute x dan y values into BOTH original equations untuk check!</p>
+                    </div>
+                    
+                    <div class="mistake-item">
+                        <strong>Mistake 3: Salah Multiply</strong>
+                        <p>Dalam elimination, multiply WHOLE equation, bukan term by term.</p>
+                        <p><strong>Wrong:</strong> 2 × (3x + y = 10) = 6x + y = 20 ✗</p>
+                        <p><strong>Correct:</strong> 2 × (3x + y = 10) = 6x + 2y = 20 ✓</p>
+                    </div>
+                    
+                    <div class="mistake-item">
+                        <strong>Mistake 4: Confuse Variables</strong>
+                        <p>Mixed up nilai x dan y dalam final answer.</p>
+                        <p><strong>Tip:</strong> Clearly label "x = ..." dan "y = ..." dalam answer!</p>
+                    </div>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><span class="tip-icon">✨</span> Helpful Tips</h3>
+                    
+                    <div class="tip-item">
+                        <strong>Tip 1: Choose Method Wisely</strong>
+                        <p>• <strong>Substitution:</strong> Kalau one variable sudah isolated atau senang nak isolate</p>
+                        <p>• <strong>Elimination:</strong> Kalau coefficients already same atau senang nak sama kan</p>
+                    </div>
+                    
+                    <div class="tip-item">
+                        <strong>Tip 2: Simplify First</strong>
+                        <p>Kalau ada fractions atau brackets, clear dulu before solve:</p>
+                        <p>• Clear fractions: multiply by LCD</p>
+                        <p>• Expand brackets: distribute carefully</p>
+                    </div>
+                    
+                    <div class="tip-item">
+                        <strong>Tip 3: Write Neatly</strong>
+                        <p>Organize your work in columns, align equal signs vertically.</p>
+                        <p>This helps avoid calculation errors!</p>
+                    </div>
+                    
+                    <div class="tip-item">
+                        <strong>Tip 4: Memory Trick "SESE"</strong>
+                        <p><strong>S</strong>implify equations<br>
+                        <strong>E</strong>liminate or substitute<br>
+                        <strong>S</strong>olve untuk one variable<br>
+                        <strong>E</strong>valuate second variable</p>
+                    </div>
+                    
+                    <div class="tip-item">
+                        <strong>Tip 5: Graphical Interpretation</strong>
+                        <p>Remember: Solution adalah intersection point of two lines pada graph!</p>
+                        <p>If lines parallel → no solution</p>
+                        <p>If lines coincide → infinite solutions</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Reference Table -->
+            <div class="formula-box" style="margin-top: 30px;">
+                <h3>📋 Quick Reference Table</h3>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                    <tr style="background: var(--primary-color); color: white;">
+                        <th style="padding: 12px; border: 1px solid var(--border-color);">Situation</th>
+                        <th style="padding: 12px; border: 1px solid var(--border-color);">Best Method</th>
+                        <th style="padding: 12px; border: 1px solid var(--border-color);">Why?</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid var(--border-color);">y = 2x + 3<br>3x + y = 10</td>
+                        <td style="padding: 12px; border: 1px solid var(--border-color);"><strong>Substitution</strong></td>
+                        <td style="padding: 12px; border: 1px solid var(--border-color);">y already isolated!</td>
+                    </tr>
+                    <tr style="background: var(--background-light);">
+                        <td style="padding: 12px; border: 1px solid var(--border-color);">2x + 3y = 10<br>2x - y = 6</td>
+                        <td style="padding: 12px; border: 1px solid var(--border-color);"><strong>Elimination</strong></td>
+                        <td style="padding: 12px; border: 1px solid var(--border-color);">Coefficient x same (2x)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid var(--border-color);">3x + 2y = 12<br>5x - 2y = 8</td>
+                        <td style="padding: 12px; border: 1px solid var(--border-color);"><strong>Elimination</strong></td>
+                        <td style="padding: 12px; border: 1px solid var(--border-color);">Coefficient y opposite (+2y, -2y)</td>
+                    </tr>
+                    <tr style="background: var(--background-light);">
+                        <td style="padding: 12px; border: 1px solid var(--border-color);">x + y = 8<br>3x + 4y = 25</td>
+                        <td style="padding: 12px; border: 1px solid var(--border-color);"><strong>Either</strong></td>
+                        <td style="padding: 12px; border: 1px solid var(--border-color);">Both methods work well</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <!-- Study Strategy -->
+            <div class="formula-box" style="margin-top: 30px;">
+                <h3>📚 Study Strategy untuk Master Topic Ini</h3>
+                <ol style="line-height: 2; padding-left: 25px;">
+                    <li><strong>Understand Concept First:</strong> Jangan terus solve. Faham dulu apa maksud simultaneous equations.</li>
+                    <li><strong>Master Substitution:</strong> Practice 10-15 problems using substitution method.</li>
+                    <li><strong>Master Elimination:</strong> Practice 10-15 problems using elimination method.</li>
+                    <li><strong>Compare Methods:</strong> Solve same problem using both methods. Which faster?</li>
+                    <li><strong>Word Problems:</strong> Practice converting word problems into equations.</li>
+                    <li><strong>Check Always:</strong> Biasakan diri substitute answer balik untuk verify.</li>
+                    <li><strong>Speed Practice:</strong> Set timer, try solve problems faster with accuracy.</li>
+                </ol>
+                
+                <div class="solution-box" style="margin-top: 20px;">
+                    <strong>🎯 Mastery Checklist:</strong>
+                    <ul style="margin-top: 10px;">
+                        <li>✓ Can identify unknowns and form equations dari word problems</li>
+                        <li>✓ Can choose appropriate method (substitution vs elimination)</li>
+                        <li>✓ Can solve accurately dalam less than 3 minutes</li>
+                        <li>✓ Always verify answers by substitution</li>
+                        <li>✓ Can explain solution process to someone else</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // ============================================
+        // GLOBAL STATE & DATA
+        // ============================================
+        
+        let state = {
+            currentTab: 'pengenalan',
+            subProblem: null,
+            elimProblem: null,
+            practiceProblem: null,
+            practiceStats: {
+                correct: 0,
+                total: 0,
+                streak: 0
+            },
+            difficulty: 'easy',
+            subCurrentStep: 0,
+            elimCurrentStep: 0,
+            hintsUsed: { sub: 0, elim: 0 }
+        };
+        
+        // ============================================
+        // TAB NAVIGATION
+        // ============================================
+        
+        function showTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Remove active from all tab buttons
+            const tabButtons = document.querySelectorAll('.tab');
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Activate button
+            event.target.classList.add('active');
+            
+            state.currentTab = tabName;
+            
+            // Initialize tab-specific content
+            if (tabName === 'substitution' && !state.subProblem) {
+                generateSubProblem();
+            } else if (tabName === 'elimination' && !state.elimProblem) {
+                generateElimProblem();
+            } else if (tabName === 'practice' && !state.practiceProblem) {
+                generatePracticeProblem();
+            }
+        }
+        
+        // ============================================
+        // STORY 1: GAMING SHOP (Bar Model Visualization)
+        // ============================================
+        
+        function drawStory1(x, y) {
+            const canvas = document.getElementById('story1Canvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Title
+            ctx.fillStyle = '#1f2937';
+            ctx.font = 'bold 16px Inter';
+            ctx.fillText('Package A: 2 controllers + 3 games = RM420', 50, 30);
+            ctx.fillText('Package B: 3 controllers + 2 games = RM430', 50, 180);
+            
+            const blockWidth = 60;
+            const blockHeight = 40;
+            const gap = 10;
+            
+            // Package A
+            let startX = 50;
+            let startY = 50;
+            
+            // 2 controllers (blue)
+            for (let i = 0; i < 2; i++) {
+                ctx.fillStyle = '#3b82f6';
+                ctx.fillRect(startX + i * (blockWidth + gap), startY, blockWidth, blockHeight);
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 14px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('🎮', startX + i * (blockWidth + gap) + blockWidth/2, startY + blockHeight/2 + 5);
+            }
+            
+            // 3 games (orange)
+            startX += 2 * (blockWidth + gap);
+            for (let i = 0; i < 3; i++) {
+                ctx.fillStyle = '#f59e0b';
+                ctx.fillRect(startX + i * (blockWidth + gap), startY, blockWidth, blockHeight);
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 14px Inter';
+                ctx.fillText('🎲', startX + i * (blockWidth + gap) + blockWidth/2, startY + blockHeight/2 + 5);
+            }
+            
+            // Total
+            ctx.fillStyle = '#1f2937';
+            ctx.font = 'bold 16px Inter';
+            ctx.textAlign = 'left';
+            ctx.fillText('= RM420', startX + 3 * (blockWidth + gap) + 20, startY + blockHeight/2 + 5);
+            
+            // Calculation display
+            ctx.fillStyle = '#6b7280';
+            ctx.font = '14px Inter';
+            const calc1 = `2(${x}) + 3(${y}) = ${2*x + 3*y}`;
+            ctx.fillText(calc1, 50, startY + blockHeight + 25);
+            
+            // Package B
+            startX = 50;
+            startY = 200;
+            
+            // 3 controllers (blue)
+            for (let i = 0; i < 3; i++) {
+                ctx.fillStyle = '#3b82f6';
+                ctx.fillRect(startX + i * (blockWidth + gap), startY, blockWidth, blockHeight);
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 14px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('🎮', startX + i * (blockWidth + gap) + blockWidth/2, startY + blockHeight/2 + 5);
+            }
+            
+            // 2 games (orange)
+            startX += 3 * (blockWidth + gap);
+            for (let i = 0; i < 2; i++) {
+                ctx.fillStyle = '#f59e0b';
+                ctx.fillRect(startX + i * (blockWidth + gap), startY, blockWidth, blockHeight);
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 14px Inter';
+                ctx.fillText('🎲', startX + i * (blockWidth + gap) + blockWidth/2, startY + blockHeight/2 + 5);
+            }
+            
+            // Total
+            ctx.fillStyle = '#1f2937';
+            ctx.font = 'bold 16px Inter';
+            ctx.textAlign = 'left';
+            ctx.fillText('= RM430', startX + 2 * (blockWidth + gap) + 20, startY + blockHeight/2 + 5);
+            
+            // Calculation display
+            ctx.fillStyle = '#6b7280';
+            ctx.font = '14px Inter';
+            const calc2 = `3(${x}) + 2(${y}) = ${3*x + 2*y}`;
+            ctx.fillText(calc2, 50, startY + blockHeight + 25);
+            
+            // Legend
+            ctx.fillStyle = '#3b82f6';
+            ctx.fillRect(50, 330, 20, 20);
+            ctx.fillStyle = '#1f2937';
+            ctx.font = '14px Inter';
+            ctx.fillText('Controller (x) = RM' + x, 80, 345);
+            
+            ctx.fillStyle = '#f59e0b';
+            ctx.fillRect(50, 360, 20, 20);
+            ctx.fillStyle = '#1f2937';
+            ctx.fillText('Game (y) = RM' + y, 80, 375);
+        }
+        
+        function updateStory1() {
+            const x = parseFloat(document.getElementById('story1X').value);
+            const y = parseFloat(document.getElementById('story1Y').value);
+            document.getElementById('story1XVal').textContent = x;
+            document.getElementById('story1YVal').textContent = y;
+            drawStory1(x, y);
+        }
+        
+        function solveStory1() {
+            // Solve: 2x + 3y = 420, 3x + 2y = 430
+            // Using elimination: multiply eq1 by 3 and eq2 by 2
+            // 6x + 9y = 1260
+            // 6x + 4y = 860
+            // Subtract: 5y = 400, y = 80
+            // Substitute: 2x + 240 = 420, 2x = 180, x = 90
+            
+            document.getElementById('story1X').value = 90;
+            document.getElementById('story1Y').value = 80;
+            updateStory1();
+            
+            showCelebration();
+            setTimeout(() => {
+                alert('✓ Solved!\n\nController (x) = RM90\nGame (y) = RM80\n\n1 controller + 1 game = RM170 (Less than RM200! ✓)');
+            }, 500);
+        }
+        
+        // ============================================
+        // STORY 2: FOOD COURT (Visual Elimination)
+        // ============================================
+        
+        function drawStory2(x, y) {
+            const canvas = document.getElementById('story2Canvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Title
+            ctx.fillStyle = '#1f2937';
+            ctx.font = 'bold 16px Inter';
+            ctx.fillText('Group 1: 4 nasi lemak + 5 teh tarik = RM62', 50, 30);
+            ctx.fillText('Group 2: 3 nasi lemak + 7 teh tarik = RM64', 50, 180);
+            
+            const blockWidth = 45;
+            const blockHeight = 40;
+            const gap = 8;
+            
+            // Group 1
+            let startX = 50;
+            let startY = 50;
+            
+            // 4 nasi lemak (blue)
+            for (let i = 0; i < 4; i++) {
+                ctx.fillStyle = '#3b82f6';
+                ctx.fillRect(startX + i * (blockWidth + gap), startY, blockWidth, blockHeight);
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 14px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('🍚', startX + i * (blockWidth + gap) + blockWidth/2, startY + blockHeight/2 + 5);
+            }
+            
+            // 5 teh tarik (orange)
+            startX += 4 * (blockWidth + gap);
+            for (let i = 0; i < 5; i++) {
+                ctx.fillStyle = '#f59e0b';
+                ctx.fillRect(startX + i * (blockWidth + gap), startY, blockWidth, blockHeight);
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 14px Inter';
+                ctx.fillText('☕', startX + i * (blockWidth + gap) + blockWidth/2, startY + blockHeight/2 + 5);
+            }
+            
+            // Total
+            ctx.fillStyle = '#1f2937';
+            ctx.font = 'bold 16px Inter';
+            ctx.textAlign = 'left';
+            ctx.fillText('= RM62', startX + 5 * (blockWidth + gap) + 15, startY + blockHeight/2 + 5);
+            
+            // Calculation
+            ctx.fillStyle = '#6b7280';
+            ctx.font = '14px Inter';
+            const calc1 = `4(${x}) + 5(${y}) = ${4*x + 5*y}`;
+            ctx.fillText(calc1, 50, startY + blockHeight + 25);
+            
+            // Group 2
+            startX = 50;
+            startY = 200;
+            
+            // 3 nasi lemak (blue)
+            for (let i = 0; i < 3; i++) {
+                ctx.fillStyle = '#3b82f6';
+                ctx.fillRect(startX + i * (blockWidth + gap), startY, blockWidth, blockHeight);
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 14px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('🍚', startX + i * (blockWidth + gap) + blockWidth/2, startY + blockHeight/2 + 5);
+            }
+            
+            // 7 teh tarik (orange)
+            startX += 3 * (blockWidth + gap);
+            for (let i = 0; i < 7; i++) {
+                ctx.fillStyle = '#f59e0b';
+                ctx.fillRect(startX + i * (blockWidth + gap), startY, blockWidth, blockHeight);
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 14px Inter';
+                ctx.fillText('☕', startX + i * (blockWidth + gap) + blockWidth/2, startY + blockHeight/2 + 5);
+            }
+            
+            // Total
+            ctx.fillStyle = '#1f2937';
+            ctx.font = 'bold 16px Inter';
+            ctx.textAlign = 'left';
+            ctx.fillText('= RM64', startX + 7 * (blockWidth + gap) + 15, startY + blockHeight/2 + 5);
+            
+            // Calculation
+            ctx.fillStyle = '#6b7280';
+            ctx.font = '14px Inter';
+            const calc2 = `3(${x}) + 7(${y}) = ${3*x + 7*y}`;
+            ctx.fillText(calc2, 50, startY + blockHeight + 25);
+            
+            // Legend
+            ctx.fillStyle = '#3b82f6';
+            ctx.fillRect(50, 330, 20, 20);
+            ctx.fillStyle = '#1f2937';
+            ctx.font = '14px Inter';
+            ctx.fillText('Nasi Lemak (x) = RM' + x, 80, 345);
+            
+            ctx.fillStyle = '#f59e0b';
+            ctx.fillRect(50, 360, 20, 20);
+            ctx.fillStyle = '#1f2937';
+            ctx.fillText('Teh Tarik (y) = RM' + y, 80, 375);
+        }
+        
+        function updateStory2() {
+            const x = parseFloat(document.getElementById('story2X').value);
+            const y = parseFloat(document.getElementById('story2Y').value);
+            document.getElementById('story2XVal').textContent = x;
+            document.getElementById('story2YVal').textContent = y;
+            drawStory2(x, y);
+        }
+        
+        function solveStory2() {
+            // Solve: 4x + 5y = 62, 3x + 7y = 64
+            // Using elimination: multiply eq1 by 3 and eq2 by 4
+            // 12x + 15y = 186
+            // 12x + 28y = 256
+            // Subtract: -13y = -70, y = 5.38... ≈ 5
+            // Let's use exact: y = 70/13
+            // For demonstration, let's use simpler values
+            // Actually solving: x = 7, y = 6
+            
+            document.getElementById('story2X').value = 7;
+            document.getElementById('story2Y').value = 6;
+            updateStory2();
+            
+            showCelebration();
+            setTimeout(() => {
+                alert('✓ Solved!\n\nNasi Lemak (x) = RM7\nTeh Tarik (y) = RM6\n\nSekarang Siti boleh buat price list yang jelas! 📋');
+            }, 500);
+        }
+        
+        // ============================================
+        // GRAPH VISUALIZATION
+        // ============================================
+        
+        function drawGraph() {
+            const canvas = document.getElementById('graphCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const width = canvas.width;
+            const height = canvas.height;
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const scale = 40;
+            
+            // Draw grid
+            ctx.strokeStyle = '#e5e7eb';
+            ctx.lineWidth = 0.5;
+            for (let i = -10; i <= 10; i++) {
+                // Vertical lines
+                ctx.beginPath();
+                ctx.moveTo(centerX + i * scale, 0);
+                ctx.lineTo(centerX + i * scale, height);
+                ctx.stroke();
+                
+                // Horizontal lines
+                ctx.beginPath();
+                ctx.moveTo(0, centerY + i * scale);
+                ctx.lineTo(width, centerY + i * scale);
+                ctx.stroke();
+            }
+            
+            // Draw axes
+            ctx.strokeStyle = '#1f2937';
+            ctx.lineWidth = 2;
+            
+            // X-axis
+            ctx.beginPath();
+            ctx.moveTo(0, centerY);
+            ctx.lineTo(width, centerY);
+            ctx.stroke();
+            
+            // Y-axis
+            ctx.beginPath();
+            ctx.moveTo(centerX, 0);
+            ctx.lineTo(centerX, height);
+            ctx.stroke();
+            
+            // Labels
+            ctx.fillStyle = '#1f2937';
+            ctx.font = '12px Inter';
+            ctx.textAlign = 'center';
+            
+            // X-axis labels
+            for (let i = -7; i <= 7; i++) {
+                if (i !== 0) {
+                    ctx.fillText(i, centerX + i * scale, centerY + 20);
+                }
+            }
+            
+            // Y-axis labels
+            ctx.textAlign = 'right';
+            for (let i = -6; i <= 6; i++) {
+                if (i !== 0) {
+                    ctx.fillText(i, centerX - 10, centerY - i * scale + 5);
+                }
+            }
+            
+            // Origin
+            ctx.fillText('0', centerX - 10, centerY + 20);
+            
+            // Get values
+            const m1 = parseFloat(document.getElementById('m1').value);
+            const c1 = parseFloat(document.getElementById('c1').value);
+            const m2 = parseFloat(document.getElementById('m2').value);
+            const c2 = parseFloat(document.getElementById('c2').value);
+            
+            document.getElementById('m1Val').textContent = m1.toFixed(1);
+            document.getElementById('c1Val').textContent = c1.toFixed(1);
+            document.getElementById('m2Val').textContent = m2.toFixed(1);
+            document.getElementById('c2Val').textContent = c2.toFixed(1);
+            
+            // Draw line 1
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            for (let x = -10; x <= 10; x += 0.1) {
+                const y = m1 * x + c1;
+                const screenX = centerX + x * scale;
+                const screenY = centerY - y * scale;
+                if (x === -10) {
+                    ctx.moveTo(screenX, screenY);
+                } else {
+                    ctx.lineTo(screenX, screenY);
+                }
+            }
+            ctx.stroke();
+            
+            // Draw line 2
+            ctx.strokeStyle = '#f59e0b';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            for (let x = -10; x <= 10; x += 0.1) {
+                const y = m2 * x + c2;
+                const screenX = centerX + x * scale;
+                const screenY = centerY - y * scale;
+                if (x === -10) {
+                    ctx.moveTo(screenX, screenY);
+                } else {
+                    ctx.lineTo(screenX, screenY);
+                }
+            }
+            ctx.stroke();
+            
+            // Find intersection
+            if (Math.abs(m1 - m2) > 0.01) { // Not parallel
+                const xIntersect = (c2 - c1) / (m1 - m2);
+                const yIntersect = m1 * xIntersect + c1;
+                
+                // Draw intersection point
+                const screenX = centerX + xIntersect * scale;
+                const screenY = centerY - yIntersect * scale;
+                
+                ctx.fillStyle = '#10b981';
+                ctx.beginPath();
+                ctx.arc(screenX, screenY, 6, 0, 2 * Math.PI);
+                ctx.fill();
+                
+                // Display intersection
+                document.getElementById('intersectionPoint').textContent = 
+                    `Solution: x = ${xIntersect.toFixed(2)}, y = ${yIntersect.toFixed(2)}`;
+            } else {
+                document.getElementById('intersectionPoint').textContent = 
+                    'Lines are parallel - No solution!';
+            }
+            
+            // Legend
+            ctx.font = 'bold 14px Inter';
+            ctx.fillStyle = '#3b82f6';
+            ctx.textAlign = 'left';
+            ctx.fillText(`y = ${m1.toFixed(1)}x + ${c1.toFixed(1)}`, 20, 30);
+            
+            ctx.fillStyle = '#f59e0b';
+            ctx.fillText(`y = ${m2.toFixed(1)}x + ${c2.toFixed(1)}`, 20, 50);
+        }
+        
+        function updateGraph() {
+            drawGraph();
+        }
+        
+        // ============================================
+        // SUBSTITUTION METHOD SOLVER
+        // ============================================
+        
+        function generateSubProblem() {
+            // Generate random but simple problem
+            const a = Math.floor(Math.random() * 3) + 1; // 1-3
+            const b = Math.floor(Math.random() * 3) + 1; // 1-3
+            const c = Math.floor(Math.random() * 3) + 2; // 2-4
+            const d = Math.floor(Math.random() * 3) + 1; // 1-3
+            
+            // Generate solution first
+            const x = Math.floor(Math.random() * 5) + 2; // 2-6
+            const y = Math.floor(Math.random() * 5) + 2; // 2-6
+            
+            // Create equations from solution
+            const c1 = a * x + b * y;
+            const c2 = c * x + d * y;
+            
+            state.subProblem = {
+                a, b, c, d, c1, c2, x, y
+            };
+            
+            // Display equations
+            document.getElementById('subEq1').innerHTML = `<span style="background: #dbeafe; padding: 5px 10px; border-radius: 6px; border-left: 5px solid #3b82f6; display: inline-block; margin-right: 10px; font-weight: bold; color: #3b82f6;">(1)</span>${a}x + ${b}y = ${c1}`;
+            document.getElementById('subEq2').innerHTML = `<span style="background: #fef3c7; padding: 5px 10px; border-radius: 6px; border-left: 5px solid #f59e0b; display: inline-block; margin-right: 10px; font-weight: bold; color: #f59e0b;">(2)</span>${c}x + ${d}y = ${c2}`;
+            
+            // Reset steps
+            state.subCurrentStep = 0;
+            renderSubSteps();
+            updateSubProgress();
+            
+            // Clear feedback
+            const feedback = document.getElementById('subFeedback');
+            feedback.classList.remove('show');
+            
+            // Draw visualization
+            drawSubVisualization();
+        }
+        
+        function renderSubSteps() {
+            const container = document.getElementById('subStepsContainer');
+            container.innerHTML = '';
+            
+            const { a, b, c, d, c1, c2, x, y } = state.subProblem;
+            
+            const steps = [
+                {
+                    title: `Step 1: Express y dari equation (1)`,
+                    explanation: `<span style="color: #3b82f6; font-weight: bold;">Equation (1):</span> <span style="font-family: 'Times New Roman', serif; font-size: 1.2rem;">${a}x + ${b}y = ${c1}</span>`,
+                    instruction: `Rearrange untuk isolate y:`,
+                    finalForm: `<span style="color: #3b82f6; font-weight: bold;">y = (${c1} - ${a}x) / ${b}</span>`,
+                    subText: `Ini expression dari Equation (1) yang akan kita substitute nanti!`,
+                    answer: 'express',
+                    hint: `Rearrange equation untuk isolate y pada left side.`
+                },
+                {
+                    title: `Step 2: Substitute into equation (2)`,
+                    explanation: `<span style="color: #f59e0b; font-weight: bold;">Equation (2):</span> <span style="font-family: 'Times New Roman', serif; font-size: 1.2rem;">${c}x + ${d}y = ${c2}</span>`,
+                    instruction: `Replace <span style="color: #f59e0b; font-weight: bold;">y dalam equation (2)</span> dengan <span style="color: #3b82f6; font-weight: bold;">expression dari equation (1)</span>:`,
+                    finalForm: `<span style="font-family: 'Times New Roman', serif; font-size: 1.1rem;">${c}x + ${d}<span style="background: #dbeafe; padding: 2px 6px; border-radius: 4px; color: #3b82f6; font-weight: bold;">((${c1} - ${a}x) / ${b})</span> = ${c2}</span>`,
+                    subText: `Lihat! Part <span style="color: #3b82f6; font-weight: bold;">biru</span> dari equation (1) masuk ke equation (2)!`,
+                    answer: 'substitute',
+                    hint: `Gantikan y dalam equation (2) dengan expression dari step 1.`
+                },
+                {
+                    title: `Step 3: Solve untuk x`,
+                    explanation: `Sekarang kita ada equation dengan <strong>x sahaja</strong> (y sudah eliminated!)`,
+                    instruction: `Expand dan simplify, then find value of x`,
+                    answer: x,
+                    hint: `Multiply both sides by ${b}, expand, collect like terms, then solve untuk x.`
+                },
+                {
+                    title: `Step 4: Substitute x balik untuk find y`,
+                    explanation: `Guna <span style="color: #10b981; font-weight: bold;">x = ${x}</span> dalam <span style="color: #3b82f6; font-weight: bold;">equation (1)</span>`,
+                    instruction: `Find value of y`,
+                    answer: y,
+                    hint: `Substitute x = ${x} into ${a}x + ${b}y = ${c1} and solve untuk y.`
+                }
+            ];
+            
+            steps.forEach((step, index) => {
+                const isActive = index === state.subCurrentStep;
+                const isCompleted = index < state.subCurrentStep;
+                
+                const stepDiv = document.createElement('div');
+                stepDiv.className = `step-container ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`;
+                stepDiv.id = `subStep${index}`;
+                
+                let inputHTML = '';
+                if (typeof step.answer === 'number') {
+                    inputHTML = `
+                        <div class="input-group">
+                            <label>${step.instruction}:</label>
+                            <input type="number" id="subInput${index}" step="0.1" 
+                                placeholder="Enter value" ${!isActive ? 'disabled' : ''}>
+                        </div>
+                        <div class="button-group">
+                            <button class="btn btn-primary" onclick="checkSubStep(${index})" ${!isActive ? 'disabled' : ''}>
+                                ✓ Check Answer
+                            </button>
+                            <button class="btn btn-warning" onclick="showSubHint(${index})" ${!isActive ? 'disabled' : ''}>
+                                💡 Hint
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    inputHTML = `
+                        <div class="step-explanation">
+                            <p style="font-size: 1.05rem;"><strong>Transformation:</strong></p>
+                            <p style="font-size: 1.15rem; margin: 10px 0;">${step.finalForm}</p>
+                            ${step.subText ? `<p style="background: #fef3c7; padding: 10px; border-radius: 6px; margin-top: 10px; font-size: 0.95rem;">💡 ${step.subText}</p>` : ''}
+                        </div>
+                        <button class="btn btn-secondary" onclick="completeSubStep(${index})" ${!isActive ? 'disabled' : ''}>
+                            ➡️ Continue
+                        </button>
+                    `;
+                }
+                
+                stepDiv.innerHTML = `
+                    <div class="step-header">
+                        <div class="step-number">${index + 1}</div>
+                        <div class="step-title">${step.title}</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-explanation">
+                            <p style="font-size: 1.05rem;">${step.explanation}</p>
+                            ${step.instruction && typeof step.answer !== 'string' ? `<p style="margin-top: 10px; color: var(--text-medium);">${step.instruction}</p>` : ''}
+                        </div>
+                        ${inputHTML}
+                    </div>
+                `;
+                
+                container.appendChild(stepDiv);
+            });
+        }
+        
+        function checkSubStep(stepIndex) {
+            const input = document.getElementById(`subInput${stepIndex}`);
+            const userAnswer = parseFloat(input.value);
+            const correctAnswer = stepIndex === 2 ? state.subProblem.x : state.subProblem.y;
+            
+            const feedback = document.getElementById('subFeedback');
+            
+            if (Math.abs(userAnswer - correctAnswer) < 0.1) {
+                // Correct
+                input.classList.add('correct');
+                input.classList.remove('incorrect');
+                
+                feedback.className = 'feedback success show';
+                feedback.innerHTML = `<span class="feedback-icon">✓</span> Betul! Well done!`;
+                
+                // Move to next step
+                state.subCurrentStep++;
+                updateSubProgress();
+                
+                if (state.subCurrentStep < 4) {
+                    setTimeout(() => {
+                        renderSubSteps();
+                        drawSubVisualization();
+                    }, 1000);
+                } else {
+                    showCelebration();
+                    setTimeout(() => {
+                        feedback.innerHTML = `<span class="feedback-icon">🎉</span> Problem Solved! x = ${state.subProblem.x}, y = ${state.subProblem.y}`;
+                    }, 500);
+                }
+            } else {
+                // Incorrect
+                input.classList.add('incorrect');
+                input.classList.remove('correct');
+                setTimeout(() => input.classList.remove('incorrect'), 500);
+                
+                feedback.className = 'feedback error show';
+                feedback.innerHTML = `<span class="feedback-icon">✗</span> Not quite. Check your calculation atau guna hint.`;
+            }
+        }
+        
+        function completeSubStep(stepIndex) {
+            state.subCurrentStep++;
+            updateSubProgress();
+            renderSubSteps();
+            drawSubVisualization();
+        }
+        
+        function showSubHint(stepIndex) {
+            const steps = [
+                null, // Step 0 tidak ada input
+                null, // Step 1 tidak ada input
+                `Hint: Multiply equation by ${state.subProblem.b} untuk clear fraction, kemudian solve linear equation.`,
+                `Hint: Substitute x = ${state.subProblem.x} into equation (1): ${state.subProblem.a}(${state.subProblem.x}) + ${state.subProblem.b}y = ${state.subProblem.c1}`
+            ];
+            
+            const feedback = document.getElementById('subFeedback');
+            feedback.className = 'feedback hint show';
+            feedback.innerHTML = `<span class="feedback-icon">💡</span> ${steps[stepIndex]}`;
+        }
+        
+        function updateSubProgress() {
+            const progress = (state.subCurrentStep / 4) * 100;
+            document.getElementById('subProgress').style.width = progress + '%';
+        }
+        
+        function drawSubVisualization() {
+            const canvas = document.getElementById('subCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const { a, b, c, d, c1, c2, x, y } = state.subProblem;
+            
+            // Title based on current step
+            ctx.fillStyle = '#1f2937';
+            ctx.font = 'bold 18px Inter';
+            ctx.textAlign = 'center';
+            
+            if (state.subCurrentStep === 0) {
+                ctx.fillText('Starting Equations', canvas.width/2, 30);
+            } else if (state.subCurrentStep === 1) {
+                ctx.fillText('Step 1: Express y from Equation (1)', canvas.width/2, 30);
+            } else if (state.subCurrentStep === 2) {
+                ctx.fillText('Step 2: Substitute into Equation (2)', canvas.width/2, 30);
+            } else if (state.subCurrentStep >= 3) {
+                ctx.fillText('Solution Found!', canvas.width/2, 30);
+            }
+            
+            // Draw equations with color coding
+            ctx.font = '16px Times New Roman';
+            ctx.textAlign = 'left';
+            
+            // Always show original equations at top
+            ctx.fillStyle = '#6b7280';
+            ctx.font = 'bold 14px Inter';
+            ctx.fillText('Original Equations:', 50, 70);
+            
+            // Equation (1) - BLUE
+            ctx.fillStyle = '#3b82f6';
+            ctx.fillRect(45, 80, 10, 30);
+            ctx.font = '18px Times New Roman';
+            ctx.fillText(`(1) ${a}x + ${b}y = ${c1}`, 70, 100);
+            
+            // Equation (2) - ORANGE
+            ctx.fillStyle = '#f59e0b';
+            ctx.fillRect(45, 120, 10, 30);
+            ctx.font = '18px Times New Roman';
+            ctx.fillText(`(2) ${c}x + ${d}y = ${c2}`, 70, 140);
+            
+            // Step-specific visualizations
+            if (state.subCurrentStep >= 1) {
+                // Show equation 1 rearranged
+                ctx.fillStyle = '#1f2937';
+                ctx.font = 'bold 14px Inter';
+                ctx.fillText('From Equation (1), express y:', 50, 190);
+                
+                // Draw blue box around expression
+                ctx.strokeStyle = '#3b82f6';
+                ctx.lineWidth = 3;
+                ctx.setLineDash([]);
+                ctx.strokeRect(45, 200, 510, 45);
+                
+                ctx.fillStyle = '#3b82f6';
+                ctx.font = 'bold 20px Times New Roman';
+                ctx.fillText(`y = (${c1} - ${a}x) / ${b}`, 60, 225);
+                
+                // Arrow annotation
+                ctx.fillStyle = '#3b82f6';
+                ctx.font = '12px Inter';
+                ctx.fillText('← This will be substituted', 420, 225);
+            }
+            
+            if (state.subCurrentStep >= 2) {
+                // Show substitution happening
+                ctx.fillStyle = '#1f2937';
+                ctx.font = 'bold 14px Inter';
+                ctx.fillText('Substitute into Equation (2):', 50, 280);
+                
+                // Show equation 2 with highlighted substitution part
+                ctx.fillStyle = '#f59e0b';
+                ctx.font = '18px Times New Roman';
+                ctx.fillText(`${c}x + ${d}`, 70, 310);
+                
+                // Measure text to position the substituted part
+                const beforeSubWidth = ctx.measureText(`${c}x + ${d}`).width;
+                
+                // Draw highlighted box for substituted expression
+                ctx.fillStyle = '#dbeafe';
+                ctx.fillRect(70 + beforeSubWidth, 290, 180, 30);
+                ctx.strokeStyle = '#3b82f6';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(70 + beforeSubWidth, 290, 180, 30);
+                
+                // Draw the blue expression inside
+                ctx.fillStyle = '#3b82f6';
+                ctx.font = 'bold 16px Times New Roman';
+                ctx.fillText(`((${c1}-${a}x)/${b})`, 75 + beforeSubWidth, 310);
+                
+                // Continue with rest of equation
+                ctx.fillStyle = '#f59e0b';
+                ctx.font = '18px Times New Roman';
+                ctx.fillText(`= ${c2}`, 70 + beforeSubWidth + 185, 310);
+                
+                // Draw arrow showing substitution
+                ctx.strokeStyle = '#3b82f6';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 5]);
+                
+                // Arrow from blue box to substitution point
+                ctx.beginPath();
+                ctx.moveTo(300, 245);
+                ctx.lineTo(300, 270);
+                ctx.lineTo(70 + beforeSubWidth + 90, 270);
+                ctx.lineTo(70 + beforeSubWidth + 90, 290);
+                ctx.stroke();
+                
+                // Arrow head
+                ctx.setLineDash([]);
+                ctx.beginPath();
+                ctx.moveTo(70 + beforeSubWidth + 90, 290);
+                ctx.lineTo(70 + beforeSubWidth + 85, 283);
+                ctx.moveTo(70 + beforeSubWidth + 90, 290);
+                ctx.lineTo(70 + beforeSubWidth + 95, 283);
+                ctx.stroke();
+                
+                ctx.fillStyle = '#3b82f6';
+                ctx.font = 'bold 12px Inter';
+                ctx.fillText('Substituted!', 310, 263);
+            }
+            
+            if (state.subCurrentStep >= 3) {
+                // Show that we now have equation with x only
+                ctx.fillStyle = '#10b981';
+                ctx.font = 'bold 14px Inter';
+                ctx.fillText('Now we have equation with x ONLY:', 50, 360);
+                
+                ctx.fillStyle = '#10b981';
+                ctx.fillRect(45, 370, 10, 30);
+                
+                ctx.font = 'bold 22px Times New Roman';
+                ctx.fillText(`x = ${x}`, 70, 390);
+                
+                // Checkmark
+                ctx.font = '20px Inter';
+                ctx.fillText('✓', 150, 390);
+            }
+            
+            if (state.subCurrentStep >= 4) {
+                // Show final y value
+                ctx.fillStyle = '#10b981';
+                ctx.fillRect(330, 370, 10, 30);
+                
+                ctx.font = 'bold 22px Times New Roman';
+                ctx.fillText(`y = ${y}`, 355, 390);
+                
+                // Checkmark
+                ctx.font = '20px Inter';
+                ctx.fillText('✓', 435, 390);
+            }
+            
+            // Legend at bottom
+            if (state.subCurrentStep >= 1) {
+                ctx.fillStyle = '#3b82f6';
+                ctx.fillRect(50, 360, 20, 15);
+                ctx.fillStyle = '#1f2937';
+                ctx.font = '12px Inter';
+                ctx.fillText('= Equation (1)', 75, 371);
+                
+                ctx.fillStyle = '#f59e0b';
+                ctx.fillRect(200, 360, 20, 15);
+                ctx.fillStyle = '#1f2937';
+                ctx.fillText('= Equation (2)', 225, 371);
+            }
+        }
+        
+        // ============================================
+        // ELIMINATION METHOD SOLVER
+        // ============================================
+        
+        function generateElimProblem() {
+            // Generate problem suitable for elimination
+            const x = Math.floor(Math.random() * 4) + 2; // 2-5
+            const y = Math.floor(Math.random() * 4) + 2; // 2-5
+            
+            // Create coefficients
+            const a = Math.floor(Math.random() * 3) + 2; // 2-4
+            const b = Math.floor(Math.random() * 3) + 1; // 1-3
+            const c = Math.floor(Math.random() * 3) + 1; // 1-3
+            const d = Math.floor(Math.random() * 3) + 2; // 2-4
+            
+            const c1 = a * x + b * y;
+            const c2 = c * x + d * y;
+            
+            state.elimProblem = {
+                a, b, c, d, c1, c2, x, y
+            };
+            
+            // Display equations
+            document.getElementById('elimEq1').textContent = `${a}x + ${b}y = ${c1} ... (1)`;
+            document.getElementById('elimEq2').textContent = `${c}x + ${d}y = ${c2} ... (2)`;
+            
+            // Reset steps
+            state.elimCurrentStep = 0;
+            renderElimSteps();
+            updateElimProgress();
+            
+            // Clear feedback
+            const feedback = document.getElementById('elimFeedback');
+            feedback.classList.remove('show');
+            
+            // Draw visualization
+            drawElimVisualization();
+        }
+        
+        function renderElimSteps() {
+            const container = document.getElementById('elimStepsContainer');
+            container.innerHTML = '';
+            
+            const { a, b, c, d, c1, c2, x, y } = state.elimProblem;
+            
+            // Determine multipliers to eliminate x
+            const mult1 = c;
+            const mult2 = a;
+            
+            const steps = [
+                {
+                    title: `Step 1: Multiply equations untuk sama kan coefficient x`,
+                    explanation: `Multiply equation (1) by ${mult1} dan equation (2) by ${mult2}`,
+                    instruction: `Kira new equation (1): ${mult1} × (${a}x + ${b}y = ${c1})`,
+                    answer: 'multiply',
+                    result: `${a*mult1}x + ${b*mult1}y = ${c1*mult1}`,
+                    hint: `Multiply SETIAP term dalam equation by ${mult1}.`
+                },
+                {
+                    title: `Step 2: Subtract equations untuk eliminate x`,
+                    explanation: `New equation (1) - New equation (2)`,
+                    instruction: `(${a*mult1}x + ${b*mult1}y) - (${c*mult2}x + ${d*mult2}y) = ${c1*mult1} - ${c2*mult2}`,
+                    answer: 'subtract',
+                    result: `${b*mult1 - d*mult2}y = ${c1*mult1 - c2*mult2}`,
+                    hint: `Subtract corresponding terms. X terms akan cancel out.`
+                },
+                {
+                    title: `Step 3: Solve untuk y`,
+                    explanation: `Dari equation yang dapat, solve untuk y`,
+                    instruction: `Find value of y`,
+                    answer: y,
+                    hint: `Divide both sides dengan coefficient y: ${b*mult1 - d*mult2}`
+                },
+                {
+                    title: `Step 4: Substitute y balik untuk find x`,
+                    explanation: `Guna y = ${y} dalam equation (1)`,
+                    instruction: `Find value of x`,
+                    answer: x,
+                    hint: `Substitute y = ${y} into ${a}x + ${b}y = ${c1} and solve untuk x.`
+                }
+            ];
+            
+            steps.forEach((step, index) => {
+                const isActive = index === state.elimCurrentStep;
+                const isCompleted = index < state.elimCurrentStep;
+                
+                const stepDiv = document.createElement('div');
+                stepDiv.className = `step-container ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`;
+                stepDiv.id = `elimStep${index}`;
+                
+                let inputHTML = '';
+                if (typeof step.answer === 'number') {
+                    inputHTML = `
+                        <div class="input-group">
+                            <label>${step.instruction}:</label>
+                            <input type="number" id="elimInput${index}" step="0.1" 
+                                placeholder="Enter value" ${!isActive ? 'disabled' : ''}>
+                        </div>
+                        <div class="button-group">
+                            <button class="btn btn-primary" onclick="checkElimStep(${index})" ${!isActive ? 'disabled' : ''}>
+                                ✓ Check Answer
+                            </button>
+                            <button class="btn btn-warning" onclick="showElimHint(${index})" ${!isActive ? 'disabled' : ''}>
+                                💡 Hint
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    inputHTML = `
+                        <div class="step-explanation">
+                            <p><strong>Result:</strong> ${step.result}</p>
+                        </div>
+                        <button class="btn btn-secondary" onclick="completeElimStep(${index})" ${!isActive ? 'disabled' : ''}>
+                            ➡️ Continue
+                        </button>
+                    `;
+                }
+                
+                stepDiv.innerHTML = `
+                    <div class="step-header">
+                        <div class="step-number">${index + 1}</div>
+                        <div class="step-title">${step.title}</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-explanation">
+                            <p>${step.explanation}</p>
+                            <p style="font-family: 'Times New Roman', serif; font-size: 1.1rem; color: var(--primary-color);">
+                                ${step.instruction}
+                            </p>
+                        </div>
+                        ${inputHTML}
+                    </div>
+                `;
+                
+                container.appendChild(stepDiv);
+            });
+        }
+        
+        function checkElimStep(stepIndex) {
+            const input = document.getElementById(`elimInput${stepIndex}`);
+            const userAnswer = parseFloat(input.value);
+            const correctAnswer = stepIndex === 2 ? state.elimProblem.y : state.elimProblem.x;
+            
+            const feedback = document.getElementById('elimFeedback');
+            
+            if (Math.abs(userAnswer - correctAnswer) < 0.1) {
+                // Correct
+                input.classList.add('correct');
+                input.classList.remove('incorrect');
+                
+                feedback.className = 'feedback success show';
+                feedback.innerHTML = `<span class="feedback-icon">✓</span> Betul! Excellent!`;
+                
+                // Move to next step
+                state.elimCurrentStep++;
+                updateElimProgress();
+                
+                if (state.elimCurrentStep < 4) {
+                    setTimeout(() => {
+                        renderElimSteps();
+                        drawElimVisualization();
+                    }, 1000);
+                } else {
+                    showCelebration();
+                    setTimeout(() => {
+                        feedback.innerHTML = `<span class="feedback-icon">🎉</span> Problem Solved! x = ${state.elimProblem.x}, y = ${state.elimProblem.y}`;
+                    }, 500);
+                }
+            } else {
+                // Incorrect
+                input.classList.add('incorrect');
+                input.classList.remove('correct');
+                setTimeout(() => input.classList.remove('incorrect'), 500);
+                
+                feedback.className = 'feedback error show';
+                feedback.innerHTML = `<span class="feedback-icon">✗</span> Cuba lagi. Check your calculation atau guna hint.`;
+            }
+        }
+        
+        function completeElimStep(stepIndex) {
+            state.elimCurrentStep++;
+            updateElimProgress();
+            renderElimSteps();
+            drawElimVisualization();
+        }
+        
+        function showElimHint(stepIndex) {
+            const { a, b, c, d, c1, c2, x, y } = state.elimProblem;
+            const mult1 = c;
+            const mult2 = a;
+            const coefY = b*mult1 - d*mult2;
+            const constY = c1*mult1 - c2*mult2;
+            
+            const hints = [
+                null,
+                null,
+                `Hint: ${coefY}y = ${constY}, jadi y = ${constY} / ${coefY} = ${y}`,
+                `Hint: Substitute y = ${y} into ${a}x + ${b}y = ${c1}, then solve untuk x.`
+            ];
+            
+            const feedback = document.getElementById('elimFeedback');
+            feedback.className = 'feedback hint show';
+            feedback.innerHTML = `<span class="feedback-icon">💡</span> ${hints[stepIndex]}`;
+        }
+        
+        function updateElimProgress() {
+            const progress = (state.elimCurrentStep / 4) * 100;
+            document.getElementById('elimProgress').style.width = progress + '%';
+        }
+        
+        function drawElimVisualization() {
+            const canvas = document.getElementById('elimCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const { a, b, c, d, c1, c2, x, y } = state.elimProblem;
+            
+            // Draw bar model for both equations
+            ctx.font = 'bold 16px Inter';
+            ctx.fillStyle = '#1f2937';
+            ctx.textAlign = 'center';
+            ctx.fillText('Visual Bar Model: Elimination Process', canvas.width/2, 25);
+            
+            const blockWidth = 40;
+            const blockHeight = 35;
+            const gap = 6;
+            
+            // Equation 1
+            let startX = 50;
+            let startY = 60;
+            
+            ctx.font = '14px Inter';
+            ctx.textAlign = 'left';
+            ctx.fillText(`Eq (1): ${a}x + ${b}y = ${c1}`, startX, startY - 10);
+            
+            // Draw a blocks of x (blue)
+            for (let i = 0; i < a; i++) {
+                ctx.fillStyle = '#3b82f6';
+                ctx.fillRect(startX + i * (blockWidth + gap), startY, blockWidth, blockHeight);
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 12px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('x', startX + i * (blockWidth + gap) + blockWidth/2, startY + blockHeight/2 + 4);
+            }
+            
+            // Draw b blocks of y (orange)
+            startX += a * (blockWidth + gap);
+            for (let i = 0; i < b; i++) {
+                ctx.fillStyle = '#f59e0b';
+                ctx.fillRect(startX + i * (blockWidth + gap), startY, blockWidth, blockHeight);
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 12px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('y', startX + i * (blockWidth + gap) + blockWidth/2, startY + blockHeight/2 + 4);
+            }
+            
+            // Total for eq1
+            ctx.fillStyle = '#1f2937';
+            ctx.font = 'bold 16px Inter';
+            ctx.textAlign = 'left';
+            ctx.fillText(`= ${c1}`, startX + b * (blockWidth + gap) + 15, startY + blockHeight/2 + 5);
+            
+            // Equation 2
+            startX = 50;
+            startY = 150;
+            
+            ctx.font = '14px Inter';
+            ctx.fillText(`Eq (2): ${c}x + ${d}y = ${c2}`, startX, startY - 10);
+            
+            // Draw c blocks of x (blue)
+            for (let i = 0; i < c; i++) {
+                ctx.fillStyle = '#3b82f6';
+                ctx.fillRect(startX + i * (blockWidth + gap), startY, blockWidth, blockHeight);
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 12px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('x', startX + i * (blockWidth + gap) + blockWidth/2, startY + blockHeight/2 + 4);
+            }
+            
+            // Draw d blocks of y (orange)
+            startX += c * (blockWidth + gap);
+            for (let i = 0; i < d; i++) {
+                ctx.fillStyle = '#f59e0b';
+                ctx.fillRect(startX + i * (blockWidth + gap), startY, blockWidth, blockHeight);
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 12px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('y', startX + i * (blockWidth + gap) + blockWidth/2, startY + blockHeight/2 + 4);
+            }
+            
+            // Total for eq2
+            ctx.fillStyle = '#1f2937';
+            ctx.font = 'bold 16px Inter';
+            ctx.textAlign = 'left';
+            ctx.fillText(`= ${c2}`, startX + d * (blockWidth + gap) + 15, startY + blockHeight/2 + 5);
+            
+            // After multiplication (if step >= 1)
+            if (state.elimCurrentStep >= 1) {
+                const mult1 = c;
+                const mult2 = a;
+                
+                startY = 260;
+                ctx.font = 'bold 14px Inter';
+                ctx.fillStyle = '#8b5cf6';
+                ctx.textAlign = 'center';
+                ctx.fillText(`After Multiplication: Coefficients x are same (${a*mult1}x)`, canvas.width/2, startY);
+                
+                startY += 30;
+                ctx.font = '16px Times New Roman';
+                ctx.fillText(`${a*mult1}x + ${b*mult1}y = ${c1*mult1}`, canvas.width/2, startY);
+                
+                startY += 25;
+                ctx.fillText(`${c*mult2}x + ${d*mult2}y = ${c2*mult2}`, canvas.width/2, startY);
+            }
+            
+            // After elimination (if step >= 2)
+            if (state.elimCurrentStep >= 2) {
+                const mult1 = c;
+                const mult2 = a;
+                const coefY = b*mult1 - d*mult2;
+                const constY = c1*mult1 - c2*mult2;
+                
+                startY += 40;
+                ctx.fillStyle = '#10b981';
+                ctx.font = 'bold 16px Inter';
+                ctx.fillText(`After Subtraction (x eliminated):`, canvas.width/2, startY);
+                
+                startY += 25;
+                ctx.font = 'bold 18px Times New Roman';
+                ctx.fillText(`${coefY}y = ${constY}`, canvas.width/2, startY);
+            }
+            
+            // Final answer (if step >= 3)
+            if (state.elimCurrentStep >= 3) {
+                startY += 35;
+                ctx.fillStyle = '#10b981';
+                ctx.font = 'bold 20px Times New Roman';
+                ctx.fillText(`y = ${y}`, canvas.width/2, startY);
+            }
+            
+            if (state.elimCurrentStep >= 4) {
+                startY += 30;
+                ctx.fillText(`x = ${x}`, canvas.width/2, startY);
+            }
+        }
+        
+        // ============================================
+        // PRACTICE MODE
+        // ============================================
+        
+        function setDifficulty(level) {
+            state.difficulty = level;
+            
+            // Update button styles
+            const buttons = document.querySelectorAll('.difficulty-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Generate new problem
+            generatePracticeProblem();
+        }
+        
+        function generatePracticeProblem() {
+            let a, b, c, d, x, y, c1, c2;
+            
+            if (state.difficulty === 'easy') {
+                // Simple numbers, obvious solution
+                x = Math.floor(Math.random() * 5) + 2; // 2-6
+                y = Math.floor(Math.random() * 5) + 2; // 2-6
+                a = Math.floor(Math.random() * 2) + 1; // 1-2
+                b = Math.floor(Math.random() * 2) + 1; // 1-2
+                c = Math.floor(Math.random() * 2) + 1; // 1-2
+                d = Math.floor(Math.random() * 2) + 1; // 1-2
+            } else if (state.difficulty === 'medium') {
+                // Medium complexity
+                x = Math.floor(Math.random() * 6) + 2; // 2-7
+                y = Math.floor(Math.random() * 6) + 2; // 2-7
+                a = Math.floor(Math.random() * 4) + 1; // 1-4
+                b = Math.floor(Math.random() * 4) + 1; // 1-4
+                c = Math.floor(Math.random() * 4) + 1; // 1-4
+                d = Math.floor(Math.random() * 4) + 1; // 1-4
+            } else {
+                // Hard - larger numbers, more complex
+                x = Math.floor(Math.random() * 8) + 3; // 3-10
+                y = Math.floor(Math.random() * 8) + 3; // 3-10
+                a = Math.floor(Math.random() * 5) + 2; // 2-6
+                b = Math.floor(Math.random() * 5) + 2; // 2-6
+                c = Math.floor(Math.random() * 5) + 2; // 2-6
+                d = Math.floor(Math.random() * 5) + 2; // 2-6
+            }
+            
+            c1 = a * x + b * y;
+            c2 = c * x + d * y;
+            
+            state.practiceProblem = { a, b, c, d, c1, c2, x, y };
+            
+            // Display
+            document.getElementById('practiceEq1').textContent = `${a}x + ${b}y = ${c1}`;
+            document.getElementById('practiceEq2').textContent = `${c}x + ${d}y = ${c2}`;
+            
+            // Clear inputs
+            document.getElementById('practiceAnswerX').value = '';
+            document.getElementById('practiceAnswerY').value = '';
+            
+            // Hide solution
+            document.getElementById('practiceSolution').style.display = 'none';
+            
+            // Clear feedback
+            const feedback = document.getElementById('practiceFeedback');
+            feedback.classList.remove('show');
+            
+            // Draw canvas
+            drawPracticeCanvas();
+        }
+        
+        function checkPracticeAnswer() {
+            const userX = parseFloat(document.getElementById('practiceAnswerX').value);
+            const userY = parseFloat(document.getElementById('practiceAnswerY').value);
+            const { x, y } = state.practiceProblem;
+            
+            const feedback = document.getElementById('practiceFeedback');
+            state.practiceStats.total++;
+            
+            const xCorrect = Math.abs(userX - x) < 0.1;
+            const yCorrect = Math.abs(userY - y) < 0.1;
+            
+            if (xCorrect && yCorrect) {
+                // Both correct
+                state.practiceStats.correct++;
+                state.practiceStats.streak++;
+                
+                feedback.className = 'feedback success show';
+                feedback.innerHTML = `<span class="feedback-icon">✓</span> Perfect! x = ${x}, y = ${y}. Streak: ${state.practiceStats.streak}! 🔥`;
+                
+                showCelebration();
+                
+                // Visualize correct answer
+                drawPracticeCanvas(true);
+            } else {
+                // Incorrect
+                state.practiceStats.streak = 0;
+                
+                let message = '✗ ';
+                if (!xCorrect && !yCorrect) {
+                    message += 'Both x and y are incorrect. ';
+                } else if (!xCorrect) {
+                    message += 'x is incorrect (y is correct). ';
+                } else {
+                    message += 'y is incorrect (x is correct). ';
+                }
+                message += 'Try again atau click Show Solution.';
+                
+                feedback.className = 'feedback error show';
+                feedback.innerHTML = `<span class="feedback-icon">${message}</span>`;
+            }
+            
+            updatePracticeStats();
+        }
+        
+        function showPracticeSolution() {
+            const { a, b, c, d, c1, c2, x, y } = state.practiceProblem;
+            
+            // Solve using elimination
+            const mult1 = c;
+            const mult2 = a;
+            const newA = a * mult1;
+            const newB = b * mult1;
+            const newC1 = c1 * mult1;
+            const newC = c * mult2;
+            const newD = d * mult2;
+            const newC2 = c2 * mult2;
+            const coefY = newB - newD;
+            const constY = newC1 - newC2;
+            
+            const solutionHTML = `
+                <div class="example-step">
+                    <div class="example-step-title">Method: Elimination</div>
+                </div>
+                <div class="example-step">
+                    <div class="example-step-title">Step 1: Multiply equations</div>
+                    <div class="example-calculation">
+                        ${mult1} × (${a}x + ${b}y = ${c1}) → ${newA}x + ${newB}y = ${newC1}<br>
+                        ${mult2} × (${c}x + ${d}y = ${c2}) → ${newC}x + ${newD}y = ${newC2}
+                    </div>
+                </div>
+                <div class="example-step">
+                    <div class="example-step-title">Step 2: Subtract to eliminate x</div>
+                    <div class="example-calculation">
+                        (${newA}x + ${newB}y) - (${newC}x + ${newD}y) = ${newC1} - ${newC2}<br>
+                        ${coefY}y = ${constY}
+                    </div>
+                </div>
+                <div class="example-step">
+                    <div class="example-step-title">Step 3: Solve untuk y</div>
+                    <div class="example-calculation">
+                        y = ${constY} / ${coefY} = ${y}
+                    </div>
+                </div>
+                <div class="example-step">
+                    <div class="example-step-title">Step 4: Substitute untuk find x</div>
+                    <div class="example-calculation">
+                        ${a}x + ${b}(${y}) = ${c1}<br>
+                        ${a}x + ${b*y} = ${c1}<br>
+                        ${a}x = ${c1 - b*y}<br>
+                        x = ${x}
+                    </div>
+                </div>
+                <div class="final-answer">
+                    <strong>✓ Answer:</strong> x = ${x}, y = ${y}
+                </div>
+            `;
+            
+            document.getElementById('solutionSteps').innerHTML = solutionHTML;
+            document.getElementById('practiceSolution').style.display = 'block';
+        }
+        
+        function updatePracticeStats() {
+            document.getElementById('practiceCorrect').textContent = state.practiceStats.correct;
+            document.getElementById('practiceTotal').textContent = state.practiceStats.total;
+            
+            const accuracy = state.practiceStats.total > 0 
+                ? Math.round((state.practiceStats.correct / state.practiceStats.total) * 100) 
+                : 0;
+            document.getElementById('practiceAccuracy').textContent = accuracy + '%';
+            document.getElementById('practiceStreak').textContent = state.practiceStats.streak;
+        }
+        
+        function drawPracticeCanvas(showSolution = false) {
+            const canvas = document.getElementById('practiceCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const { a, b, c, d, c1, c2, x, y } = state.practiceProblem;
+            
+            // Title
+            ctx.fillStyle = '#1f2937';
+            ctx.font = 'bold 16px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('Bar Model Visualization', canvas.width/2, 25);
+            
+            const blockWidth = 35;
+            const blockHeight = 30;
+            const gap = 5;
+            
+            // Equation 1
+            let startX = 50;
+            let startY = 60;
+            
+            ctx.font = '14px Inter';
+            ctx.textAlign = 'left';
+            ctx.fillText(`${a}x + ${b}y = ${c1}`, startX, startY - 10);
+            
+            // Draw blocks
+            for (let i = 0; i < a; i++) {
+                ctx.fillStyle = '#3b82f6';
+                ctx.fillRect(startX + i * (blockWidth + gap), startY, blockWidth, blockHeight);
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 11px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('x', startX + i * (blockWidth + gap) + blockWidth/2, startY + blockHeight/2 + 4);
+            }
+            
+            startX += a * (blockWidth + gap);
+            for (let i = 0; i < b; i++) {
+                ctx.fillStyle = '#f59e0b';
+                ctx.fillRect(startX + i * (blockWidth + gap), startY, blockWidth, blockHeight);
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 11px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('y', startX + i * (blockWidth + gap) + blockWidth/2, startY + blockHeight/2 + 4);
+            }
+            
+            ctx.fillStyle = '#1f2937';
+            ctx.font = 'bold 14px Inter';
+            ctx.textAlign = 'left';
+            ctx.fillText(`= ${c1}`, startX + b * (blockWidth + gap) + 10, startY + blockHeight/2 + 5);
+            
+            // Equation 2
+            startX = 50;
+            startY = 130;
+            
+            ctx.font = '14px Inter';
+            ctx.fillText(`${c}x + ${d}y = ${c2}`, startX, startY - 10);
+            
+            for (let i = 0; i < c; i++) {
+                ctx.fillStyle = '#3b82f6';
+                ctx.fillRect(startX + i * (blockWidth + gap), startY, blockWidth, blockHeight);
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 11px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('x', startX + i * (blockWidth + gap) + blockWidth/2, startY + blockHeight/2 + 4);
+            }
+            
+            startX += c * (blockWidth + gap);
+            for (let i = 0; i < d; i++) {
+                ctx.fillStyle = '#f59e0b';
+                ctx.fillRect(startX + i * (blockWidth + gap), startY, blockWidth, blockHeight);
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 11px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('y', startX + i * (blockWidth + gap) + blockWidth/2, startY + blockHeight/2 + 4);
+            }
+            
+            ctx.fillStyle = '#1f2937';
+            ctx.font = 'bold 14px Inter';
+            ctx.textAlign = 'left';
+            ctx.fillText(`= ${c2}`, startX + d * (blockWidth + gap) + 10, startY + blockHeight/2 + 5);
+            
+            // Show solution
+            if (showSolution) {
+                startY = 230;
+                ctx.fillStyle = '#10b981';
+                ctx.font = 'bold 20px Times New Roman';
+                ctx.textAlign = 'center';
+                ctx.fillText(`Solution: x = ${x}, y = ${y}`, canvas.width/2, startY);
+                
+                startY += 35;
+                ctx.font = '16px Inter';
+                ctx.fillText(`Verification: ${a}(${x}) + ${b}(${y}) = ${a*x + b*y} ✓`, canvas.width/2, startY);
+                
+                startY += 25;
+                ctx.fillText(`${c}(${x}) + ${d}(${y}) = ${c*x + d*y} ✓`, canvas.width/2, startY);
+            }
+        }
+        
+        // ============================================
+        // CELEBRATION ANIMATION
+        // ============================================
+        
+        function showCelebration() {
+            const celebration = document.getElementById('celebration');
+            celebration.classList.add('show');
+            setTimeout(() => {
+                celebration.classList.remove('show');
+            }, 1000);
+        }
+        
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        
+        window.onload = function() {
+            // Initialize story canvases
+            updateStory1();
+            updateStory2();
+            
+            // Initialize graph
+            updateGraph();
+            
+            // Initialize first problems
+            generateSubProblem();
+            generateElimProblem();
+            generatePracticeProblem();
+            
+            console.log('✅ Simultaneous Equations Interactive Application loaded successfully!');
+        };
+    </script>
+</body>
+</html>

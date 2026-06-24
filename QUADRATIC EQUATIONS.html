@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quadratic Lab</title>
+    <style>
+        :root {
+            --ink: #17202a;
+            --muted: #667085;
+            --line: #d8dee9;
+            --paper: #ffffff;
+            --page: #f6f7fb;
+            --blue: #2563eb;
+            --teal: #0f9f8f;
+            --amber: #d97706;
+            --rose: #e11d48;
+            --green: #16a34a;
+            --blue-soft: #dbeafe;
+            --teal-soft: #ccfbf1;
+            --amber-soft: #fef3c7;
+            --rose-soft: #ffe4e6;
+            --green-soft: #dcfce7;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: var(--page);
+            color: var(--ink);
+        }
+
+        .app {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 18px;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 18px 0;
+        }
+
+        h1, h2, h3, p { margin: 0; }
+
+        h1 {
+            font-size: clamp(1.8rem, 4vw, 3.1rem);
+            line-height: 1;
+            letter-spacing: 0;
+        }
+
+        .tagline {
+            color: var(--muted);
+            font-weight: 600;
+            margin-top: 6px;
+        }
+
+        .topic-tabs {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            margin: 12px 0 18px;
+        }
+
+        .topic-card {
+            border: 2px solid transparent;
+            border-radius: 8px;
+            background: var(--paper);
+            color: var(--ink);
+            cursor: pointer;
+            padding: 14px;
+            text-align: left;
+            min-height: 98px;
+            box-shadow: 0 8px 24px rgba(23, 32, 42, 0.06);
+        }
+
+        .topic-card strong {
+            display: block;
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+
+        .topic-card .mini-equation {
+            display: inline-flex;
+            align-items: center;
+            min-height: 34px;
+            padding: 6px 10px;
+            border-radius: 8px;
+            background: #eef2ff;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 1.1rem;
+        }
+
+        .topic-card.active {
+            border-color: var(--blue);
+            background: #f8fbff;
+        }
+
+        .panel {
+            display: none;
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            box-shadow: 0 18px 40px rgba(23, 32, 42, 0.08);
+            overflow: hidden;
+        }
+
+        .panel.active { display: block; }
+
+        .panel-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 18px;
+            border-bottom: 1px solid var(--line);
+            background: #fbfcff;
+        }
+
+        .panel-head h2 { font-size: 1.15rem; }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+            gap: 18px;
+            padding: 18px;
+        }
+
+        .layout.single { grid-template-columns: 1fr; }
+
+        .stage {
+            display: grid;
+            gap: 14px;
+            align-content: start;
+        }
+
+        .equation-card {
+            min-height: 170px;
+            display: grid;
+            place-items: center;
+            text-align: center;
+            border-radius: 8px;
+            background:
+                linear-gradient(90deg, rgba(37, 99, 235, 0.08) 1px, transparent 1px),
+                linear-gradient(rgba(15, 159, 143, 0.08) 1px, transparent 1px),
+                #ffffff;
+            background-size: 28px 28px;
+            border: 1px solid var(--line);
+            padding: 18px;
+        }
+
+        .equation {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(2rem, 6vw, 3.4rem);
+            font-weight: 700;
+            line-height: 1.15;
+        }
+
+        .visual-strip {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .tile {
+            border-radius: 8px;
+            border: 1px solid var(--line);
+            padding: 14px;
+            background: #fff;
+            min-height: 80px;
+        }
+
+        .tile span {
+            display: block;
+            color: var(--muted);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .tile strong {
+            display: block;
+            margin-top: 8px;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 1.6rem;
+        }
+
+        .tile.blue { background: var(--blue-soft); border-color: #93c5fd; }
+        .tile.teal { background: var(--teal-soft); border-color: #5eead4; }
+        .tile.amber { background: var(--amber-soft); border-color: #fbbf24; }
+        .tile.green { background: var(--green-soft); border-color: #86efac; }
+
+        .choice-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        button {
+            font: inherit;
+        }
+
+        .choice-btn, .btn, .diff-btn {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: var(--paper);
+            color: var(--ink);
+            cursor: pointer;
+            font-weight: 800;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+        }
+
+        .choice-btn {
+            min-height: 72px;
+            font-size: 1.25rem;
+        }
+
+        .choice-btn:hover, .btn:hover, .diff-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(23, 32, 42, 0.09);
+        }
+
+        .choice-btn.correct {
+            background: var(--green);
+            border-color: var(--green);
+            color: #fff;
+        }
+
+        .choice-btn.wrong {
+            background: var(--rose);
+            border-color: var(--rose);
+            color: #fff;
+        }
+
+        .diff-group {
+            display: inline-flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .diff-btn {
+            padding: 9px 13px;
+            font-size: 0.9rem;
+        }
+
+        .diff-btn.active {
+            color: #fff;
+            background: var(--blue);
+            border-color: var(--blue);
+        }
+
+        .factor-board {
+            display: grid;
+            grid-template-columns: 70px 1fr 1fr;
+            grid-template-rows: 62px 1fr 1fr;
+            gap: 8px;
+            min-height: 360px;
+        }
+
+        .cell {
+            display: grid;
+            place-items: center;
+            min-height: 90px;
+            border-radius: 8px;
+            border: 2px solid var(--line);
+            background: #fff;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(1.1rem, 3vw, 1.8rem);
+            font-weight: 800;
+            text-align: center;
+        }
+
+        .cell.label {
+            min-height: 58px;
+            background: #f8fafc;
+            border-style: dashed;
+            color: var(--muted);
+        }
+
+        .cell.main { background: var(--blue-soft); border-color: var(--blue); color: #1d4ed8; }
+        .cell.split { background: var(--amber-soft); border-color: var(--amber); color: #92400e; }
+        .cell.unit { background: var(--teal-soft); border-color: var(--teal); color: #0f766e; }
+
+        .steps {
+            display: grid;
+            gap: 12px;
+        }
+
+        .step-card {
+            border: 1px solid var(--line);
+            border-left: 6px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 14px;
+            background: #fff;
+        }
+
+        .step-card.active { border-left-color: var(--blue); }
+        .step-card.done { border-left-color: var(--green); background: #f7fff9; }
+        .step-card.locked { opacity: 0.52; }
+
+        .step-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            font-weight: 800;
+        }
+
+        .badge {
+            display: inline-grid;
+            place-items: center;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            color: #fff;
+            background: var(--blue);
+            font-size: 0.9rem;
+        }
+
+        .inputs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .input-pair {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 8px;
+            background: #fbfcff;
+        }
+
+        .input-pair label {
+            font-weight: 800;
+            color: var(--muted);
+        }
+
+        input {
+            width: 92px;
+            min-height: 40px;
+            border: 1px solid #b7c0ce;
+            border-radius: 7px;
+            padding: 8px 10px;
+            font: 700 1rem Consolas, "Courier New", monospace;
+            color: var(--ink);
+            background: #fff;
+        }
+
+        input:focus {
+            outline: 3px solid rgba(37, 99, 235, 0.16);
+            border-color: var(--blue);
+        }
+
+        input:disabled {
+            background: #f1f5f9;
+            color: #94a3b8;
+        }
+
+        .hint-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            min-height: 30px;
+            border-radius: 8px;
+            padding: 5px 9px;
+            font-family: Georgia, "Times New Roman", serif;
+            font-weight: 800;
+            background: #f1f5f9;
+            color: #334155;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 2px;
+        }
+
+        .btn {
+            min-height: 44px;
+            padding: 10px 16px;
+        }
+
+        .btn.primary {
+            color: #fff;
+            background: var(--blue);
+            border-color: var(--blue);
+        }
+
+        .btn.secondary {
+            background: #f8fafc;
+        }
+
+        .feedback {
+            display: none;
+            border-radius: 8px;
+            border: 1px solid var(--line);
+            padding: 12px 14px;
+            font-weight: 800;
+        }
+
+        .feedback.show { display: block; }
+        .feedback.ok { background: var(--green-soft); border-color: #86efac; color: #166534; }
+        .feedback.no { background: var(--rose-soft); border-color: #fda4af; color: #9f1239; }
+
+        .formula-visual {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .formula-card {
+            grid-column: 1 / -1;
+            border-radius: 8px;
+            padding: 18px;
+            background: var(--blue-soft);
+            border: 1px solid #93c5fd;
+            text-align: center;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(1.4rem, 4vw, 2.4rem);
+            font-weight: 800;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 18px 0;
+        }
+
+        .stat {
+            border-radius: 8px;
+            background: var(--paper);
+            border: 1px solid var(--line);
+            padding: 12px;
+        }
+
+        .stat span {
+            display: block;
+            color: var(--muted);
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .stat strong {
+            display: block;
+            margin-top: 4px;
+            font-size: 1.7rem;
+        }
+
+        .quick-notes {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .note {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #fff;
+            padding: 12px;
+            min-height: 76px;
+        }
+
+        .note strong {
+            display: block;
+            margin-bottom: 7px;
+        }
+
+        .note .chip { margin-top: 4px; }
+
+        @media (max-width: 900px) {
+            header { align-items: flex-start; flex-direction: column; }
+            .topic-tabs, .layout, .visual-strip, .quick-notes { grid-template-columns: 1fr; }
+            .formula-visual { grid-template-columns: 1fr; }
+            .panel-head { align-items: flex-start; flex-direction: column; }
+        }
+
+        @media (max-width: 560px) {
+            .app { padding: 12px; }
+            .layout, .panel-head { padding: 12px; }
+            .choice-grid, .stats { grid-template-columns: 1fr; }
+            .factor-board {
+                grid-template-columns: 54px 1fr 1fr;
+                gap: 6px;
+                min-height: 300px;
+            }
+            .cell { min-height: 74px; }
+            input { width: 82px; }
+        }
+    </style>
+</head>
+<body>
+    <main class="app">
+        <header>
+            <div>
+                <h1>Quadratic Lab</h1>
+                <p class="tagline">Visual, ringkas, tepat.</p>
+            </div>
+            <button class="btn secondary" type="button" onclick="resetAll()">Reset skor</button>
+        </header>
+
+        <nav class="topic-tabs" aria-label="Topik">
+            <button class="topic-card active" type="button" id="card-recognize" onclick="switchTopic('recognize')">
+                <strong>1. Kenal pasti</strong>
+                <span class="mini-equation">ax<sup>2</sup> + bx + c = 0</span>
+            </button>
+            <button class="topic-card" type="button" id="card-factor" onclick="switchTopic('factor')">
+                <strong>2. Faktor visual</strong>
+                <span class="mini-equation">(px + q)(rx + s)</span>
+            </button>
+            <button class="topic-card" type="button" id="card-formula" onclick="switchTopic('formula')">
+                <strong>3. Formula</strong>
+                <span class="mini-equation">&Delta; = b<sup>2</sup> - 4ac</span>
+            </button>
+        </nav>
+
+        <section class="panel active" id="section-recognize">
+            <div class="panel-head">
+                <h2>Kuadratik atau bukan?</h2>
+            </div>
+            <div class="layout single">
+                <div class="stage">
+                    <div class="equation-card">
+                        <div class="equation" id="recog-equation"></div>
+                    </div>
+                    <div class="visual-strip">
+                        <div class="tile blue"><span>Kuasa tertinggi</span><strong id="recog-degree">?</strong></div>
+                        <div class="tile teal"><span>Satu pemboleh ubah</span><strong id="recog-variable">?</strong></div>
+                        <div class="tile amber"><span>Bentuk</span><strong id="recog-shape">?</strong></div>
+                    </div>
+                    <div class="choice-grid">
+                        <button class="choice-btn" type="button" id="btn-yes" onclick="checkRecognition(true)">Kuadratik</button>
+                        <button class="choice-btn" type="button" id="btn-no" onclick="checkRecognition(false)">Bukan</button>
+                    </div>
+                    <div class="feedback" id="recog-feedback"></div>
+                    <div class="actions">
+                        <button class="btn primary" type="button" onclick="generateRecognition()">Soalan baru</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel" id="section-factor">
+            <div class="panel-head">
+                <h2>Pemfaktoran</h2>
+                <div class="diff-group">
+                    <button class="diff-btn active" type="button" id="f-diff-easy" onclick="setDiff('easy')">a = 1</button>
+                    <button class="diff-btn" type="button" id="f-diff-hard" onclick="setDiff('hard')">a &gt; 1</button>
+                </div>
+            </div>
+            <div class="layout">
+                <div class="stage">
+                    <div class="equation-card">
+                        <div class="equation" id="factor-equation"></div>
+                    </div>
+                    <div class="factor-board" aria-label="Model keluasan">
+                        <div class="cell label">&times;</div>
+                        <div class="cell label" id="vis-top-x">?x</div>
+                        <div class="cell label" id="vis-top-c">?</div>
+                        <div class="cell label" id="vis-side-x">?x</div>
+                        <div class="cell main" id="vis-ax2">?x<sup>2</sup></div>
+                        <div class="cell split" id="vis-split-1">?x</div>
+                        <div class="cell label" id="vis-side-c">?</div>
+                        <div class="cell split" id="vis-split-2">?x</div>
+                        <div class="cell unit" id="vis-c">?</div>
+                    </div>
+                </div>
+
+                <div class="steps">
+                    <div class="step-card active" id="f-step-1">
+                        <div class="step-title"><span class="badge">1</span> a, b, c</div>
+                        <div class="inputs">
+                            <span class="input-pair"><label>a</label><input id="f-in-a" inputmode="numeric"></span>
+                            <span class="input-pair"><label>b</label><input id="f-in-b" inputmode="numeric"></span>
+                            <span class="input-pair"><label>c</label><input id="f-in-c" inputmode="numeric"></span>
+                        </div>
+                    </div>
+                    <div class="step-card locked" id="f-step-2">
+                        <div class="step-title"><span class="badge">2</span> Pecahkan bx</div>
+                        <div class="inputs">
+                            <span class="input-pair"><label>m</label><input id="f-in-m" inputmode="numeric" disabled></span>
+                            <span class="input-pair"><label>n</label><input id="f-in-n" inputmode="numeric" disabled></span>
+                        </div>
+                        <div class="hint-row">
+                            <span class="chip">m + n = <span id="f-chip-b">?</span></span>
+                            <span class="chip">mn = ac = <span id="f-chip-ac">?</span></span>
+                        </div>
+                    </div>
+                    <div class="step-card locked" id="f-step-3">
+                        <div class="step-title"><span class="badge">3</span> Punca</div>
+                        <div class="inputs">
+                            <span class="input-pair"><label>x<sub>1</sub></label><input id="f-in-x1" inputmode="decimal" disabled></span>
+                            <span class="input-pair"><label>x<sub>2</sub></label><input id="f-in-x2" inputmode="decimal" disabled></span>
+                        </div>
+                    </div>
+                    <div class="feedback" id="factor-feedback"></div>
+                    <div class="actions">
+                        <button class="btn primary" type="button" onclick="checkFactorStep()">Semak</button>
+                        <button class="btn secondary" type="button" onclick="generateFactor()">Soalan baru</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel" id="section-formula">
+            <div class="panel-head">
+                <h2>Formula kuadratik</h2>
+            </div>
+            <div class="layout">
+                <div class="stage">
+                    <div class="equation-card">
+                        <div class="equation" id="formula-equation"></div>
+                    </div>
+                    <div class="formula-visual">
+                        <div class="formula-card">x = (-b &plusmn; &radic;&Delta;) / 2a</div>
+                        <div class="tile blue"><span>&Delta;</span><strong id="form-vis-d">?</strong></div>
+                        <div class="tile teal"><span>&radic;&Delta;</span><strong id="form-vis-rootd">?</strong></div>
+                        <div class="tile amber"><span>2a</span><strong id="form-vis-denom">?</strong></div>
+                        <div class="tile green"><span>Punca</span><strong id="form-vis-roots">?</strong></div>
+                    </div>
+                </div>
+
+                <div class="steps">
+                    <div class="step-card active" id="form-step-1">
+                        <div class="step-title"><span class="badge">1</span> a, b, c</div>
+                        <div class="inputs">
+                            <span class="input-pair"><label>a</label><input id="form-in-a" inputmode="numeric"></span>
+                            <span class="input-pair"><label>b</label><input id="form-in-b" inputmode="numeric"></span>
+                            <span class="input-pair"><label>c</label><input id="form-in-c" inputmode="numeric"></span>
+                        </div>
+                    </div>
+                    <div class="step-card locked" id="form-step-2">
+                        <div class="step-title"><span class="badge">2</span> &Delta;</div>
+                        <div class="inputs">
+                            <span class="input-pair"><label>&Delta;</label><input id="form-in-d" inputmode="numeric" disabled></span>
+                        </div>
+                    </div>
+                    <div class="step-card locked" id="form-step-3">
+                        <div class="step-title"><span class="badge">3</span> x</div>
+                        <div class="inputs">
+                            <span class="input-pair"><label>x<sub>1</sub></label><input id="form-in-x1" inputmode="decimal" disabled></span>
+                            <span class="input-pair"><label>x<sub>2</sub></label><input id="form-in-x2" inputmode="decimal" disabled></span>
+                        </div>
+                    </div>
+                    <div class="feedback" id="formula-feedback"></div>
+                    <div class="actions">
+                        <button class="btn primary" type="button" onclick="checkFormulaStep()">Semak</button>
+                        <button class="btn secondary" type="button" onclick="generateFormula()">Soalan baru</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="stats" aria-label="Skor">
+            <div class="stat"><span>Selesai</span><strong id="stat-done">0</strong></div>
+            <div class="stat"><span>Ketepatan</span><strong id="stat-acc">0%</strong></div>
+            <div class="stat"><span>Streak</span><strong id="stat-streak">0</strong></div>
+        </section>
+
+        <section class="quick-notes" aria-label="Nota ringkas">
+            <div class="note"><strong>Kuadratik</strong><span class="chip">kuasa tertinggi = 2</span></div>
+            <div class="note"><strong>Faktor</strong><span class="chip">m + n = b, mn = ac</span></div>
+            <div class="note"><strong>Formula</strong><span class="chip">&Delta; = b<sup>2</sup> - 4ac</span></div>
+        </section>
+    </main>
+
+    <script>
+        const state = {
+            topic: "recognize",
+            diff: "easy",
+            current: null,
+            step: 1,
+            answered: false,
+            done: false,
+            stats: { completed: 0, attempts: 0, correct: 0, streak: 0 }
+        };
+
+        const recogItems = [
+            { html: "x<sup>2</sup> + 3x + 2 = 0", isQ: true, degree: 2, variable: "Ya", shape: "ax² + bx + c" },
+            { html: "2x + 5 = 0", isQ: false, degree: 1, variable: "Ya", shape: "Linear" },
+            { html: "x<sup>3</sup> - x + 1 = 0", isQ: false, degree: 3, variable: "Ya", shape: "Kubik" },
+            { html: "5x<sup>2</sup> = 0", isQ: true, degree: 2, variable: "Ya", shape: "ax² + c" },
+            { html: "x<sup>2</sup> + <sup>1</sup>/<sub>x</sub> = 0", isQ: false, degree: "pecahan", variable: "Ya", shape: "Bukan polinomial" },
+            { html: "-x<sup>2</sup> + 10 = 0", isQ: true, degree: 2, variable: "Ya", shape: "ax² + c" },
+            { html: "(x + 1)(x - 2) = 0", isQ: true, degree: 2, variable: "Ya", shape: "dua faktor linear" },
+            { html: "y<sup>2</sup> - 4 = 0", isQ: true, degree: 2, variable: "Ya", shape: "ay² + c" },
+            { html: "3x + y = 2", isQ: false, degree: 1, variable: "Tidak", shape: "dua pemboleh ubah" }
+        ];
+
+        function byId(id) {
+            return document.getElementById(id);
+        }
+
+        function rndInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function nonZeroInt(min, max) {
+            let value = 0;
+            while (value === 0) value = rndInt(min, max);
+            return value;
+        }
+
+        function parseValue(raw) {
+            const text = String(raw || "").trim().replace(/−/g, "-").replace(",", ".");
+            if (!text) return NaN;
+            const fraction = text.match(/^([+-]?\d+(?:\.\d+)?)\s*\/\s*([+-]?\d+(?:\.\d+)?)$/);
+            if (fraction) {
+                const top = Number(fraction[1]);
+                const bottom = Number(fraction[2]);
+                return bottom === 0 ? NaN : top / bottom;
+            }
+            return Number(text);
+        }
+
+        function read(id) {
+            return parseValue(byId(id).value);
+        }
+
+        function closeEnough(a, b, tolerance = 0.01) {
+            return Number.isFinite(a) && Math.abs(a - b) <= tolerance;
+        }
+
+        function samePair(a, b, x, y, tolerance = 0.01) {
+            return (closeEnough(a, x, tolerance) && closeEnough(b, y, tolerance)) ||
+                   (closeEnough(a, y, tolerance) && closeEnough(b, x, tolerance));
+        }
+
+        function signedNumber(value) {
+            return value >= 0 ? `+ ${value}` : `- ${Math.abs(value)}`;
+        }
+
+        function signedLabel(value) {
+            return value >= 0 ? `+${value}` : `${value}`;
+        }
+
+        function termHtml(coef, power) {
+            const abs = Math.abs(coef);
+            const variable = power === 2 ? "x<sup>2</sup>" : power === 1 ? "x" : "";
+            if (power === 0) return String(abs);
+            return `${abs === 1 ? "" : abs}${variable}`;
+        }
+
+        function quadraticHtml(a, b, c) {
+            const terms = [];
+            if (a !== 0) terms.push({ sign: Math.sign(a), body: termHtml(a, 2) });
+            if (b !== 0) terms.push({ sign: Math.sign(b), body: termHtml(b, 1) });
+            if (c !== 0 || terms.length === 0) terms.push({ sign: Math.sign(c || 1), body: termHtml(c, 0) });
+
+            return terms.map((term, index) => {
+                if (index === 0) return term.sign < 0 ? `-${term.body}` : term.body;
+                return `${term.sign < 0 ? " - " : " + "}${term.body}`;
+            }).join("") + " = 0";
+        }
+
+        function linearLabel(coef, constant) {
+            const xPart = `${coef === 1 ? "" : coef}x`;
+            return `${xPart} ${signedNumber(constant)}`;
+        }
+
+        function formatNumber(value) {
+            if (Number.isInteger(value)) return String(value);
+            return String(Math.round(value * 100) / 100);
+        }
+
+        function setStep(prefix, activeStep) {
+            for (let i = 1; i <= 3; i++) {
+                const card = byId(`${prefix}-step-${i}`);
+                card.className = "step-card " + (i < activeStep ? "done" : i === activeStep ? "active" : "locked");
+                card.querySelectorAll("input").forEach(input => {
+                    input.disabled = i !== activeStep;
+                });
+            }
+            state.step = activeStep;
+        }
+
+        function clearInputs(ids) {
+            ids.forEach(id => byId(id).value = "");
+        }
+
+        function showFeedback(id, ok, message) {
+            const el = byId(id);
+            el.className = `feedback show ${ok ? "ok" : "no"}`;
+            el.textContent = message;
+        }
+
+        function hideFeedback(id) {
+            byId(id).className = "feedback";
+            byId(id).textContent = "";
+        }
+
+        function record(ok, completed = false) {
+            state.stats.attempts++;
+            if (ok) state.stats.correct++;
+            if (completed) {
+                state.stats.completed++;
+                state.stats.streak++;
+            }
+            if (!ok) state.stats.streak = 0;
+            updateStats();
+        }
+
+        function updateStats() {
+            byId("stat-done").textContent = state.stats.completed;
+            byId("stat-streak").textContent = state.stats.streak;
+            const acc = state.stats.attempts === 0 ? 0 : Math.round((state.stats.correct / state.stats.attempts) * 100);
+            byId("stat-acc").textContent = `${acc}%`;
+        }
+
+        function resetAll() {
+            state.stats = { completed: 0, attempts: 0, correct: 0, streak: 0 };
+            updateStats();
+        }
+
+        function switchTopic(topic) {
+            state.topic = topic;
+            document.querySelectorAll(".topic-card").forEach(card => card.classList.remove("active"));
+            document.querySelectorAll(".panel").forEach(section => section.classList.remove("active"));
+            byId(`card-${topic}`).classList.add("active");
+            byId(`section-${topic}`).classList.add("active");
+
+            if (topic === "recognize") generateRecognition();
+            if (topic === "factor") generateFactor();
+            if (topic === "formula") generateFormula();
+        }
+
+        function generateRecognition() {
+            const item = recogItems[rndInt(0, recogItems.length - 1)];
+            state.current = item;
+            state.answered = false;
+            byId("recog-equation").innerHTML = item.html;
+            byId("recog-degree").textContent = "?";
+            byId("recog-variable").textContent = "?";
+            byId("recog-shape").textContent = "?";
+            byId("btn-yes").className = "choice-btn";
+            byId("btn-no").className = "choice-btn";
+            hideFeedback("recog-feedback");
+        }
+
+        function checkRecognition(answer) {
+            if (state.answered) return;
+            state.answered = true;
+            const item = state.current;
+            const ok = answer === item.isQ;
+
+            byId("recog-degree").textContent = item.degree;
+            byId("recog-variable").textContent = item.variable;
+            byId("recog-shape").textContent = item.shape;
+            byId(answer ? "btn-yes" : "btn-no").classList.add(ok ? "correct" : "wrong");
+            byId(item.isQ ? "btn-yes" : "btn-no").classList.add("correct");
+
+            record(ok, ok);
+            showFeedback("recog-feedback", ok, ok ? "Betul." : "Semak kuasa tertinggi dan bilangan pemboleh ubah.");
+        }
+
+        function setDiff(diff) {
+            state.diff = diff;
+            byId("f-diff-easy").classList.toggle("active", diff === "easy");
+            byId("f-diff-hard").classList.toggle("active", diff === "hard");
+            generateFactor();
+        }
+
+        function makeFactorProblem(hard = false) {
+            const pairs = hard ? [[1, 2], [2, 3], [1, 3], [2, 2]] : [[1, 1]];
+            const [p, r] = pairs[rndInt(0, pairs.length - 1)];
+            const q = nonZeroInt(-5, 5);
+            const s = nonZeroInt(-5, 5);
+            const a = p * r;
+            const b = p * s + q * r;
+            const c = q * s;
+            const split1 = q * r;
+            const split2 = p * s;
+            const x1 = -q / p;
+            const x2 = -s / r;
+            return { p, q, r, s, a, b, c, split1, split2, x1, x2 };
+        }
+
+        function generateFactor() {
+            let problem = makeFactorProblem(state.diff === "hard");
+            while (problem.b === 0) problem = makeFactorProblem(state.diff === "hard");
+            state.current = problem;
+            state.done = false;
+
+            byId("factor-equation").innerHTML = quadraticHtml(problem.a, problem.b, problem.c);
+            byId("f-chip-b").textContent = problem.b;
+            byId("f-chip-ac").textContent = problem.a * problem.c;
+            clearInputs(["f-in-a", "f-in-b", "f-in-c", "f-in-m", "f-in-n", "f-in-x1", "f-in-x2"]);
+            resetFactorVisual();
+            hideFeedback("factor-feedback");
+            setStep("f", 1);
+        }
+
+        function resetFactorVisual() {
+            byId("vis-top-x").innerHTML = "?x";
+            byId("vis-top-c").textContent = "?";
+            byId("vis-side-x").innerHTML = "?x";
+            byId("vis-side-c").textContent = "?";
+            byId("vis-ax2").innerHTML = "?x<sup>2</sup>";
+            byId("vis-split-1").innerHTML = "?x";
+            byId("vis-split-2").innerHTML = "?x";
+            byId("vis-c").textContent = "?";
+        }
+
+        function fillFactorVisual(problem) {
+            byId("vis-top-x").innerHTML = `${problem.p === 1 ? "" : problem.p}x`;
+            byId("vis-top-c").textContent = signedLabel(problem.q);
+            byId("vis-side-x").innerHTML = `${problem.r === 1 ? "" : problem.r}x`;
+            byId("vis-side-c").textContent = signedLabel(problem.s);
+            byId("vis-ax2").innerHTML = `${problem.a === 1 ? "" : problem.a}x<sup>2</sup>`;
+            byId("vis-split-1").innerHTML = `${problem.split1}x`;
+            byId("vis-split-2").innerHTML = `${problem.split2}x`;
+            byId("vis-c").textContent = problem.c;
+        }
+
+        function checkFactorStep() {
+            if (state.done) return;
+            const p = state.current;
+            let ok = false;
+            let completed = false;
+
+            if (state.step === 1) {
+                ok = closeEnough(read("f-in-a"), p.a, 0) &&
+                     closeEnough(read("f-in-b"), p.b, 0) &&
+                     closeEnough(read("f-in-c"), p.c, 0);
+                if (ok) {
+                    byId("vis-ax2").innerHTML = `${p.a === 1 ? "" : p.a}x<sup>2</sup>`;
+                    byId("vis-c").textContent = p.c;
+                    setStep("f", 2);
+                }
+            } else if (state.step === 2) {
+                ok = samePair(read("f-in-m"), read("f-in-n"), p.split1, p.split2, 0);
+                if (ok) {
+                    fillFactorVisual(p);
+                    setStep("f", 3);
+                }
+            } else if (state.step === 3) {
+                ok = samePair(read("f-in-x1"), read("f-in-x2"), p.x1, p.x2, 0.01);
+                completed = ok;
+                if (ok) {
+                    state.done = true;
+                    setStep("f", 4);
+                }
+            }
+
+            record(ok, completed);
+            const answer = `x = ${formatNumber(p.x1)}, ${formatNumber(p.x2)}`;
+            showFeedback("factor-feedback", ok, ok ? (completed ? `Siap. ${answer}` : "Betul.") : "Cuba semula.");
+        }
+
+        function makeFormulaProblem() {
+            const pairs = [[1, 2], [2, 3], [1, 3], [2, 2], [1, 1]];
+            const [p, r] = pairs[rndInt(0, pairs.length - 1)];
+            const q = nonZeroInt(-5, 5);
+            const s = nonZeroInt(-5, 5);
+            const a = p * r;
+            const b = p * s + q * r;
+            const c = q * s;
+            const d = b * b - 4 * a * c;
+            const x1 = -q / p;
+            const x2 = -s / r;
+            return { a, b, c, d, x1, x2 };
+        }
+
+        function generateFormula() {
+            let problem = makeFormulaProblem();
+            while (problem.d < 0 || closeEnough(problem.x1, problem.x2, 0.001)) problem = makeFormulaProblem();
+            state.current = problem;
+            state.done = false;
+
+            byId("formula-equation").innerHTML = quadraticHtml(problem.a, problem.b, problem.c);
+            clearInputs(["form-in-a", "form-in-b", "form-in-c", "form-in-d", "form-in-x1", "form-in-x2"]);
+            byId("form-vis-d").textContent = "?";
+            byId("form-vis-rootd").textContent = "?";
+            byId("form-vis-denom").textContent = "?";
+            byId("form-vis-roots").textContent = "?";
+            hideFeedback("formula-feedback");
+            setStep("form", 1);
+        }
+
+        function checkFormulaStep() {
+            if (state.done) return;
+            const p = state.current;
+            let ok = false;
+            let completed = false;
+
+            if (state.step === 1) {
+                ok = closeEnough(read("form-in-a"), p.a, 0) &&
+                     closeEnough(read("form-in-b"), p.b, 0) &&
+                     closeEnough(read("form-in-c"), p.c, 0);
+                if (ok) {
+                    byId("form-vis-denom").textContent = 2 * p.a;
+                    setStep("form", 2);
+                }
+            } else if (state.step === 2) {
+                ok = closeEnough(read("form-in-d"), p.d, 0);
+                if (ok) {
+                    byId("form-vis-d").textContent = p.d;
+                    byId("form-vis-rootd").textContent = formatNumber(Math.sqrt(p.d));
+                    setStep("form", 3);
+                }
+            } else if (state.step === 3) {
+                ok = samePair(read("form-in-x1"), read("form-in-x2"), p.x1, p.x2, 0.01);
+                completed = ok;
+                if (ok) {
+                    state.done = true;
+                    byId("form-vis-roots").textContent = `${formatNumber(p.x1)}, ${formatNumber(p.x2)}`;
+                    setStep("form", 4);
+                }
+            }
+
+            record(ok, completed);
+            const answer = `x = ${formatNumber(p.x1)}, ${formatNumber(p.x2)}`;
+            showFeedback("formula-feedback", ok, ok ? (completed ? `Siap. ${answer}` : "Betul.") : "Cuba semula.");
+        }
+
+        window.addEventListener("load", () => {
+            generateRecognition();
+            updateStats();
+        });
+    </script>
+</body>
+</html>
