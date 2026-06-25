@@ -1,80 +1,97 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ALGEBRA | Portal Pembelajaran Algebra</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    :root{
-      --blue:#1d4ed8; --sky:#dbeafe; --navy:#172554;
-      --green:#16a34a; --purple:#7c3aed; --orange:#f97316;
-      --teal:#0891b2; --pink:#db2777; --red:#dc2626; --gold:#d97706;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-      color:#1f2937;
-      min-height:100vh;
-      background:
-        radial-gradient(circle at 8% 8%, rgba(96,165,250,.22), transparent 28%),
-        radial-gradient(circle at 94% 4%, rgba(191,219,254,.55), transparent 24%),
-        linear-gradient(180deg,#f8fbff 0%,#eef6ff 42%,#ffffff 100%);
-      overflow-x:hidden;
-    }
-    .hero{
-      position:relative;
-      padding:54px 7vw 42px;
-      min-height:350px;
-      overflow:hidden;
-    }
-    .blob{position:absolute;border-radius:999px;background:rgba(191,219,254,.55);filter:blur(.2px);z-index:0}
-    .blob.one{width:360px;height:230px;left:-100px;top:-60px;transform:rotate(-15deg)}
-    .blob.two{width:420px;height:250px;right:-150px;top:-75px;transform:rotate(20deg)}
-    .dots{position:absolute;width:140px;height:90px;background-image:radial-gradient(#bfdbfe 2px, transparent 2px);background-size:18px 18px;opacity:.9;z-index:0}
-    .dots.left{left:0;top:170px}.dots.right{right:130px;top:72px}
-    .math-note{position:absolute;color:#8da8ff;font-weight:700;font-size:23px;letter-spacing:.5px;z-index:1;opacity:.88}
-    .note1{left:17%;top:42px;transform:rotate(-7deg)}.note2{right:12%;top:48px;transform:rotate(4deg)}.note3{right:23%;top:185px;color:#a78bfa;font-size:44px}.note4{right:5%;top:205px;font-size:26px;opacity:.55}
-    .book-wrap{position:absolute;left:6vw;top:72px;width:210px;height:180px;z-index:1}
-    .book{position:absolute;width:128px;height:158px;background:linear-gradient(145deg,#2563eb,#1d4ed8);border-radius:14px;box-shadow:0 20px 35px rgba(30,64,175,.28);transform:rotate(-10deg)}
-    .book:before{content:"A";position:absolute;left:36px;top:29px;color:white;font-size:72px;font-weight:900;text-shadow:0 4px 10px rgba(0,0,0,.22)}
-    .bookmark{position:absolute;left:29px;bottom:-9px;width:26px;height:42px;background:#fbbf24;clip-path:polygon(0 0,100% 0,100% 100%,50% 72%,0 100%)}
-    .calc{position:absolute;left:92px;top:58px;width:98px;height:128px;background:#f8fafc;border-radius:18px;box-shadow:0 16px 28px rgba(15,23,42,.22);transform:rotate(12deg);padding:14px}
-    .screen{height:24px;background:#cbd5e1;border-radius:5px;margin-bottom:12px}.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.key{height:16px;border-radius:5px;background:#d1d5db}.key.blue{background:#60a5fa}.key.yellow{background:#fbbf24}
-    .graph{position:absolute;right:8vw;top:86px;width:200px;height:150px;z-index:1;opacity:.85}
-    .axis-x,.axis-y{position:absolute;background:#64748b}.axis-x{height:1.8px;width:168px;top:78px;left:18px}.axis-y{width:1.8px;height:128px;top:14px;left:96px}.axis-x:after{content:"x";position:absolute;right:-14px;top:-10px;color:#64748b}.axis-y:after{content:"y";position:absolute;right:8px;top:-13px;color:#64748b}.curve{position:absolute;left:52px;top:24px;width:92px;height:95px;border-bottom:4px solid #2563eb;border-left:0;border-right:0;border-radius:0 0 55px 55px;transform:scaleX(1.35)}
-    .title-wrap{position:relative;z-index:2;text-align:center;max-width:900px;margin:0 auto;padding-top:8px}
-    h1{margin:0;font-size:clamp(56px,9vw,112px);line-height:.9;font-weight:950;letter-spacing:4px;background:linear-gradient(180deg,#2563eb,#0f3fb6);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 8px 14px rgba(30,64,175,.12)}
-    .subtitle{margin-top:22px;font-size:clamp(22px,3vw,36px);font-weight:800;color:#172554}.support{margin-top:18px;font-size:clamp(16px,2vw,23px);color:#475569}.divider{display:flex;align-items:center;justify-content:center;gap:20px;margin:20px auto 0;color:#2563eb}.divider:before,.divider:after{content:"";width:120px;height:2px;background:linear-gradient(90deg,transparent,#3b82f6)}.divider:after{background:linear-gradient(90deg,#3b82f6,transparent)}
-    .home-badge{position:absolute;right:7vw;bottom:18px;z-index:3;background:rgba(255,255,255,.86);backdrop-filter:blur(12px);border:1px solid rgba(191,219,254,.9);box-shadow:0 10px 25px rgba(30,64,175,.16);border-radius:18px;padding:10px 17px;display:flex;align-items:center;gap:10px;font-weight:600;color:#334155}.home-icon{width:34px;height:34px;border-radius:50%;background:#2563eb;color:#fff;display:grid;place-items:center;font-size:18px}.home-badge code{color:#1d4ed8;font-weight:900;font-size:17px}
-    main{position:relative;z-index:4;padding:10px 7vw 70px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px 30px;max-width:1500px;margin:0 auto}.card{position:relative;display:flex;align-items:center;gap:28px;min-height:148px;padding:28px 34px;background:rgba(255,255,255,.86);border:1.5px solid rgba(226,232,240,.95);border-radius:18px;box-shadow:0 16px 30px rgba(15,23,42,.08);overflow:hidden;text-decoration:none;transition:.22s ease}.card:hover{transform:translateY(-6px);box-shadow:0 24px 45px rgba(15,23,42,.14)}.card:before{content:"";position:absolute;left:0;top:0;bottom:0;width:7px;background:var(--accent)}.icon{flex:0 0 92px;width:92px;height:92px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb, var(--accent) 14%, white);color:var(--accent)}.icon svg{width:50px;height:50px}.card h2{margin:0 0 12px;font-size:clamp(22px,2vw,30px);line-height:1.1;font-weight:900;color:var(--accent)}.file-pill{display:inline-block;max-width:100%;padding:9px 16px;border-radius:9px;border:1.5px solid color-mix(in srgb,var(--accent) 28%, white);background:color-mix(in srgb,var(--accent) 9%, white);font-family:"Courier New",monospace;font-size:clamp(14px,1.4vw,18px);font-weight:800;color:color-mix(in srgb,var(--accent) 78%, #111827);white-space:nowrap}.wave{position:fixed;left:0;right:0;bottom:-2px;height:86px;background:linear-gradient(180deg,rgba(219,234,254,.1),rgba(219,234,254,.75));clip-path:ellipse(70% 45% at 50% 100%);z-index:0;pointer-events:none}
-    @media(max-width:1050px){.book-wrap,.graph,.math-note,.dots{opacity:.22}.grid{grid-template-columns:1fr 1fr}.home-badge{position:relative;right:auto;bottom:auto;margin:26px auto 0;width:max-content}.hero{padding-bottom:24px}}
-    @media(max-width:700px){.grid{grid-template-columns:1fr}.card{padding:22px;gap:18px}.icon{width:76px;height:76px;flex-basis:76px}.hero{padding-left:24px;padding-right:24px}.book-wrap,.graph{display:none}.file-pill{white-space:normal}.divider:before,.divider:after{width:70px}}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hab Pembelajaran ALGEBRA</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles if needed, though Tailwind should cover most */
+        body {
+            font-family: 'Inter', sans-serif; /* Example font, Tailwind uses system fonts by default */
+        }
+        .topic-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .topic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+    </style>
 </head>
-<body>
-  <section class="hero">
-    <div class="blob one"></div><div class="blob two"></div><div class="dots left"></div><div class="dots right"></div>
-    <div class="math-note note1">ax² + bx + c = 0</div><div class="math-note note2">y = mx + c</div><div class="math-note note3">√x</div><div class="math-note note4">(a+b)²</div>
-    <div class="book-wrap" aria-hidden="true"><div class="book"><div class="bookmark"></div></div><div class="calc"><div class="screen"></div><div class="keys"><span class="key"></span><span class="key"></span><span class="key blue"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key blue"></span><span class="key yellow"></span></div></div></div>
-    <div class="graph" aria-hidden="true"><div class="axis-x"></div><div class="axis-y"></div><div class="curve"></div></div>
-    <div class="title-wrap"><h1>ALGEBRA</h1><div class="subtitle">Portal Pembelajaran Algebra</div><div class="divider">★</div><div class="support">Pilih subtopik untuk mula belajar</div></div>
-    <div class="home-badge"><span class="home-icon">⌂</span><span>Home file: <code>index.html</code></span></div>
-  </section>
-  <main>
-    <section class="grid" aria-label="Senarai subtopik Algebra">
-      <a class="card" style="--accent:var(--blue)" href="algebra_equations.html"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v18M5 7h14M7 7l-4 7h8L7 7Zm10 0-4 7h8l-4-7Z"/><path d="M9 21h6"/></svg></div><div><h2>Algebra Equations</h2><span class="file-pill">algebra_equations.html</span></div></a>
-      <a class="card" style="--accent:var(--green)" href="formulae.html"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v5h5M9 12h6M9 16h4M16 14l4 4M20 14l-4 4"/></svg></div><div><h2>Formulae</h2><span class="file-pill">formulae.html</span></div></a>
-      <a class="card" style="--accent:var(--purple)" href="operation_algebra.html"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h4M10 7v4M15 9h3M8 15l4 4M12 15l-4 4M15 17h3M15 14h3"/></svg></div><div><h2>Operation Algebra</h2><span class="file-pill">operation_algebra.html</span></div></a>
-      <a class="card" style="--accent:var(--orange)" href="partial_fraction.html"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3a9 9 0 1 0 9 9h-9V3Z"/><path d="M12 12 20 7M12 12v9M12 12h9" stroke-dasharray="2 2"/></svg></div><div><h2>Partial Fraction</h2><span class="file-pill">partial_fraction.html</span></div></a>
-      <a class="card" style="--accent:var(--teal)" href="peta_minda.html"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 7a3 3 0 0 1 6 0 3 3 0 1 1 1 5.83A4 4 0 0 1 8 13a3 3 0 1 1 1-6Z"/><path d="M12 16v3M8 19h8M6 21h.01M18 21h.01"/></svg></div><div><h2>Peta Minda</h2><span class="file-pill">peta_minda.html</span></div></a>
-      <a class="card" style="--accent:var(--pink)" href="polynomial.html"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 17c2-8 4-8 6 0 2-8 4-8 6 0"/><path d="M17 6h3M18.5 4.5v3"/><text x="5" y="10" font-size="5" fill="currentColor" stroke="none">xⁿ</text></svg></div><div><h2>Polynomial</h2><span class="file-pill">polynomial.html</span></div></a>
-      <a class="card" style="--accent:var(--red)" href="quadratic_equations.html"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 18c4-12 10-12 14 0"/><path d="M4 19h16"/><text x="6" y="10" font-size="5" fill="currentColor" stroke="none">x²</text></svg></div><div><h2>Quadratic Equations</h2><span class="file-pill">quadratic_equations.html</span></div></a>
-      <a class="card" style="--accent:var(--blue)" href="simultaneous_equation.html"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="8" r="3"/><path d="M3 19a4 4 0 0 1 8 0"/><circle cx="17" cy="16" r="3"/><path d="M21 5a4 4 0 0 0-8 0M12 10h7l-2-2M12 14H5l2 2"/></svg></div><div><h2>Simultaneous Equation</h2><span class="file-pill">simultaneous_equation.html</span></div></a>
-      <a class="card" style="--accent:var(--gold)" href="mind_map.html"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18h6M10 21h4M8 11a4 4 0 1 1 8 0c0 2-2 3-2 5h-4c0-2-2-3-2-5Z"/><path d="M12 2v2M4.9 4.9l1.4 1.4M19.1 4.9l-1.4 1.4M3 12h2M19 12h2"/></svg></div><div><h2>Mind Map</h2><span class="file-pill">mind_map.html</span></div></a>
-    </section>
-  </main>
-  <div class="wave"></div>
+<body class="bg-gray-100 text-gray-900">
+    <div class="container mx-auto p-6 md:p-10">
+        <!-- Header Section -->
+        <header class="text-center mb-12">
+            <h1 class="text-5xl md:text-6xl font-extrabold text-indigo-800 mb-4 leading-tight">
+                ALGEBRA
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto">
+                Selamat datang ke hab pembelajaran Algebra! Terokai pelbagai topik penting dalam Algebra untuk mengukuhkan pemahaman anda.
+            </p>
+        </header>
+
+        <!-- Algebra Mind Map Section -->
+        <section class="mb-12 bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-3xl font-bold text-indigo-700 mb-6 text-center">Peta Minda Algebra</h2>
+            <div class="flex justify-center">
+                <a href="peta_minda,html" alt="Peta Minda Algebra" class="max-w-full h-auto rounded-lg shadow-lg">
+            </div>
+            <p class="text-center text-gray-600 mt-4">Peta minda ini memberikan gambaran keseluruhan topik-topik utama dalam Algebra.</p>
+        </section>
+
+        <!-- Topics Grid -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Topic Card: Operations of Algebra -->
+            <a href="operations_algebra.html" class="topic-card block bg-white rounded-lg shadow-md hover:shadow-xl p-6 border-l-4 border-indigo-500">
+                <h2 class="text-2xl font-semibold text-indigo-700 mb-2">Operations of Algebra</h2>
+                <p class="text-gray-600">Pelajari asas-asas operasi algebra seperti penambahan, penolakan, pendaraban, dan pembahagian ungkapan algebra.</p>
+            </a>
+
+            <!-- Topic Card: Expansion & Factorization -->
+            <a href="expansion_factorization.html" class="topic-card block bg-white rounded-lg shadow-md hover:shadow-xl p-6 border-l-4 border-green-500">
+                <h2 class="text-2xl font-semibold text-green-700 mb-2">Expansion & Factorization</h2>
+                <p class="text-gray-600">Fahami teknik pengembangan dan pemfaktoran ungkapan algebra untuk menyelesaikan masalah yang lebih kompleks.</p>
+            </a>
+
+            <!-- Topic Card: Algebra Equations -->
+            <a href="algebra_equations.html" class="topic-card block bg-white rounded-lg shadow-md hover:shadow-xl p-6 border-l-4 border-red-500">
+                <h2 class="text-2xl font-semibold text-red-700 mb-2">Algebra Equations</h2>
+                <p class="text-gray-600">Terokai pelbagai jenis persamaan algebra dan kaedah penyelesaiannya.</p>
+            </a>
+
+            <!-- Topic Card: Quadratic Equations -->
+            <a href="quadratic_equations.html" class="topic-card block bg-white rounded-lg shadow-md hover:shadow-xl p-6 border-l-4 border-yellow-500">
+                <h2 class="text-2xl font-semibold text-yellow-700 mb-2">Quadratic Equations</h2>
+                <p class="text-gray-600">Kuasai persamaan kuadratik, termasuk kaedah pemfaktoran, rumus kuadratik, dan penyelesaian graf.</p>
+            </a>
+
+            <!-- Topic Card: Simultaneous Equation -->
+            <a href="simultaneous_equation.html" class="topic-card block bg-white rounded-lg shadow-md hover:shadow-xl p-6 border-l-4 border-purple-500">
+                <h2 class="text-2xl font-semibold text-purple-700 mb-2">Simultaneous Equation</h2>
+                <p class="text-gray-600">Pelajari cara menyelesaikan sistem persamaan serentak menggunakan kaedah penggantian dan penghapusan.</p>
+            </a>
+
+            <!-- Topic Card: Formulae -->
+            <a href="formulae.html" class="topic-card block bg-white rounded-lg shadow-md hover:shadow-xl p-6 border-l-4 border-pink-500">
+                <h2 class="text-2xl font-semibold text-pink-700 mb-2">Formulae</h2>
+                <p class="text-gray-600">Fahami dan gunakan pelbagai formula algebra dalam konteks penyelesaian masalah.</p>
+            </a>
+
+            <!-- Topic Card: Polynomial -->
+            <a href="polynomial.html" class="topic-card block bg-white rounded-lg shadow-md hover:shadow-xl p-6 border-l-4 border-blue-500">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-2">Polynomial</h2>
+                <p class="text-gray-600">Terokai sifat-sifat polinomial, operasi, dan kaedah pemfaktoran.</p>
+            </a>
+
+            <!-- Topic Card: Partial Fractions -->
+            <a href="partial-fractions.html" class="topic-card block bg-white rounded-lg shadow-md hover:shadow-xl p-6 border-l-4 border-teal-500">
+                <h2 class="text-2xl font-semibold text-teal-700 mb-2">Partial Fractions</h2>
+                <p class="text-gray-600">Pelajari teknik pecahan separa untuk memudahkan integrasi dan manipulasi ungkapan rasional.</p>
+            </a>
+        </section>
+    </div>
 </body>
 </html>
+
