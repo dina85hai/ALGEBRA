@@ -1,2740 +1,2120 @@
 <!DOCTYPE html>
-<html lang="ms">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Transposition of Formulae - Pembelajaran Interaktif CVSA">
-    <title>Transposisi Formula | Pembelajaran Interaktif CVSA</title>
-    
-    <style>
-        /* ========================================
-           DESIGN SYSTEM & BASE STYLES
-           ======================================== */
-        
-        :root {
-            /* Brand Colors */
-            --primary: #3b82f6;
-            --secondary: #8b5cf6;
-            
-            /* Semantic Colors */
-            --success: #10b981;
-            --error: #ef4444;
-            --warning: #f59e0b;
-            --info: #06b6d4;
-            
-            /* CVSA Stage Colors */
-            --concrete-color: #fb923c;
-            --visual-color: #a78bfa;
-            --symbolic-color: #3b82f6;
-            --abstract-color: #10b981;
-            
-            /* Formula Component Colors */
-            --input-value: #3b82f6;
-            --operation: #f97316;
-            --result: #10b981;
-            --subject: #a855f7;
-            --warning-color: #ef4444;
-            
-            /* Backgrounds */
-            --bg-primary: #ffffff;
-            --bg-secondary: #f9fafb;
-            --bg-tertiary: #f3f4f6;
-            --bg-hero: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            
-            /* Text */
-            --text-primary: #111827;
-            --text-secondary: #6b7280;
-            --text-tertiary: #9ca3af;
-            
-            /* Borders */
-            --border-light: #e5e7eb;
-            --border-medium: #d1d5db;
-            
-            /* Shadows */
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
-            
-            /* Transitions */
-            --transition-fast: 150ms ease;
-            --transition-normal: 300ms ease;
-            --transition-slow: 500ms ease;
-            
-            /* Typography */
-            --text-xs: 0.75rem;
-            --text-sm: 0.875rem;
-            --text-base: 1rem;
-            --text-lg: 1.125rem;
-            --text-xl: 1.25rem;
-            --text-2xl: 1.5rem;
-            --text-3xl: 1.875rem;
-            --text-4xl: 2.25rem;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', 'Inter', system-ui, sans-serif;
-            line-height: 1.6;
-            color: var(--text-primary);
-            background: var(--bg-secondary);
-            overflow-x: hidden;
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-        
-        /* ========================================
-           HERO SECTION
-           ======================================== */
-        
-        .hero-section {
-            background: var(--bg-hero);
-            color: white;
-            padding: 3rem 0;
-            text-align: center;
-            box-shadow: var(--shadow-lg);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero-section::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -10%;
-            width: 40%;
-            height: 200%;
-            background: rgba(255, 255, 255, 0.05);
-            transform: rotate(15deg);
-        }
-        
-        .hero-section h1 {
-            font-size: var(--text-4xl);
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .tagline {
-            font-size: var(--text-xl);
-            opacity: 0.95;
-            margin-bottom: 2rem;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .learning-objectives {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            padding: 1.5rem 2rem;
-            border-radius: 1rem;
-            text-align: left;
-            margin-bottom: 2rem;
-            box-shadow: var(--shadow-md);
-            position: relative;
-            z-index: 1;
-        }
-        
-        .learning-objectives div {
-            margin: 0.5rem 0;
-            font-size: var(--text-base);
-        }
-        
-        .progress-container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 999px;
-            padding: 0.5rem;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .progress-bar-wrapper {
-            background: rgba(255, 255, 255, 0.3);
-            height: 24px;
-            border-radius: 999px;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #10b981, #34d399);
-            border-radius: 999px;
-            transition: width 0.5s ease;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding-right: 0.5rem;
-        }
-        
-        .progress-text {
-            display: block;
-            text-align: center;
-            margin-top: 0.5rem;
-            font-size: var(--text-sm);
-            font-weight: 600;
-        }
-        
-        /* ========================================
-           CARD COMPONENTS
-           ======================================== */
-        
-        .card {
-            background: var(--bg-primary);
-            border-radius: 1rem;
-            padding: 2rem;
-            margin: 2rem 0;
-            box-shadow: var(--shadow-md);
-            border: 1px solid var(--border-light);
-        }
-        
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--border-light);
-        }
-        
-        .card-icon {
-            font-size: 2.5rem;
-            line-height: 1;
-        }
-        
-        .card-title {
-            font-size: var(--text-2xl);
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-        
-        .card-subtitle {
-            font-size: var(--text-sm);
-            color: var(--text-secondary);
-            margin-top: 0.25rem;
-        }
-        
-        .stage-badge {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 0.5rem;
-            font-size: var(--text-xs);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        
-        .stage-concrete {
-            background: rgba(251, 146, 60, 0.1);
-            color: var(--concrete-color);
-        }
-        
-        .stage-visual {
-            background: rgba(167, 139, 250, 0.1);
-            color: var(--visual-color);
-        }
-        
-        .stage-symbolic {
-            background: rgba(59, 130, 246, 0.1);
-            color: var(--symbolic-color);
-        }
-        
-        .stage-abstract {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--abstract-color);
-        }
-        
-        /* ========================================
-           MISSION/STORY SECTION
-           ======================================== */
-        
-        .mission-box {
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            border-left: 4px solid var(--warning);
-            padding: 2rem;
-            border-radius: 0.75rem;
-            margin: 1.5rem 0;
-            position: relative;
-        }
-        
-        .mission-title {
-            font-size: var(--text-2xl);
-            font-weight: 700;
-            color: #92400e;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .mission-content {
-            font-size: var(--text-lg);
-            color: #78350f;
-            line-height: 1.8;
-        }
-        
-        .character-section {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 2rem;
-            align-items: center;
-            margin: 2rem 0;
-        }
-        
-        .character-image {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 1rem;
-            padding: 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 5rem;
-            box-shadow: var(--shadow-lg);
-        }
-        
-        .character-dialogue {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 1rem;
-            box-shadow: var(--shadow-md);
-            position: relative;
-        }
-        
-        .character-dialogue::before {
-            content: '';
-            position: absolute;
-            left: -10px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 10px 10px 10px 0;
-            border-color: transparent white transparent transparent;
-        }
-        
-        .why-important {
-            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            margin: 1.5rem 0;
-        }
-        
-        .why-important h3 {
-            color: #1e40af;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .why-important ul {
-            list-style: none;
-            padding-left: 0;
-        }
-        
-        .why-important li {
-            padding: 0.5rem 0;
-            padding-left: 2rem;
-            position: relative;
-            color: #1e3a8a;
-        }
-        
-        .why-important li::before {
-            content: '▶';
-            position: absolute;
-            left: 0.5rem;
-            color: var(--info);
-        }
-        
-        /* ========================================
-           VISUAL DIAGRAM SECTION
-           ======================================== */
-        
-        .visual-canvas {
-            background: white;
-            border-radius: 0.75rem;
-            padding: 2rem;
-            margin: 1.5rem 0;
-            box-shadow: var(--shadow-md);
-            text-align: center;
-        }
-        
-        .balance-scale {
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            gap: 2rem;
-            margin: 2rem 0;
-            position: relative;
-        }
-        
-        .balance-pivot {
-            width: 4px;
-            height: 120px;
-            background: var(--text-primary);
-            position: relative;
-        }
-        
-        .balance-pivot::before {
-            content: '';
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 0 20px 20px 20px;
-            border-color: transparent transparent var(--text-primary) transparent;
-        }
-        
-        .balance-beam {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 400px;
-            height: 8px;
-            background: var(--text-primary);
-            border-radius: 4px;
-        }
-        
-        .balance-pan {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            color: white;
-            font-size: var(--text-xl);
-            font-weight: 600;
-            min-width: 150px;
-            box-shadow: var(--shadow-lg);
-            animation: float 2s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        
-        .cvs-bridge {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }
-        
-        .cvs-stage {
-            background: var(--bg-secondary);
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            text-align: center;
-            border: 2px solid var(--border-light);
-            transition: all var(--transition-normal);
-        }
-        
-        .cvs-stage:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-lg);
-        }
-        
-        .cvs-stage h4 {
-            margin-bottom: 1rem;
-            font-size: var(--text-lg);
-        }
-        
-        .cvs-content {
-            font-size: var(--text-2xl);
-            font-weight: 600;
-            padding: 1rem;
-            background: white;
-            border-radius: 0.5rem;
-        }
-        
-        .arrow-connector {
-            text-align: center;
-            font-size: 2rem;
-            color: var(--primary);
-            margin: 1rem 0;
-        }
-        
-        /* ========================================
-           FORMULA DISPLAY
-           ======================================== */
-        
-        .formula-box {
-            background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
-            border: 3px solid var(--secondary);
-            border-radius: 1rem;
-            padding: 2rem;
-            margin: 2rem 0;
-            text-align: center;
-        }
-        
-        .formula-title {
-            font-size: var(--text-xl);
-            font-weight: 700;
-            color: #5b21b6;
-            margin-bottom: 1.5rem;
-        }
-        
-        .formula-display {
-            font-family: 'Times New Roman', serif;
-            font-size: 2.5rem;
-            font-weight: 600;
-            margin: 1.5rem 0;
-            padding: 1.5rem;
-            background: white;
-            border-radius: 0.75rem;
-            box-shadow: var(--shadow-md);
-        }
-        
-        .formula-legend {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-top: 1.5rem;
-            text-align: left;
-        }
-        
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem;
-            background: white;
-            border-radius: 0.5rem;
-            font-size: var(--text-sm);
-        }
-        
-        .legend-color {
-            width: 24px;
-            height: 24px;
-            border-radius: 0.25rem;
-            flex-shrink: 0;
-        }
-        
-        .inverse-ops {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin: 1.5rem 0;
-        }
-        
-        .inverse-pair {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            text-align: center;
-            box-shadow: var(--shadow-sm);
-        }
-        
-        .inverse-arrow {
-            font-size: 2rem;
-            color: var(--primary);
-            margin: 0.5rem 0;
-        }
-        
-        .operation-sign {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--operation);
-        }
-        
-        /* ========================================
-           WORKED EXAMPLES
-           ======================================== */
-        
-        .example-steps {
-            background: var(--bg-secondary);
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-        }
-        
-        .step-item {
-            background: white;
-            padding: 1.5rem;
-            margin: 1rem 0;
-            border-radius: 0.5rem;
-            border-left: 4px solid var(--primary);
-            box-shadow: var(--shadow-sm);
-        }
-        
-        .step-number {
-            display: inline-block;
-            width: 32px;
-            height: 32px;
-            background: var(--primary);
-            color: white;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 32px;
-            font-weight: 700;
-            margin-right: 0.75rem;
-        }
-        
-        .step-content {
-            margin-top: 1rem;
-        }
-        
-        .step-visual, .step-symbolic, .step-verbal {
-            margin: 0.75rem 0;
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-        }
-        
-        .step-visual {
-            background: rgba(167, 139, 250, 0.1);
-            border-left: 3px solid var(--visual-color);
-        }
-        
-        .step-symbolic {
-            background: rgba(59, 130, 246, 0.1);
-            border-left: 3px solid var(--symbolic-color);
-            font-family: 'Times New Roman', serif;
-            font-size: var(--text-xl);
-        }
-        
-        .step-verbal {
-            background: rgba(16, 185, 129, 0.1);
-            border-left: 3px solid var(--abstract-color);
-        }
-        
-        /* ========================================
-           INTERACTIVE PRACTICE
-           ======================================== */
-        
-        .practice-container {
-            background: var(--bg-primary);
-            border-radius: 1rem;
-            padding: 2rem;
-            margin: 2rem 0;
-        }
-        
-        .difficulty-selector {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-        
-        .difficulty-btn {
-            flex: 1;
-            min-width: 150px;
-            padding: 1rem;
-            border: 2px solid var(--border-medium);
-            background: white;
-            border-radius: 0.75rem;
-            cursor: pointer;
-            transition: all var(--transition-fast);
-            font-size: var(--text-base);
-            font-weight: 600;
-        }
-        
-        .difficulty-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-        
-        .difficulty-btn.active {
-            border-color: var(--primary);
-            background: var(--primary);
-            color: white;
-        }
-        
-        .problem-display {
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-            padding: 2rem;
-            border-radius: 0.75rem;
-            margin: 1.5rem 0;
-            text-align: center;
-        }
-        
-        .problem-text {
-            font-size: var(--text-xl);
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--text-primary);
-        }
-        
-        .problem-formula {
-            font-family: 'Times New Roman', serif;
-            font-size: 2rem;
-            font-weight: 700;
-            margin: 1.5rem 0;
-            padding: 1rem;
-            background: white;
-            border-radius: 0.5rem;
-            display: inline-block;
-        }
-        
-        .problem-instruction {
-            font-size: var(--text-base);
-            color: var(--text-secondary);
-            margin-top: 1rem;
-        }
-        
-        .solving-area {
-            background: white;
-            padding: 2rem;
-            border-radius: 0.75rem;
-            margin: 1.5rem 0;
-            box-shadow: var(--shadow-sm);
-        }
-        
-        .solving-step {
-            margin: 1.5rem 0;
-            padding: 1.5rem;
-            background: var(--bg-secondary);
-            border-radius: 0.5rem;
-            transition: all var(--transition-normal);
-        }
-        
-        .solving-step.locked {
-            opacity: 0.5;
-            pointer-events: none;
-        }
-        
-        .solving-step.completed {
-            background: rgba(16, 185, 129, 0.1);
-            border: 2px solid var(--success);
-        }
-        
-        .step-label {
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .input-group {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin: 1rem 0;
-        }
-        
-        .input-field {
-            padding: 0.75rem 1rem;
-            border: 2px solid var(--border-medium);
-            border-radius: 0.5rem;
-            font-size: var(--text-lg);
-            font-family: 'Times New Roman', serif;
-            text-align: center;
-            min-width: 120px;
-            transition: all var(--transition-fast);
-        }
-        
-        .input-field:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-        
-        .input-field.correct {
-            border-color: var(--success);
-            background: rgba(16, 185, 129, 0.05);
-        }
-        
-        .input-field.incorrect {
-            border-color: var(--error);
-            background: rgba(239, 68, 68, 0.05);
-            animation: shake 0.3s ease;
-        }
-        
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-        
-        /* ========================================
-           BUTTONS
-           ======================================== */
-        
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            font-size: var(--text-base);
-            cursor: pointer;
-            transition: all var(--transition-fast);
-            border: none;
-            outline: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            text-decoration: none;
-        }
-        
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-        
-        .btn-primary:hover:not(:disabled) {
-            background: #2563eb;
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-        
-        .btn-primary:active:not(:disabled) {
-            transform: translateY(0);
-        }
-        
-        .btn-success {
-            background: var(--success);
-            color: white;
-        }
-        
-        .btn-success:hover:not(:disabled) {
-            background: #059669;
-        }
-        
-        .btn-warning {
-            background: var(--warning);
-            color: white;
-        }
-        
-        .btn-warning:hover:not(:disabled) {
-            background: #d97706;
-        }
-        
-        .btn-secondary {
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-            border: 2px solid var(--border-medium);
-        }
-        
-        .btn-secondary:hover:not(:disabled) {
-            background: var(--bg-secondary);
-            border-color: var(--primary);
-        }
-        
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .btn-group {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin: 1rem 0;
-        }
-        
-        /* ========================================
-           FEEDBACK & HINTS
-           ======================================== */
-        
-        .feedback {
-            padding: 1rem 1.5rem;
-            border-radius: 0.5rem;
-            margin: 1rem 0;
-            display: flex;
-            align-items: flex-start;
-            gap: 0.75rem;
-            animation: slideIn 0.3s ease;
-        }
-        
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .feedback-success {
-            background: #dcfce7;
-            border-left: 4px solid var(--success);
-            color: #166534;
-        }
-        
-        .feedback-error {
-            background: #fee2e2;
-            border-left: 4px solid var(--error);
-            color: #991b1b;
-        }
-        
-        .feedback-hint {
-            background: #fef3c7;
-            border-left: 4px solid var(--warning);
-            color: #92400e;
-        }
-        
-        .feedback-icon {
-            font-size: 1.5rem;
-            line-height: 1;
-        }
-        
-        .hint-system {
-            margin: 1.5rem 0;
-        }
-        
-        .hint-buttons {
-            display: flex;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-            flex-wrap: wrap;
-        }
-        
-        .hint-btn {
-            padding: 0.5rem 1rem;
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            border: 2px solid var(--warning);
-            border-radius: 0.5rem;
-            color: #92400e;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all var(--transition-fast);
-        }
-        
-        .hint-btn:hover:not(:disabled) {
-            background: #fde68a;
-            transform: translateY(-2px);
-        }
-        
-        .hint-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        
-        .hint-content {
-            background: #fffbeb;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            border-left: 3px solid var(--warning);
-            display: none;
-        }
-        
-        .hint-content.show {
-            display: block;
-            animation: slideIn 0.3s ease;
-        }
-        
-        /* ========================================
-           REFERENCE CARD
-           ======================================== */
-        
-        .reference-card {
-            background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%);
-            border: 2px solid var(--info);
-            border-radius: 1rem;
-            padding: 2rem;
-            margin: 2rem 0;
-        }
-        
-        .reference-title {
-            font-size: var(--text-2xl);
-            font-weight: 700;
-            color: #0e7490;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .reference-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-        }
-        
-        .reference-item {
-            background: white;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            box-shadow: var(--shadow-sm);
-        }
-        
-        .reference-item strong {
-            color: var(--primary);
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-        
-        /* ========================================
-           COMMON MISTAKES SECTION
-           ======================================== */
-        
-        .mistakes-section {
-            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-            border-radius: 1rem;
-            padding: 2rem;
-            margin: 2rem 0;
-        }
-        
-        .mistakes-title {
-            font-size: var(--text-2xl);
-            font-weight: 700;
-            color: #991b1b;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .mistake-item {
-            background: white;
-            padding: 1.5rem;
-            margin: 1rem 0;
-            border-radius: 0.75rem;
-            border-left: 4px solid var(--error);
-            box-shadow: var(--shadow-sm);
-        }
-        
-        .mistake-wrong {
-            color: var(--error);
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-        
-        .mistake-why {
-            color: var(--text-secondary);
-            margin: 0.5rem 0;
-        }
-        
-        .mistake-correct {
-            color: var(--success);
-            font-weight: 700;
-            margin-top: 0.5rem;
-        }
-        
-        .tips-section {
-            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-            border-radius: 1rem;
-            padding: 2rem;
-            margin: 2rem 0;
-        }
-        
-        .tips-title {
-            font-size: var(--text-2xl);
-            font-weight: 700;
-            color: #1e40af;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .tip-item {
-            background: white;
-            padding: 1rem;
-            margin: 0.75rem 0;
-            border-radius: 0.5rem;
-            border-left: 3px solid var(--primary);
-            box-shadow: var(--shadow-sm);
-        }
-        
-        /* ========================================
-           FINAL CHALLENGE
-           ======================================== */
-        
-        .challenge-section {
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            border-radius: 1rem;
-            padding: 2rem;
-            margin: 2rem 0;
-        }
-        
-        .trophy {
-            text-align: center;
-            font-size: 4rem;
-            margin-bottom: 1rem;
-        }
-        
-        .challenge-title {
-            font-size: var(--text-3xl);
-            font-weight: 700;
-            color: #78350f;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        
-        .challenge-tasks {
-            display: grid;
-            gap: 1.5rem;
-        }
-        
-        .challenge-task {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            box-shadow: var(--shadow-md);
-        }
-        
-        .task-number {
-            display: inline-block;
-            width: 36px;
-            height: 36px;
-            background: var(--warning);
-            color: white;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 36px;
-            font-weight: 700;
-            margin-right: 0.75rem;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin: 2rem 0;
-        }
-        
-        .stat-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            text-align: center;
-            box-shadow: var(--shadow-md);
-        }
-        
-        .stat-value {
-            font-size: var(--text-3xl);
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-        
-        .stat-label {
-            font-size: var(--text-sm);
-            color: var(--text-secondary);
-        }
-        
-        /* ========================================
-           CONFETTI ANIMATION
-           ======================================== */
-        
-        .confetti {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            top: -10px;
-            z-index: 9999;
-            animation: fall 3s linear forwards;
-        }
-        
-        @keyframes fall {
-            to {
-                transform: translateY(100vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-        
-        /* ========================================
-           RESPONSIVE DESIGN
-           ======================================== */
-        
-        @media (max-width: 768px) {
-            .hero-section h1 {
-                font-size: var(--text-3xl);
-            }
-            
-            .tagline {
-                font-size: var(--text-lg);
-            }
-            
-            .character-section {
-                grid-template-columns: 1fr;
-            }
-            
-            .character-dialogue::before {
-                display: none;
-            }
-            
-            .cvs-bridge {
-                grid-template-columns: 1fr;
-            }
-            
-            .balance-scale {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            
-            .formula-display {
-                font-size: 1.75rem;
-            }
-            
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .difficulty-btn {
-                min-width: 100%;
-            }
-        }
-        
-        /* ========================================
-           ACCESSIBILITY
-           ======================================== */
-        
-        *:focus {
-            outline: 2px solid var(--primary);
-            outline-offset: 2px;
-        }
-        
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border-width: 0;
-        }
-        
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Interactive learning app for transposition of formulae" />
+  <title>Formula Transposition Lab</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --warning: #f59e0b;
+      --ink: #111827;
+      --muted: #64748b;
+      --line: #dbe3ef;
+      --soft: #f5f8fc;
+      --panel: #ffffff;
+      --blue-soft: #eaf2ff;
+      --green-soft: #eaf8ef;
+      --red-soft: #fff1f2;
+      --shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, 0.12), transparent 32rem),
+        linear-gradient(180deg, #f8fbff 0%, #eef4fb 100%);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .app-shell {
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 22px 0 40px;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      align-items: end;
+      margin-bottom: 18px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .home-button {
+      min-height: 100%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #bfdbfe;
+      border-radius: var(--radius);
+      padding: 10px 13px;
+      color: var(--primary);
+      background: rgba(255, 255, 255, 0.86);
+      font-weight: 850;
+      text-decoration: none;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
+    }
+
+    .home-button:hover {
+      background: var(--blue-soft);
+    }
+
+    .eyebrow {
+      color: var(--primary);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin: 0 0 4px;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: 0.98;
+      margin: 0;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      margin: 10px 0 0;
+      max-width: 760px;
+      font-size: 1.05rem;
+    }
+
+    .status-pill {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      background: rgba(255, 255, 255, 0.82);
+      min-width: 190px;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
+    }
+
+    .status-pill strong {
+      display: block;
+      color: var(--primary);
+      font-size: 1.25rem;
+    }
+
+    .tabs {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 8px;
+      padding: 10px;
+      margin: 18px 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.07);
+    }
+
+    .tab-button {
+      min-height: 44px;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      color: #334155;
+      background: transparent;
+      font-weight: 800;
+      cursor: pointer;
+      transition: 160ms ease;
+      white-space: nowrap;
+    }
+
+    .tab-button:hover {
+      background: var(--blue-soft);
+      border-color: #bfdbfe;
+    }
+
+    .tab-button.active {
+      color: white;
+      background: var(--primary);
+      box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.16);
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+      animation: riseIn 240ms ease;
+    }
+
+    @keyframes riseIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .section {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: var(--shadow);
+      padding: clamp(18px, 3vw, 30px);
+      margin-bottom: 18px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: start;
+      margin-bottom: 18px;
+    }
+
+    .section h2 {
+      margin: 0;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .section p {
+      color: var(--muted);
+    }
+
+    .grid-2,
+    .grid-3 {
+      display: grid;
+      gap: 16px;
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .mini-card,
+    .story-card,
+    .exercise-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      padding: 16px;
+    }
+
+    .story-card {
+      min-height: 145px;
+      border-left: 5px solid var(--primary);
+    }
+
+    .story-card strong,
+    .mini-card strong {
+      color: var(--ink);
+    }
+
+    .canvas-wrap {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: #f8fbff;
+      margin-top: 16px;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      min-height: 310px;
+    }
+
+    .math {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.18em;
+      min-height: 34px;
+      padding: 4px 9px;
+      border-radius: 6px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      color: #0f172a;
+      font-family: "Cambria Math", "Times New Roman", serif;
+      font-size: 1.15rem;
+      white-space: nowrap;
+    }
+
+    .math sup {
+      font-size: 0.72em;
+      line-height: 0;
+    }
+
+    .fraction {
+      display: inline-grid;
+      grid-template-rows: auto auto;
+      align-items: center;
+      justify-items: center;
+      line-height: 1;
+      margin: 0 0.12em;
+      vertical-align: middle;
+    }
+
+    .fraction .num {
+      display: block;
+      min-width: 100%;
+      padding: 0 0.18em 0.12em;
+      border-bottom: 1.7px solid currentColor;
+      text-align: center;
+    }
+
+    .fraction .den {
+      display: block;
+      padding: 0.12em 0.18em 0;
+      text-align: center;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      align-items: stretch;
+      margin: 18px 0;
+    }
+
+    .flow-step {
+      min-height: 106px;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      gap: 7px;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfdff;
+      padding: 12px;
+    }
+
+    .flow-step .label {
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .operator {
+      color: white;
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .operator .label,
+    .operator .math {
+      color: white;
+    }
+
+    .operator .math {
+      background: rgba(255, 255, 255, 0.16);
+      border-color: rgba(255, 255, 255, 0.24);
+    }
+
+    .box-method {
+      display: grid;
+      grid-template-columns: 1fr 54px 1fr;
+      gap: 10px;
+      align-items: center;
+      margin: 18px 0;
+    }
+
+    .box-side {
+      min-height: 132px;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      gap: 12px;
+      border: 2px solid #cbd5e1;
+      border-radius: var(--radius);
+      background: #fbfdff;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .box-side.target {
+      border-color: var(--primary);
+      background: var(--blue-soft);
+    }
+
+    .equals {
+      text-align: center;
+      color: var(--primary);
+      font-size: 2rem;
+      font-weight: 900;
+    }
+
+    .input-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    label {
+      display: grid;
+      gap: 6px;
+      color: #334155;
+      font-size: 0.9rem;
+      font-weight: 750;
+    }
+
+    .math-input,
+    .small-input {
+      width: 100%;
+      min-height: 44px;
+      border: 2px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 8px 10px;
+      background: white;
+      color: var(--ink);
+      transition: 160ms ease;
+    }
+
+    .math-input:focus,
+    .small-input:focus {
+      outline: 3px solid rgba(37, 99, 235, 0.18);
+      border-color: var(--primary);
+    }
+
+    .math-input.correct,
+    .small-input.correct {
+      border-color: var(--success);
+      background: var(--green-soft);
+    }
+
+    .math-input.incorrect,
+    .small-input.incorrect {
+      border-color: var(--danger);
+      background: var(--red-soft);
+    }
+
+    .validation-note {
+      min-height: 22px;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .validation-note.good {
+      color: var(--success);
+    }
+
+    .validation-note.bad {
+      color: var(--danger);
+    }
+
+    .step-table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: white;
+    }
+
+    .step-table th,
+    .step-table td {
+      border-bottom: 1px solid var(--line);
+      padding: 11px;
+      vertical-align: middle;
+      text-align: left;
+    }
+
+    .step-table th {
+      background: #eff6ff;
+      color: #1e3a8a;
+      font-size: 0.83rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .step-table tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-top: 16px;
+    }
+
+    .btn {
+      min-height: 42px;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      padding: 9px 13px;
+      font-weight: 850;
+      cursor: pointer;
+      transition: 160ms ease;
+    }
+
+    .btn-primary {
+      color: white;
+      background: var(--primary);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-success {
+      color: white;
+      background: var(--success);
+    }
+
+    .btn-danger {
+      color: white;
+      background: var(--danger);
+    }
+
+    .btn-ghost {
+      color: var(--primary);
+      background: white;
+      border-color: #bfdbfe;
+    }
+
+    .btn-ghost:hover {
+      background: var(--blue-soft);
+    }
+
+    .difficulty-bar {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin: 14px 0;
+    }
+
+    .difficulty-btn {
+      min-height: 64px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: white;
+      cursor: pointer;
+      text-align: left;
+      padding: 10px 12px;
+      font-weight: 850;
+      transition: 160ms ease;
+    }
+
+    .difficulty-btn span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 650;
+    }
+
+    .difficulty-btn.active {
+      border-color: var(--primary);
+      background: var(--blue-soft);
+      color: #1e40af;
+    }
+
+    .problem-banner {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #f8fbff;
+      padding: 16px;
+      margin: 14px 0;
+    }
+
+    .problem-banner h3 {
+      margin: 0 0 8px;
+      font-size: 1.16rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .stat {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: white;
+      padding: 12px;
+    }
+
+    .stat strong {
+      display: block;
+      color: var(--primary);
+      font-size: 1.55rem;
+      line-height: 1;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    .solution-box {
+      display: none;
+      border: 1px solid #bbf7d0;
+      border-radius: var(--radius);
+      background: #f0fdf4;
+      padding: 14px;
+      margin-top: 14px;
+    }
+
+    .solution-box.show {
+      display: block;
+    }
+
+    .solution-box ol {
+      margin: 8px 0 0 22px;
+      padding: 0;
+    }
+
+    .solution-box li {
+      margin: 7px 0;
+    }
+
+    .feedback {
+      min-height: 30px;
+      margin-top: 12px;
+      font-weight: 800;
+    }
+
+    .feedback.good {
+      color: var(--success);
+    }
+
+    .feedback.bad {
+      color: var(--danger);
+    }
+
+    .tips-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .tip {
+      border-left: 5px solid var(--primary);
+      border-radius: var(--radius);
+      background: white;
+      padding: 14px;
+    }
+
+    .mistake {
+      border-left-color: var(--danger);
+    }
+
+    .kbd {
+      display: inline-block;
+      border: 1px solid #cbd5e1;
+      border-bottom-width: 2px;
+      border-radius: 5px;
+      background: white;
+      padding: 1px 6px;
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: 0.88em;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 900px) {
+      .topbar,
+      .grid-2,
+      .grid-3,
+      .input-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .header-actions {
+        flex-direction: column;
+      }
+
+      .tabs {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        position: static;
+      }
+
+      .flow {
+        grid-template-columns: 1fr;
+      }
+
+      .box-method {
+        grid-template-columns: 1fr;
+      }
+
+      .equals {
+        transform: rotate(90deg);
+      }
+
+      .difficulty-bar,
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .step-table,
+      .step-table tbody,
+      .step-table tr,
+      .step-table td {
+        display: block;
+        width: 100%;
+      }
+
+      .step-table thead {
+        display: none;
+      }
+
+      .step-table td {
+        border-bottom: 0;
+      }
+
+      .step-table tr {
+        border-bottom: 1px solid var(--line);
+      }
+    }
+  </style>
 </head>
 <body>
-    
-    <!-- ========================================
-         SECTION 1: HERO HEADER
-         ======================================== -->
-    
-    <header class="hero-section">
-        <div class="container">
-            <h1>🔄 Transposisi Formula</h1>
-            <p class="tagline">Tukar subjek formula dengan mudah dan yakin!</p>
-            
-            <div class="learning-objectives">
-                <div>✅ Faham konsep transposisi formula</div>
-                <div>✅ Tahu operasi songsang dan peraturan tanda</div>
-                <div>✅ Boleh transpose formula dengan betul</div>
-                <div>✅ Boleh evaluate formula dengan nilai yang diberi</div>
-            </div>
-            
-            <div class="progress-container">
-                <div class="progress-bar-wrapper">
-                    <div class="progress-bar" id="mainProgressBar" style="width: 0%">
-                        <span style="color: white; font-size: 0.75rem; font-weight: 700;"></span>
-                    </div>
-                </div>
-                <span class="progress-text">
-                    Bahagian <span id="currentSection">1</span> daripada <span id="totalSections">9</span>
-                </span>
-            </div>
-        </div>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Interactive Mathematics Lab</p>
+        <h1>Formula Transposition</h1>
+        <p class="subtitle">
+          Learn how to change the subject of a formula using daily-life stories, workbook-style
+          questions, visual boxes, live checking, and unlimited generated practice.
+        </p>
+      </div>
+      <div class="header-actions">
+        <a class="home-button" href="index.html" aria-label="Go back to Algebra index">Home</a>
+        <aside class="status-pill" aria-label="Practice progress">
+          <span>Practice accuracy</span>
+          <strong id="headerAccuracy">0%</strong>
+        </aside>
+      </div>
     </header>
-    
-    <!-- ========================================
-         SECTION 2: MISI & CERITA (Concrete Stage)
-         ======================================== -->
-    
-    <main class="container">
-        <div class="card" id="section-concrete">
-            <div class="card-header">
-                <span class="card-icon">🎯</span>
-                <div>
-                    <h2 class="card-title">Misi: Selamatkan Litar Elektrik!</h2>
-                    <p class="card-subtitle">
-                        <span class="stage-badge stage-concrete">Tahap 1: Konkrit</span>
-                    </p>
-                </div>
+
+    <nav class="tabs" aria-label="Main sections">
+      <button class="tab-button active" data-tab="intro">🏠 Intro</button>
+      <button class="tab-button" data-tab="concept1">📘 Concept 1</button>
+      <button class="tab-button" data-tab="concept2">📗 Concept 2</button>
+      <button class="tab-button" data-tab="advanced">➗ Advanced</button>
+      <button class="tab-button" data-tab="practice">🎮 Practice</button>
+      <button class="tab-button" data-tab="tips">💡 Tips</button>
+    </nav>
+
+    <main>
+      <section class="tab-panel active" id="intro">
+        <div class="section">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Why this matters</p>
+              <h2>Every formula is a machine you can run backward.</h2>
             </div>
-            
-            <div class="mission-box">
-                <div class="mission-title">
-                    🌟 MISI: Cari Nilai Yang Hilang!
-                </div>
-                <div class="mission-content">
-                    Engineer Zara sedang menghadapi masalah besar! Dia perlu mencari nilai <strong>voltage (V)</strong> 
-                    dalam litar elektrik, tetapi dia hanya ada formula <strong>I = V/R</strong>. 
-                    Masalahnya, formula ini beri nilai <strong>I</strong> (current), bukan <strong>V</strong>!
-                    <br><br>
-                    Zara perlu <strong>transpose</strong> (tukar) formula supaya V jadi subjek. 
-                    Bolehkah anda tolong dia?
-                </div>
-            </div>
-            
-            <div class="character-section">
-                <div class="character-image">
-                    👩‍🔬
-                </div>
-                <div class="character-dialogue">
-                    <strong style="color: var(--primary);">Engineer Zara berkata:</strong>
-                    <p style="margin-top: 0.5rem;">
-                        "Bila kita transpose formula, kita sebenarnya sedang 'buka' formula untuk 
-                        cari variable yang kita nak. Macam main detective - kita kena ikut petunjuk 
-                        dan guna operasi yang betul!"
-                    </p>
-                </div>
-            </div>
-            
-            <div class="why-important">
-                <h3>💡 Kenapa Transposisi Formula Penting?</h3>
-                <ul>
-                    <li><strong>Fizik & Engineering:</strong> V = IR, E = mc², F = ma - semua perlu transpose!</li>
-                    <li><strong>Chemistry:</strong> PV = nRT - tukar subjek untuk cari nilai berlainan</li>
-                    <li><strong>Matematik:</strong> Area, perimeter, volume - senang cari nilai yang hilang</li>
-                    <li><strong>Kehidupan harian:</strong> Formula loan, interest, speed - semua guna transposition!</li>
-                </ul>
-            </div>
+          </div>
+
+          <div class="grid-2">
+            <article class="story-card">
+              <strong>Scenario 1: Topping up phone credit</strong>
+              <p>
+                Your final balance is <span class="math">g = 3 + h</span> after a RM3 bonus.
+                If you know the final balance, transposition finds your original balance:
+                <span class="math">h = g - 3</span>.
+              </p>
+            </article>
+            <article class="story-card">
+              <strong>Scenario 2: Sharing a class-event cost</strong>
+              <p>
+                A class fund uses <span class="math">(R - C) / N = P</span>, where P is each
+                student's share. If you know P, N, and C, transposition finds the total
+                collected amount: <span class="math">R = PN + C</span>.
+              </p>
+            </article>
+          </div>
+
+          <div class="canvas-wrap" aria-label="Animated formula stories">
+            <canvas id="storyCanvas" width="1100" height="360"></canvas>
+          </div>
         </div>
-        
-        <!-- ========================================
-             SECTION 3: KONSEP VISUAL (Visual Stage)
-             ======================================== -->
-        
-        <div class="card" id="section-visual">
-            <div class="card-header">
-                <span class="card-icon">👁️</span>
-                <div>
-                    <h2 class="card-title">Konsep Visual: Balance Scale</h2>
-                    <p class="card-subtitle">
-                        <span class="stage-badge stage-visual">Tahap 2: Visual</span>
-                    </p>
-                </div>
+
+        <div class="section">
+          <div class="grid-3">
+            <div class="mini-card">
+              <strong>1. Locate the subject</strong>
+              <p>The subject is the variable you want alone, usually on the left.</p>
             </div>
-            
-            <div class="visual-canvas">
-                <h3 style="color: var(--primary); margin-bottom: 1.5rem;">
-                    Formula = Balance Scale (Timbangan Seimbang)
-                </h3>
-                
-                <p style="margin-bottom: 2rem; font-size: var(--text-lg);">
-                    Bayangkan formula macam balance scale. Kedua-dua bahagian mesti <strong>sama berat</strong> (seimbang). 
-                    Apa yang kita buat di sebelah kiri, <strong>MESTI</strong> buat di sebelah kanan juga!
-                </p>
-                
-                <div style="position: relative; min-height: 200px;">
-                    <div class="balance-pivot">
-                        <div class="balance-beam"></div>
-                    </div>
-                    <div style="position: absolute; top: 40px; left: 50%; transform: translateX(-50%); display: flex; gap: 3rem; width: 100%; max-width: 500px;">
-                        <div class="balance-pan" style="flex: 1;">
-                            x + 5
-                        </div>
-                        <div class="balance-pan" style="flex: 1;">
-                            16
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="arrow-connector">⬇️</div>
-                
-                <div style="background: rgba(16, 185, 129, 0.1); padding: 1rem; border-radius: 0.5rem;">
-                    <strong style="color: var(--success);">Peraturan Emas:</strong> 
-                    Apa yang buat di kiri, buat di kanan. Balance scale tetap seimbang!
-                </div>
+            <div class="mini-card">
+              <strong>2. Undo in reverse order</strong>
+              <p>Use inverse operations: add ↔ subtract, multiply ↔ divide, square ↔ square root.</p>
             </div>
-            
-            <div class="cvs-bridge">
-                <div class="cvs-stage">
-                    <h4 style="color: var(--concrete-color);">🎯 KONKRIT</h4>
-                    <div class="cvs-content">
-                        <div>Balance Scale</div>
-                        <div style="font-size: 3rem;">⚖️</div>
-                    </div>
-                </div>
-                
-                <div class="cvs-stage">
-                    <h4 style="color: var(--visual-color);">👁️ VISUAL</h4>
-                    <div class="cvs-content">
-                        <div style="display: flex; justify-content: space-around; align-items: center;">
-                            <span style="color: var(--primary);">x+5</span>
-                            <span>=</span>
-                            <span style="color: var(--success);">16</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="cvs-stage">
-                    <h4 style="color: var(--symbolic-color);">📐 SIMBOLIK</h4>
-                    <div class="cvs-content" style="font-family: 'Times New Roman', serif;">
-                        x = 16 - 5
-                    </div>
-                </div>
+            <div class="mini-card">
+              <strong>3. Keep both sides balanced</strong>
+              <p>Whatever you do to one side of the equation, do to the other side too.</p>
             </div>
-            
-            <div style="margin-top: 2rem;">
-                <h3 style="color: var(--primary); margin-bottom: 1rem;">
-                    🔄 Operasi Songsang (Inverse Operations)
-                </h3>
-                <p style="margin-bottom: 1.5rem;">
-                    Untuk "pindahkan" nombor atau variable, kita guna <strong>operasi songsang</strong>:
-                </p>
-                
-                <div class="inverse-ops">
-                    <div class="inverse-pair">
-                        <div class="operation-sign">+</div>
-                        <div class="inverse-arrow">⬇️⬆️</div>
-                        <div class="operation-sign">-</div>
-                        <p style="margin-top: 0.5rem; font-size: var(--text-sm); color: var(--text-secondary);">
-                            Tambah ⟷ Tolak
-                        </p>
-                    </div>
-                    
-                    <div class="inverse-pair">
-                        <div class="operation-sign">-</div>
-                        <div class="inverse-arrow">⬇️⬆️</div>
-                        <div class="operation-sign">+</div>
-                        <p style="margin-top: 0.5rem; font-size: var(--text-sm); color: var(--text-secondary);">
-                            Tolak ⟷ Tambah
-                        </p>
-                    </div>
-                    
-                    <div class="inverse-pair">
-                        <div class="operation-sign">×</div>
-                        <div class="inverse-arrow">⬇️⬆️</div>
-                        <div class="operation-sign">÷</div>
-                        <p style="margin-top: 0.5rem; font-size: var(--text-sm); color: var(--text-secondary);">
-                            Darab ⟷ Bahagi
-                        </p>
-                    </div>
-                    
-                    <div class="inverse-pair">
-                        <div class="operation-sign">÷</div>
-                        <div class="inverse-arrow">⬇️⬆️</div>
-                        <div class="operation-sign">×</div>
-                        <p style="margin-top: 0.5rem; font-size: var(--text-sm); color: var(--text-secondary);">
-                            Bahagi ⟷ Darab
-                        </p>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
-        
-        <!-- ========================================
-             SECTION 4: FORMULA/RULE (Symbolic Stage)
-             ======================================== -->
-        
-        <div class="card" id="section-symbolic">
-            <div class="card-header">
-                <span class="card-icon">📐</span>
-                <div>
-                    <h2 class="card-title">Formula & Peraturan</h2>
-                    <p class="card-subtitle">
-                        <span class="stage-badge stage-symbolic">Tahap 3: Simbolik</span>
-                    </p>
-                </div>
+
+        <div class="section">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">From your workbook</p>
+              <h2>The subtopics in this lesson.</h2>
+              <p>These are the exact exercise types from your Formulae workbook, rewritten as visual skills.</p>
             </div>
-            
-            <div class="formula-box">
-                <div class="formula-title">🎯 FORMULA UMUM</div>
-                
-                <div class="formula-display">
-                    <span style="color: var(--input-value);">a</span>
-                    <span style="color: var(--operation);">×</span>
-                    <span style="color: var(--subject);">x</span>
-                    <span style="color: var(--operation);">+</span>
-                    <span style="color: var(--input-value);">b</span>
-                    <span> = </span>
-                    <span style="color: var(--result);">c</span>
-                </div>
-                
-                <div class="arrow-connector">⬇️ Transpose untuk cari x ⬇️</div>
-                
-                <div class="formula-display">
-                    <span style="color: var(--subject);">x</span>
-                    <span> = </span>
-                    <span style="color: var(--result);">(c - b)</span>
-                    <span style="color: var(--operation);"> ÷ </span>
-                    <span style="color: var(--input-value);">a</span>
-                </div>
-                
-                <div class="formula-legend">
-                    <div class="legend-item">
-                        <div class="legend-color" style="background: var(--subject);"></div>
-                        <div>
-                            <strong>x</strong> = Subjek (yang kita nak cari)
-                        </div>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color" style="background: var(--input-value);"></div>
-                        <div>
-                            <strong>a, b, c</strong> = Nilai yang diberi
-                        </div>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color" style="background: var(--operation);"></div>
-                        <div>
-                            <strong>+, ×, ÷</strong> = Operasi
-                        </div>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color" style="background: var(--result);"></div>
-                        <div>
-                            <strong>Hasil</strong> = Jawapan akhir
-                        </div>
-                    </div>
-                </div>
+          </div>
+          <div class="grid-3">
+            <div class="mini-card">
+              <strong>Basic subject change</strong>
+              <p><span class="math">g = 3 + h [h]</span>, <span class="math">P = IRT [T]</span></p>
+              <p>Use one inverse operation: subtract, divide, or multiply.</p>
             </div>
-            
-            <div style="background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); padding: 1.5rem; border-radius: 0.75rem; border-left: 4px solid var(--error);">
-                <h3 style="color: #991b1b; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
-                    ⚠️ PERATURAN TANDA PENTING
-                </h3>
-                <ul style="list-style: none; padding-left: 0;">
-                    <li style="margin: 0.75rem 0; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0; color: var(--error);">❌</span>
-                        Bila pindah <strong>+</strong> jadi <strong>-</strong>
-                    </li>
-                    <li style="margin: 0.75rem 0; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0; color: var(--error);">❌</span>
-                        Bila pindah <strong>-</strong> jadi <strong>+</strong>
-                    </li>
-                    <li style="margin: 0.75rem 0; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0; color: var(--success);">✅</span>
-                        Bila pindah <strong>×</strong> jadi <strong>÷</strong>
-                    </li>
-                    <li style="margin: 0.75rem 0; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0; color: var(--success);">✅</span>
-                        Bila pindah <strong>÷</strong> jadi <strong>×</strong>
-                    </li>
-                </ul>
+            <div class="mini-card">
+              <strong>Two-step and fraction formulae</strong>
+              <p><span class="math">4g - 2h = 7 [g]</span>, <span class="math">(x + y) / 3 = 5 [x]</span></p>
+              <p>Clear the outside operation first, then isolate the target.</p>
             </div>
-            
-            <div style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); padding: 1.5rem; border-radius: 0.75rem; margin-top: 1.5rem;">
-                <h3 style="color: #1e40af; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
-                    💡 TIPS MUDAH INGAT
-                </h3>
-                <ul style="list-style: none; padding-left: 0;">
-                    <li style="margin: 0.75rem 0; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0;">🎯</span>
-                        <strong>Step 1:</strong> Kenal pasti subjek yang kita nak cari
-                    </li>
-                    <li style="margin: 0.75rem 0; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0;">🎯</span>
-                        <strong>Step 2:</strong> Pindahkan nombor dulu (guna +/-)
-                    </li>
-                    <li style="margin: 0.75rem 0; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0;">🎯</span>
-                        <strong>Step 3:</strong> Pindahkan coefficient (guna ×/÷)
-                    </li>
-                    <li style="margin: 0.75rem 0; padding-left: 1.5rem; position: relative;">
-                        <span style="position: absolute; left: 0;">🎯</span>
-                        <strong>Step 4:</strong> Tulis subjek di sebelah kiri =
-                    </li>
-                </ul>
+            <div class="mini-card">
+              <strong>Substitute values after rearranging</strong>
+              <p><span class="math">A = r / (2L)</span>, <span class="math">(R - C) / N = P</span></p>
+              <p>Make the variable the subject, then put in the given numbers.</p>
             </div>
+          </div>
         </div>
-        
-        <!-- ========================================
-             SECTION 5: TUNJUK CARA (Worked Examples)
-             ======================================== -->
-        
-        <div class="card" id="section-examples">
-            <div class="card-header">
-                <span class="card-icon">📚</span>
-                <div>
-                    <h2 class="card-title">Tunjuk Cara: Contoh Lengkap</h2>
-                    <p class="card-subtitle">Saya buat, awak perhatikan dengan teliti</p>
-                </div>
+      </section>
+
+      <section class="tab-panel" id="concept1">
+        <div class="section">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Concept 1</p>
+              <h2>Inverse operations: undo the last action first.</h2>
+              <p>Think of the target variable as being trapped inside operations. In the workbook, <span class="math">g = 3 + h [h]</span> means h is hidden behind a +3 bonus.</p>
             </div>
-            
-            <h3 style="color: var(--primary); margin-bottom: 1.5rem;">
-                📖 Contoh 1: Transpose formula mudah
-            </h3>
-            
-            <div style="background: #f0f9ff; padding: 1.5rem; border-radius: 0.75rem; margin-bottom: 1rem;">
-                <div style="font-size: var(--text-xl); font-weight: 700; margin-bottom: 0.5rem;">
-                    Formula asal: <span style="font-family: 'Times New Roman', serif; font-size: 1.75rem;">x + 5 = 16</span>
-                </div>
-                <div style="color: var(--text-secondary);">
-                    Cari nilai <strong>x</strong>
-                </div>
+          </div>
+
+          <div class="flow" aria-label="Step by step flow">
+            <div class="flow-step">
+              <span class="label">Start</span>
+              <span class="math">g = 3 + h</span>
             </div>
-            
-            <div class="example-steps">
-                <div class="step-item">
-                    <span class="step-number">1</span>
-                    <strong>Kenal pasti subjek</strong>
-                    
-                    <div class="step-content">
-                        <div class="step-visual">
-                            <strong>👁️ VISUAL:</strong> Kita nak cari <strong>x</strong>. Sekarang dia ada + 5 di sebelahnya.
-                        </div>
-                        <div class="step-symbolic">
-                            <strong>📐 SIMBOLIK:</strong> x + 5 = 16
-                        </div>
-                        <div class="step-verbal">
-                            <strong>💬 PENJELASAN:</strong> x adalah subjek kita. Kita kena "asingkan" dia di sebelah kiri.
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="step-item">
-                    <span class="step-number">2</span>
-                    <strong>Pindahkan +5 ke sebelah kanan</strong>
-                    
-                    <div class="step-content">
-                        <div class="step-visual">
-                            <strong>👁️ VISUAL:</strong> +5 pindah jadi -5 (operasi songsang!)
-                            <div style="margin-top: 0.5rem; font-size: 1.5rem;">
-                                ⚖️ <span style="color: var(--primary);">x + 5</span> = <span style="color: var(--success);">16</span>
-                                <br>↓ <span style="font-size: 1rem;">(tolak 5 kedua-dua belah)</span>
-                                <br>⚖️ <span style="color: var(--primary);">x</span> = <span style="color: var(--success);">16 - 5</span>
-                            </div>
-                        </div>
-                        <div class="step-symbolic">
-                            <strong>📐 SIMBOLIK:</strong> x = 16 - 5
-                        </div>
-                        <div class="step-verbal">
-                            <strong>💬 PENJELASAN:</strong> Bila +5 pindah ke kanan, dia jadi -5. Balance scale tetap seimbang!
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="step-item">
-                    <span class="step-number">3</span>
-                    <strong>Kira hasil akhir</strong>
-                    
-                    <div class="step-content">
-                        <div class="step-visual">
-                            <strong>👁️ VISUAL:</strong> Sekarang x dah bersendirian!
-                        </div>
-                        <div class="step-symbolic">
-                            <strong>📐 SIMBOLIK:</strong> x = 11
-                        </div>
-                        <div class="step-verbal">
-                            <strong>💬 PENJELASAN:</strong> 16 - 5 = 11. Jadi x = 11 ✅
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="step-item" style="background: rgba(16, 185, 129, 0.1); border-color: var(--success);">
-                    <span class="step-number" style="background: var(--success);">✓</span>
-                    <strong>Semak jawapan (verification)</strong>
-                    
-                    <div class="step-content">
-                        <div class="step-verbal">
-                            <strong>💬 SEMAKAN:</strong> Ganti x = 11 dalam formula asal:<br>
-                            11 + 5 = 16 ✅ <strong>BETUL!</strong>
-                        </div>
-                    </div>
-                </div>
+            <div class="flow-step operator">
+              <span class="label">Undo +3</span>
+              <span class="math">− 3</span>
             </div>
-            
-            <div style="height: 2rem;"></div>
-            
-            <h3 style="color: var(--primary); margin-bottom: 1.5rem;">
-                📖 Contoh 2: Transpose dengan multiply/divide
-            </h3>
-            
-            <div style="background: #f0f9ff; padding: 1.5rem; border-radius: 0.75rem; margin-bottom: 1rem;">
-                <div style="font-size: var(--text-xl); font-weight: 700; margin-bottom: 0.5rem;">
-                    Formula asal: <span style="font-family: 'Times New Roman', serif; font-size: 1.75rem;">I = V/R</span>
-                </div>
-                <div style="color: var(--text-secondary);">
-                    Transpose untuk cari <strong>V</strong> (voltage)
-                </div>
+            <div class="flow-step">
+              <span class="label">Balanced move</span>
+              <span class="math">g - 3 = 3 + h - 3</span>
             </div>
-            
-            <div class="example-steps">
-                <div class="step-item">
-                    <span class="step-number">1</span>
-                    <strong>Kenal pasti subjek baru</strong>
-                    
-                    <div class="step-content">
-                        <div class="step-visual">
-                            <strong>👁️ VISUAL:</strong> Subjek asal: I. Subjek baru: V
-                        </div>
-                        <div class="step-symbolic">
-                            <strong>📐 SIMBOLIK:</strong> I = V/R
-                        </div>
-                        <div class="step-verbal">
-                            <strong>💬 PENJELASAN:</strong> V sekarang dalam pembilang (atas). Dia dibahagi dengan R.
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="step-item">
-                    <span class="step-number">2</span>
-                    <strong>Pindahkan R ke sebelah kiri</strong>
-                    
-                    <div class="step-content">
-                        <div class="step-visual">
-                            <strong>👁️ VISUAL:</strong> R sedang bahagi V. Untuk pindahkan R, kita DARAB!
-                            <div style="margin-top: 0.5rem; font-size: 1.5rem;">
-                                ⚖️ <span style="color: var(--primary);">I</span> = <span style="color: var(--success);">V/R</span>
-                                <br>↓ <span style="font-size: 1rem;">(darab R kedua-dua belah)</span>
-                                <br>⚖️ <span style="color: var(--primary);">I × R</span> = <span style="color: var(--success);">V</span>
-                            </div>
-                        </div>
-                        <div class="step-symbolic">
-                            <strong>📐 SIMBOLIK:</strong> I × R = V
-                        </div>
-                        <div class="step-verbal">
-                            <strong>💬 PENJELASAN:</strong> R dibahagi (÷) jadi didarab (×) bila pindah. Balance scale seimbang!
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="step-item">
-                    <span class="step-number">3</span>
-                    <strong>Tulis V di sebelah kiri</strong>
-                    
-                    <div class="step-content">
-                        <div class="step-symbolic">
-                            <strong>📐 SIMBOLIK:</strong> V = I × R atau V = IR
-                        </div>
-                        <div class="step-verbal">
-                            <strong>💬 PENJELASAN:</strong> Tukar kedudukan supaya V di kiri. Ini formula final! ✅
-                        </div>
-                    </div>
-                </div>
+            <div class="flow-step operator">
+              <span class="label">Simplify</span>
+              <span class="math">3 - 3 = 0</span>
             </div>
-            
-            <div style="height: 2rem;"></div>
-            
-            <h3 style="color: var(--primary); margin-bottom: 1.5rem;">
-                📖 Contoh 3: Formula kompleks dengan kuasa
-            </h3>
-            
-            <div style="background: #f0f9ff; padding: 1.5rem; border-radius: 0.75rem; margin-bottom: 1rem;">
-                <div style="font-size: var(--text-xl); font-weight: 700; margin-bottom: 0.5rem;">
-                    Formula asal: <span style="font-family: 'Times New Roman', serif; font-size: 1.75rem;">X<sub>c</sub> = 1/(2πf<sub>c</sub>)</span>
-                </div>
-                <div style="color: var(--text-secondary);">
-                    Transpose untuk cari <strong>f<sub>c</sub></strong> (frequency)
-                </div>
+            <div class="flow-step">
+              <span class="label">Subject alone</span>
+              <span class="math">h = g - 3</span>
             </div>
-            
-            <div class="example-steps">
-                <div class="step-item">
-                    <span class="step-number">1</span>
-                    <strong>Analisa formula</strong>
-                    
-                    <div class="step-content">
-                        <div class="step-verbal">
-                            <strong>💬 PENJELASAN:</strong> f<sub>c</sub> berada dalam penyebut (bawah). 
-                            Dia didarab dengan 2π, dan keseluruhan bahagi 1.
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="step-item">
-                    <span class="step-number">2</span>
-                    <strong>Cross multiply untuk keluarkan dari penyebut</strong>
-                    
-                    <div class="step-content">
-                        <div class="step-symbolic">
-                            X<sub>c</sub> × (2πf<sub>c</sub>) = 1
-                        </div>
-                        <div class="step-verbal">
-                            <strong>💬 PENJELASAN:</strong> Darab kedua-dua belah dengan penyebut untuk "keluarkan" f<sub>c</sub>.
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="step-item">
-                    <span class="step-number">3</span>
-                    <strong>Pindahkan X<sub>c</sub> dan 2π</strong>
-                    
-                    <div class="step-content">
-                        <div class="step-symbolic">
-                            2πf<sub>c</sub> = 1/X<sub>c</sub>
-                        </div>
-                        <div class="step-symbolic">
-                            f<sub>c</sub> = 1/(2πX<sub>c</sub>)
-                        </div>
-                        <div class="step-verbal">
-                            <strong>💬 PENJELASAN:</strong> Bahagikan dengan 2π untuk dapatkan f<sub>c</sub> bersendirian! ✅
-                        </div>
-                    </div>
-                </div>
+          </div>
+
+          <div class="exercise-card">
+            <h3>Daily-life check: balance and electricity</h3>
+            <p>Fill the two boxes. The app accepts equivalent expressions, so <span class="kbd">g-3</span> and <span class="kbd">-3+g</span> both work.</p>
+            <div class="input-grid">
+              <label>
+                Phone credit: for <span class="math">g = 3 + h</span>, make h the subject.
+                <input class="math-input" data-answer="g - 3" data-vars="g" placeholder="Example: g - 3" />
+                <span class="validation-note"></span>
+              </label>
+              <label>
+                Electricity formula: for <span class="math">P = IRT</span>, make T the subject.
+                <input class="math-input" data-answer="P / (I * R)" data-vars="P,I,R" placeholder="Example: P / (I R)" />
+                <span class="validation-note"></span>
+              </label>
             </div>
+          </div>
         </div>
-        
-        <!-- ========================================
-             SECTION 6: CUBA SENDIRI (Interactive Practice)
-             ======================================== -->
-        
-        <div class="card" id="section-practice">
-            <div class="card-header">
-                <span class="card-icon">✏️</span>
-                <div>
-                    <h2 class="card-title">Cuba Sendiri: Latihan Interaktif</h2>
-                    <p class="card-subtitle">Sekarang giliran awak! Transpose formula step by step</p>
-                </div>
+      </section>
+
+      <section class="tab-panel" id="concept2">
+        <div class="section">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Concept 2</p>
+              <h2>The box method for two-step formulae.</h2>
+              <p>Use this for workbook questions like <span class="math">4g - 2h = 7 [g]</span>. Keep the g-term in a box, then remove what is outside it.</p>
             </div>
-            
-            <div class="difficulty-selector">
-                <button class="difficulty-btn active" data-level="easy" onclick="selectDifficulty('easy')">
-                    <div style="font-size: 1.5rem; margin-bottom: 0.25rem;">😊</div>
-                    <div><strong>MUDAH</strong></div>
-                    <div style="font-size: 0.75rem; opacity: 0.8;">Dengan scaffolding</div>
-                </button>
-                <button class="difficulty-btn" data-level="medium" onclick="selectDifficulty('medium')">
-                    <div style="font-size: 1.5rem; margin-bottom: 0.25rem;">🤔</div>
-                    <div><strong>SEDERHANA</strong></div>
-                    <div style="font-size: 0.75rem; opacity: 0.8;">Sikit bantuan</div>
-                </button>
-                <button class="difficulty-btn" data-level="hard" onclick="selectDifficulty('hard')">
-                    <div style="font-size: 1.5rem; margin-bottom: 0.25rem;">🔥</div>
-                    <div><strong>CABARAN</strong></div>
-                    <div style="font-size: 0.75rem; opacity: 0.8;">Tanpa bantuan</div>
-                </button>
+          </div>
+
+          <div class="box-method" aria-label="Box method diagram">
+            <div class="box-side target">
+              <span class="label">Target side</span>
+              <span class="math">4g - 2h</span>
+              <span>Box: <strong>4g</strong>. Outside: <strong>-2h</strong>.</span>
             </div>
-            
-            <div class="practice-container">
-                <div class="problem-display" id="problemDisplay">
-                    <div class="problem-text" id="problemText">Klik "Soalan Baru" untuk mula!</div>
-                    <div class="problem-formula" id="problemFormula"></div>
-                    <div class="problem-instruction" id="problemInstruction"></div>
-                </div>
-                
-                <div class="solving-area" id="solvingArea" style="display: none;">
-                    <!-- Steps will be generated dynamically -->
-                </div>
-                
-                <div class="hint-system" id="hintSystem" style="display: none;">
-                    <div class="hint-buttons">
-                        <button class="hint-btn" onclick="showHint(1)">💡 Petunjuk 1</button>
-                        <button class="hint-btn" onclick="showHint(2)">💡 Petunjuk 2</button>
-                        <button class="hint-btn" onclick="showHint(3)">💡 Petunjuk 3</button>
-                    </div>
-                    <div class="hint-content" id="hint1"></div>
-                    <div class="hint-content" id="hint2"></div>
-                    <div class="hint-content" id="hint3"></div>
-                </div>
-                
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="generateProblem()">
-                        🔄 Soalan Baru
-                    </button>
-                    <button class="btn btn-secondary" onclick="resetProblem()" id="resetBtn" style="display: none;">
-                        ↺ Reset Soalan Ini
-                    </button>
-                </div>
-                
-                <div id="feedbackArea"></div>
-                
-                <div class="stats-grid" style="margin-top: 2rem;">
-                    <div class="stat-card">
-                        <div class="stat-value" id="attemptedCount">0</div>
-                        <div class="stat-label">Soalan Dicuba</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="correctCount">0</div>
-                        <div class="stat-label">Jawapan Betul</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="successRate">0%</div>
-                        <div class="stat-label">Kejayaan</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="hintsUsed">0</div>
-                        <div class="stat-label">Petunjuk Guna</div>
-                    </div>
-                </div>
+            <div class="equals">=</div>
+            <div class="box-side">
+              <span class="label">Other side</span>
+              <span class="math">7</span>
+              <span>The same moves happen here.</span>
             </div>
+          </div>
+
+          <table class="step-table">
+            <thead>
+              <tr>
+                <th>Step</th>
+                <th>Visual action</th>
+                <th>Your expression</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Undo <span class="math">-2h</span> by adding 2h to both sides: <span class="math">4g = ?</span></td>
+                <td>
+                  <input class="math-input" data-answer="7 + 2 * h" data-vars="h" placeholder="Right side" />
+                  <span class="validation-note"></span>
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Undo <span class="math">×4</span> by dividing by 4: <span class="math">g = ?</span></td>
+                <td>
+                  <input class="math-input" data-answer="(7 + 2 * h) / 4" data-vars="h" placeholder="Final answer" />
+                  <span class="validation-note"></span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        
-        <!-- ========================================
-             SECTION 7: CARTA RUJUKAN (Reference Card)
-             ======================================== -->
-        
-        <div class="reference-card" id="section-reference">
-            <div class="reference-title">
-                📋 Rujukan Pantas: Transposisi Formula
+      </section>
+
+      <section class="tab-panel" id="advanced">
+        <div class="section">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Advanced</p>
+              <h2>When the subject is inside fractions, brackets, or powers.</h2>
+              <p>Use the same logic, but reveal one layer at a time. These examples mirror the harder workbook questions.</p>
             </div>
-            
-            <div class="reference-grid">
-                <div class="reference-item">
-                    <strong>🔹 Formula Utama</strong>
-                    Untuk transpose, tukar subjek ke sebelah kiri, pindahkan yang lain ke kanan guna operasi songsang.
-                </div>
-                
-                <div class="reference-item">
-                    <strong>🔹 Bila Guna</strong>
-                    Bila kita tahu formula, tetapi nak cari variable berlainan daripada subjek asal.
-                </div>
-                
-                <div class="reference-item">
-                    <strong>🔹 Operasi Songsang</strong>
-                    + ⟷ -<br>
-                    - ⟷ +<br>
-                    × ⟷ ÷<br>
-                    ÷ ⟷ ×
-                </div>
-                
-                <div class="reference-item">
-                    <strong>🔹 Urutan Kerja</strong>
-                    1. Kenal pasti subjek<br>
-                    2. Pindah nombor (+/-)<br>
-                    3. Pindah coefficient (×/÷)<br>
-                    4. Tulis subjek di kiri
-                </div>
-                
-                <div class="reference-item">
-                    <strong>🔹 Kes Khas: Pecahan</strong>
-                    Bila subjek dalam penyebut, cross multiply untuk keluarkan dia.
-                </div>
-                
-                <div class="reference-item">
-                    <strong>🔹 Tidak Boleh</strong>
-                    ❌ Pindah hanya satu variable tanpa buat operasi yang sama di kedua-dua belah<br>
-                    ❌ Lupa tukar tanda bila pindah
-                </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="exercise-card">
+              <h3>Fraction flow: isolate x</h3>
+              <p>Daily-life idea: average score. If <span class="math">(x + y) / 3 = 5</span>, three equal shares average to 5. Find the missing score x.</p>
+              <table class="step-table">
+                <thead>
+                  <tr>
+                    <th>Step</th>
+                    <th>Action</th>
+                    <th>Your result</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Multiply both sides by 3: <span class="math">x + y = ?</span></td>
+                    <td>
+                      <input class="math-input" data-answer="15" data-vars="x,y" placeholder="15" />
+                      <span class="validation-note"></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>Subtract y: <span class="math">x = ?</span></td>
+                    <td>
+                      <input class="math-input" data-answer="15 - y" data-vars="y" placeholder="15 - y" />
+                      <span class="validation-note"></span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-            
-            <div style="margin-top: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem;">
-                <strong style="color: var(--primary);">💡 Tip Pro:</strong> 
-                Selalu semak jawapan dengan ganti nilai balik dalam formula asal!
+
+            <div class="exercise-card">
+              <h3>Power flow: isolate z</h3>
+              <p>Daily-life idea: packaging volume. If <span class="math">x = yz^3 / 6</span>, z is a cube-length hidden inside a power.</p>
+              <table class="step-table">
+                <thead>
+                  <tr>
+                    <th>Step</th>
+                    <th>Action</th>
+                    <th>Your result</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Multiply by 6: <span class="math">6x = ?</span></td>
+                    <td>
+                      <input class="math-input" data-answer="y * z^3" data-vars="y,z" placeholder="y z^3" />
+                      <span class="validation-note"></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>Divide by y: <span class="math">z^3 = ?</span></td>
+                    <td>
+                      <input class="math-input" data-answer="6 * x / y" data-vars="x,y" placeholder="6x / y" />
+                      <span class="validation-note"></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>Take the cube root: <span class="math">z = ?</span></td>
+                    <td>
+                      <input class="math-input" data-answer="cbrt((6 * x) / y)" data-vars="x,y" placeholder="cbrt((6x) / y)" />
+                      <span class="validation-note"></span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
+          </div>
         </div>
-        
-        <!-- ========================================
-             SECTION 8: KESILAPAN BIASA (Common Mistakes)
-             ======================================== -->
-        
-        <div class="mistakes-section" id="section-mistakes">
-            <div class="mistakes-title">
-                ⚠️ Jangan Buat Ini! Kesilapan Biasa
+      </section>
+
+      <section class="tab-panel" id="practice">
+        <div class="section">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Practice mode</p>
+              <h2>Generated exercises with live validation.</h2>
+              <p>Choose a level. Fill the intermediate steps first, then enter the final transposed formula.</p>
             </div>
-            
-            <div class="mistake-item">
-                <div class="mistake-wrong">❌ SALAH: x + 5 = 16 → x = 16 + 5</div>
-                <div class="mistake-why">
-                    <strong>Sebab kenapa salah:</strong> Tanda tidak tukar! Bila +5 pindah, dia MESTI jadi -5.
-                </div>
-                <div class="mistake-correct">✅ BETUL: x + 5 = 16 → x = 16 - 5 = 11</div>
-            </div>
-            
-            <div class="mistake-item">
-                <div class="mistake-wrong">❌ SALAH: 2x = 10 → x = 10 - 2</div>
-                <div class="mistake-why">
-                    <strong>Sebab kenapa salah:</strong> 2x bermakna 2 DIDARAB dengan x, bukan tambah. 
-                    Jadi untuk pindahkan 2, kita BAHAGI, bukan tolak.
-                </div>
-                <div class="mistake-correct">✅ BETUL: 2x = 10 → x = 10 ÷ 2 = 5</div>
-            </div>
-            
-            <div class="mistake-item">
-                <div class="mistake-wrong">❌ SALAH: I = V/R → V = R/I</div>
-                <div class="mistake-why">
-                    <strong>Sebab kenapa salah:</strong> Operasi tidak betul. Bila V dibahagi R, 
-                    untuk transpose kita DARAB R, bukan bahagi.
-                </div>
-                <div class="mistake-correct">✅ BETUL: I = V/R → V = I × R = IR</div>
-            </div>
-            
-            <div class="mistake-item">
-                <div class="mistake-wrong">❌ SALAH: 3x + 2 = 11 → 3x = 11 + 2 → x = 13 ÷ 3</div>
-                <div class="mistake-why">
-                    <strong>Sebab kenapa salah:</strong> +2 tukar jadi +2? Ini tidak betul. 
-                    Bila pindah dari kiri ke kanan, +2 jadi -2.
-                </div>
-                <div class="mistake-correct">✅ BETUL: 3x + 2 = 11 → 3x = 11 - 2 = 9 → x = 9 ÷ 3 = 3</div>
-            </div>
-            
-            <div class="mistake-item">
-                <div class="mistake-wrong">❌ SALAH: x/4 = 12 → x = 12/4 = 3</div>
-                <div class="mistake-why">
-                    <strong>Sebab kenapa salah:</strong> x DIBAHAGI 4, bukan 12 dibahagi 4. 
-                    Untuk keluarkan x dari pecahan, DARAB dengan 4.
-                </div>
-                <div class="mistake-correct">✅ BETUL: x/4 = 12 → x = 12 × 4 = 48</div>
-            </div>
+          </div>
+
+          <div class="difficulty-bar" role="group" aria-label="Difficulty">
+            <button class="difficulty-btn active" data-difficulty="easy">Easy (Basics)<span>One inverse operation</span></button>
+            <button class="difficulty-btn" data-difficulty="medium">Medium (Intermediate)<span>Two-step box method</span></button>
+            <button class="difficulty-btn" data-difficulty="hard">Hard (Challenge)<span>Fractions, brackets, roots</span></button>
+          </div>
+
+          <div class="problem-banner" id="problemBanner">
+            <h3 id="problemTitle">Ready?</h3>
+            <p id="problemPrompt">Click New Problem to generate your first exercise.</p>
+            <div id="problemFormula" class="math">Formula appears here</div>
+          </div>
+
+          <div id="practiceGrid"></div>
+
+          <label style="margin-top: 14px;">
+            Final answer for the target variable
+            <input id="finalAnswer" class="math-input" placeholder="Example: (y - 3) / 4" />
+            <span class="validation-note"></span>
+          </label>
+
+          <div class="button-row">
+            <button class="btn btn-primary" id="newProblemBtn">New Problem</button>
+            <button class="btn btn-success" id="checkProblemBtn">Check</button>
+            <button class="btn btn-ghost" id="showSolutionBtn">Show Solution</button>
+          </div>
+
+          <div class="feedback" id="practiceFeedback" aria-live="polite"></div>
+          <div class="solution-box" id="solutionBox"></div>
+
+          <div class="stats-grid">
+            <div class="stat"><strong id="attemptedCount">0</strong><span>Attempted</span></div>
+            <div class="stat"><strong id="correctCount">0</strong><span>Correct</span></div>
+            <div class="stat"><strong id="accuracyCount">0%</strong><span>Accuracy</span></div>
+            <div class="stat"><strong id="streakCount">0</strong><span>Streak</span></div>
+          </div>
         </div>
-        
-        <div class="tips-section">
-            <div class="tips-title">
-                💡 Tips & Tricks untuk Ingat
+
+        <div class="section">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Workbook drill</p>
+              <h2>Same style as FORMULAE.docx.</h2>
+              <p>Use these as a checklist: first make the variable the subject, then substitute values when numbers are given.</p>
             </div>
-            
-            <div class="tip-item">
-                <strong>🎯 Trick 1: "Lompat Tanda"</strong><br>
-                Bayangkan nombor "lompat" melepasi tanda =. Bila lompat, tanda dia bertukar! 
-                +5 lompat jadi -5, ×3 lompat jadi ÷3
+          </div>
+          <div class="grid-2">
+            <div class="exercise-card">
+              <h3>A. Change the subject</h3>
+              <p><span class="math">g = 3 + h [h]</span></p>
+              <p><span class="math">2s + t = -8q [q]</span></p>
+              <p><span class="math">P = IRT [T]</span></p>
+              <p><span class="math">a = my^2 [y]</span></p>
+              <p><span class="math">(x + y) / 3 = 5 [x]</span></p>
+              <p><span class="math">x = yz^3 / 6 [z]</span></p>
             </div>
-            
-            <div class="tip-item">
-                <strong>🎯 Trick 2: "What Touching?"</strong><br>
-                Apa yang "sentuh" subjek kita? Kalau +/- → tolak/tambah untuk pindahkan. 
-                Kalau ×/÷ → bahagi/darab untuk pindahkan.
+            <div class="exercise-card">
+              <h3>B. Rearrange, then calculate</h3>
+              <p><span class="math">A = r / (2L)</span>, find r when <span class="math">A = 4, L = 3</span>.</p>
+              <p><span class="math">(R - C) / N = P</span>, find R when <span class="math">P = -1, N = 2, C = 6</span>.</p>
+              <p><span class="math">k = (2 / 3)mn - p^2</span>, find m when <span class="math">k = 1, n = -3, p = 2</span>.</p>
+              <p><span class="math">p = 3q - 2r^2</span>, find q when <span class="math">p = 9, r = 3</span>.</p>
             </div>
-            
-            <div class="tip-item">
-                <strong>🎯 Trick 3: "BODMAS Reverse"</strong><br>
-                Bila transpose, buat sebaliknya BODMAS. Pindahkan +/- dulu, baru ×/÷.
-            </div>
-            
-            <div class="tip-item">
-                <strong>🎯 Trick 4: "Balance Scale Test"</strong><br>
-                Setiap step, tanya: "Adakah kedua-dua belah masih sama?" Kalau ya, betul!
-            </div>
-            
-            <div class="tip-item">
-                <strong>🎯 Trick 5: "Substitute Check"</strong><br>
-                SELALU semak jawapan dengan ganti nilai dalam formula asal. Kalau betul, kedua-dua belah akan sama.
-            </div>
+          </div>
         </div>
-        
-        <!-- ========================================
-             SECTION 9: CABARAN AKHIR (Final Challenge)
-             ======================================== -->
-        
-        <div class="challenge-section" id="section-challenge">
-            <div class="trophy">🏆</div>
-            <div class="challenge-title">Anda Pakar Sekarang!</div>
-            
-            <p style="text-align: center; font-size: var(--text-lg); margin-bottom: 2rem;">
-                Tahniah! Anda dah kuasai transposisi formula. Sekarang tunjukkan kemahiran anda!
-            </p>
-            
-            <div class="challenge-tasks">
-                <div class="challenge-task">
-                    <div>
-                        <span class="task-number">1</span>
-                        <strong>Cabaran Lukisan</strong>
-                    </div>
-                    <p style="margin: 1rem 0 0 3rem;">
-                        Lukis komik 3 panel untuk terangkan transposisi formula kepada adik anda yang umur 10 tahun. 
-                        Guna balance scale atau analogi mudah yang budak boleh faham!
-                    </p>
-                </div>
-                
-                <div class="challenge-task">
-                    <div>
-                        <span class="task-number">2</span>
-                        <strong>Cabaran Cipta Soalan</strong>
-                    </div>
-                    <p style="margin: 1rem 0 0 3rem;">
-                        Cipta SATU formula berdasarkan situasi dalam kehidupan anda (contoh: formula untuk kira 
-                        pocket money, formula untuk speed dalam perjalanan ke sekolah, dll). 
-                        Kemudian transpose formula tu!
-                    </p>
-                    <textarea id="userFormula" style="width: 100%; min-height: 100px; margin-top: 1rem; padding: 1rem; 
-                                border-radius: 0.5rem; border: 2px solid var(--border-medium); font-family: 'Times New Roman', serif; 
-                                font-size: var(--text-lg);" placeholder="Tulis formula anda di sini..."></textarea>
-                </div>
-                
-                <div class="challenge-task">
-                    <div>
-                        <span class="task-number">3</span>
-                        <strong>Cabaran Ajar Balik</strong>
-                    </div>
-                    <p style="margin: 1rem 0 0 3rem;">
-                        Ajar balik apa yang anda belajar dalam 60 saat atau kurang. Boleh tulis atau record. 
-                        Gunakan kata-kata sendiri!
-                    </p>
-                    <textarea id="teachBack" style="width: 100%; min-height: 100px; margin-top: 1rem; padding: 1rem; 
-                                border-radius: 0.5rem; border: 2px solid var(--border-medium); font-size: var(--text-base);" 
-                                placeholder="Tulis penjelasan anda di sini..."></textarea>
-                </div>
+      </section>
+
+      <section class="tab-panel" id="tips">
+        <div class="section">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Tips and checks</p>
+              <h2>Reliable habits for error-free transposition.</h2>
             </div>
-            
-            <div style="margin-top: 2rem; text-align: center;">
-                <button class="btn btn-success" style="font-size: var(--text-lg); padding: 1rem 2rem;">
-                    🎖️ Saya Dah Siap! Nak Badge
-                </button>
+          </div>
+
+          <div class="tips-list">
+            <div class="tip">
+              <strong>Work outside to inside.</strong>
+              <p>If the formula is <span class="math">y = 3x + 8</span>, remove +8 before removing ×3.</p>
             </div>
+            <div class="tip">
+              <strong>Use inverse operations.</strong>
+              <p>Addition is undone by subtraction. Multiplication is undone by division. Squaring is undone by square root.</p>
+            </div>
+            <div class="tip">
+              <strong>Protect brackets.</strong>
+              <p>Write <span class="kbd">(y - 5) / 3</span>, not <span class="kbd">y - 5 / 3</span>. Those are different expressions.</p>
+            </div>
+            <div class="tip mistake">
+              <strong>Common mistake: changing only one side.</strong>
+              <p>From <span class="math">x + 6 = y</span>, the correct move is <span class="math">x = y − 6</span>, because the −6 happens to both sides.</p>
+            </div>
+            <div class="tip mistake">
+              <strong>Common mistake: treating multiplication like addition.</strong>
+              <p>From <span class="math">5x = y</span>, write <span class="math">x = y / 5</span>, not <span class="math">x = y − 5</span>.</p>
+            </div>
+            <div class="tip">
+              <strong>Edge cases to remember.</strong>
+              <p>Never divide by zero. If a coefficient is 0, that variable cannot be isolated by division. If a square root appears, the real-number answer needs a non-negative radicand.</p>
+            </div>
+          </div>
         </div>
-        
-        <!-- Footer -->
-        <div style="text-align: center; padding: 3rem 0; color: var(--text-secondary);">
-            <p style="font-size: var(--text-lg); margin-bottom: 0.5rem;">
-                🎓 Tahniah kerana belajar dengan tekun!
-            </p>
-            <p style="font-size: var(--text-sm);">
-                Modul Pembelajaran Interaktif CVSA | Matematik Form 2-3
-            </p>
-        </div>
+      </section>
     </main>
-    
-    <!-- ========================================
-         JAVASCRIPT - ALL FUNCTIONALITY
-         ======================================== -->
-    
-    <script>
-        /* ========================================
-           DATA MODELS & STATE
-           ======================================== */
-        
-        let currentDifficulty = 'easy';
-        let currentProblem = null;
-        let currentStep = 0;
-        let attempts = 0;
-        let hintsShown = 0;
-        
-        // Statistics
-        let stats = {
-            attempted: 0,
-            correct: 0,
-            hintsUsed: 0,
-            startTime: Date.now()
-        };
-        
-        // Problem templates by difficulty
-        const problemTemplates = {
-            easy: [
-                {
-                    type: 'linear_add',
-                    original: 'x + a = b',
-                    target: 'x',
-                    generator: () => {
-                        const a = Math.floor(Math.random() * 10) + 1;
-                        const b = Math.floor(Math.random() * 20) + a + 1;
-                        return {
-                            formula: `x + ${a} = ${b}`,
-                            target: 'x',
-                            steps: [
-                                {
-                                    instruction: `Pindahkan +${a} ke sebelah kanan (tukar jadi -${a})`,
-                                    answer: `${b - a}`,
-                                    formula: `x = ${b} - ${a}`
-                                }
-                            ],
-                            finalAnswer: `${b - a}`,
-                            hints: [
-                                `Cuba fokus pada nombor ${a} yang berada di sebelah x`,
-                                `Bila +${a} pindah ke kanan, dia jadi -${a}`,
-                                `Kira: ${b} - ${a} = ?`
-                            ]
-                        };
-                    }
-                },
-                {
-                    type: 'linear_subtract',
-                    original: 'x - a = b',
-                    target: 'x',
-                    generator: () => {
-                        const a = Math.floor(Math.random() * 10) + 1;
-                        const b = Math.floor(Math.random() * 15) + 1;
-                        return {
-                            formula: `x - ${a} = ${b}`,
-                            target: 'x',
-                            steps: [
-                                {
-                                    instruction: `Pindahkan -${a} ke sebelah kanan (tukar jadi +${a})`,
-                                    answer: `${b + a}`,
-                                    formula: `x = ${b} + ${a}`
-                                }
-                            ],
-                            finalAnswer: `${b + a}`,
-                            hints: [
-                                `Cuba fokus pada -${a} di sebelah x`,
-                                `Bila -${a} pindah ke kanan, dia jadi +${a}`,
-                                `Kira: ${b} + ${a} = ?`
-                            ]
-                        };
-                    }
-                },
-                {
-                    type: 'linear_multiply',
-                    original: 'ax = b',
-                    target: 'x',
-                    generator: () => {
-                        const a = Math.floor(Math.random() * 5) + 2;
-                        const x = Math.floor(Math.random() * 10) + 1;
-                        const b = a * x;
-                        return {
-                            formula: `${a}x = ${b}`,
-                            target: 'x',
-                            steps: [
-                                {
-                                    instruction: `Pindahkan coefficient ${a} ke sebelah kanan (bahagi)`,
-                                    answer: `${x}`,
-                                    formula: `x = ${b} ÷ ${a}`
-                                }
-                            ],
-                            finalAnswer: `${x}`,
-                            hints: [
-                                `${a}x bermakna ${a} DIDARAB dengan x`,
-                                `Untuk pindahkan ${a}, BAHAGI kedua-dua belah dengan ${a}`,
-                                `Kira: ${b} ÷ ${a} = ?`
-                            ]
-                        };
-                    }
-                }
-            ],
-            
-            medium: [
-                {
-                    type: 'two_step',
-                    original: 'ax + b = c',
-                    target: 'x',
-                    generator: () => {
-                        const a = Math.floor(Math.random() * 5) + 2;
-                        const b = Math.floor(Math.random() * 10) + 1;
-                        const x = Math.floor(Math.random() * 8) + 1;
-                        const c = a * x + b;
-                        return {
-                            formula: `${a}x + ${b} = ${c}`,
-                            target: 'x',
-                            steps: [
-                                {
-                                    instruction: `Step 1: Pindahkan +${b} ke kanan`,
-                                    answer: `${c - b}`,
-                                    formula: `${a}x = ${c} - ${b}`
-                                },
-                                {
-                                    instruction: `Step 2: Bahagi kedua-dua belah dengan ${a}`,
-                                    answer: `${x}`,
-                                    formula: `x = ${c - b} ÷ ${a}`
-                                }
-                            ],
-                            finalAnswer: `${x}`,
-                            hints: [
-                                `Pindahkan nombor (+${b}) dulu sebelum coefficient`,
-                                `Selepas pindah ${b}, anda dapat ${a}x = ${c - b}`,
-                                `Bahagikan ${c - b} dengan ${a} untuk dapat x`
-                            ]
-                        };
-                    }
-                },
-                {
-                    type: 'physics_basic',
-                    original: 'V = IR',
-                    target: 'R',
-                    generator: () => {
-                        const I = Math.floor(Math.random() * 5) + 1;
-                        const R = Math.floor(Math.random() * 10) + 2;
-                        const V = I * R;
-                        return {
-                            formula: `V = IR`,
-                            context: `Diberi V = ${V}V dan I = ${I}A`,
-                            target: 'R',
-                            steps: [
-                                {
-                                    instruction: `Transpose untuk cari R (bahagi kedua-dua belah dengan I)`,
-                                    answer: `${R}`,
-                                    formula: `R = V ÷ I = ${V} ÷ ${I}`
-                                }
-                            ],
-                            finalAnswer: `${R}`,
-                            hints: [
-                                `R sekarang didarab dengan I. Untuk pindahkan I, bahagi!`,
-                                `Formula baru: R = V/I`,
-                                `Ganti nilai: R = ${V}/${I} = ?`
-                            ]
-                        };
-                    }
-                }
-            ],
-            
-            hard: [
-                {
-                    type: 'complex_two_variables',
-                    original: '3x + 2 = 8 - 2x',
-                    target: 'x',
-                    generator: () => {
-                        const a = Math.floor(Math.random() * 4) + 2;
-                        const b = Math.floor(Math.random() * 5) + 1;
-                        const c = Math.floor(Math.random() * 3) + 2;
-                        const x = Math.floor(Math.random() * 5) + 1;
-                        const d = a * x + b + c * x;
-                        return {
-                            formula: `${a}x + ${b} = ${d} - ${c}x`,
-                            target: 'x',
-                            steps: [
-                                {
-                                    instruction: `Step 1: Pindahkan -${c}x ke kiri (jadi +${c}x)`,
-                                    answer: `${a + c}`,
-                                    formula: `${a}x + ${c}x + ${b} = ${d}`
-                                },
-                                {
-                                    instruction: `Step 2: Gabung ${a}x + ${c}x`,
-                                    answer: `${a + c}`,
-                                    formula: `${a + c}x + ${b} = ${d}`
-                                },
-                                {
-                                    instruction: `Step 3: Pindahkan +${b} ke kanan`,
-                                    answer: `${d - b}`,
-                                    formula: `${a + c}x = ${d} - ${b}`
-                                },
-                                {
-                                    instruction: `Step 4: Bahagi dengan ${a + c}`,
-                                    answer: `${x}`,
-                                    formula: `x = ${d - b} ÷ ${a + c}`
-                                }
-                            ],
-                            finalAnswer: `${x}`,
-                            hints: [
-                                `Kumpulkan semua x di satu belah dulu`,
-                                `Selepas kumpul x, pindahkan nombor biasa`,
-                                `Akhir sekali, bahagi untuk dapat x bersendirian`
-                            ]
-                        };
-                    }
-                },
-                {
-                    type: 'fraction_complex',
-                    original: 'Xc = 1/(2πfc)',
-                    target: 'fc',
-                    generator: () => {
-                        const Xc = (Math.floor(Math.random() * 10) + 1) * 100;
-                        const fc = Math.floor(Math.random() * 5) + 1;
-                        const calc = Math.round(1 / (2 * Math.PI * fc * Xc) * 1000) / 1000;
-                        return {
-                            formula: `X<sub>c</sub> = 1/(2πf<sub>c</sub>)`,
-                            context: `Diberi X<sub>c</sub> = ${Xc}Ω`,
-                            target: 'f<sub>c</sub>',
-                            steps: [
-                                {
-                                    instruction: `Step 1: Cross multiply`,
-                                    answer: `1`,
-                                    formula: `X<sub>c</sub> × 2πf<sub>c</sub> = 1`
-                                },
-                                {
-                                    instruction: `Step 2: Bahagi dengan X<sub>c</sub> dan 2π`,
-                                    answer: `${calc}`,
-                                    formula: `f<sub>c</sub> = 1/(2πX<sub>c</sub>)`
-                                }
-                            ],
-                            finalAnswer: `${calc}`,
-                            hints: [
-                                `f<sub>c</sub> dalam penyebut. Guna cross multiply!`,
-                                `Selepas cross multiply: X<sub>c</sub> × 2πf<sub>c</sub> = 1`,
-                                `Bahagikan kedua-dua belah dengan X<sub>c</sub> dan 2π`
-                            ]
-                        };
-                    }
-                }
-            ]
-        };
-        
-        /* ========================================
-           PROBLEM GENERATION
-           ======================================== */
-        
-        function generateProblem() {
-            // Reset state
-            currentStep = 0;
-            attempts = 0;
-            hintsShown = 0;
-            
-            // Select random problem from current difficulty
-            const templates = problemTemplates[currentDifficulty];
-            const template = templates[Math.floor(Math.random() * templates.length)];
-            currentProblem = template.generator();
-            
-            // Update UI
-            displayProblem();
-            createSolvingSteps();
-            resetHints();
-            
-            // Show reset button
-            document.getElementById('resetBtn').style.display = 'inline-flex';
-            
-            // Update stats
-            stats.attempted++;
-            updateStats();
-            
-            // Update progress
-            updateProgress(3); // Practice section
-        }
-        
-        function displayProblem() {
-            const display = document.getElementById('problemDisplay');
-            const textEl = document.getElementById('problemText');
-            const formulaEl = document.getElementById('problemFormula');
-            const instructionEl = document.getElementById('problemInstruction');
-            
-            textEl.textContent = `Soalan ${stats.attempted}:`;
-            formulaEl.innerHTML = currentProblem.formula;
-            
-            if (currentProblem.context) {
-                instructionEl.innerHTML = `${currentProblem.context}<br>Transpose untuk cari <strong>${currentProblem.target}</strong>`;
-            } else {
-                instructionEl.innerHTML = `Transpose untuk cari <strong>${currentProblem.target}</strong>`;
-            }
-            
-            document.getElementById('solvingArea').style.display = 'block';
-            document.getElementById('hintSystem').style.display = 'block';
-        }
-        
-        function createSolvingSteps() {
-            const solvingArea = document.getElementById('solvingArea');
-            solvingArea.innerHTML = '';
-            
-            currentProblem.steps.forEach((step, index) => {
-                const stepDiv = document.createElement('div');
-                stepDiv.className = 'solving-step';
-                stepDiv.id = `step-${index}`;
-                
-                if (index > 0) {
-                    stepDiv.classList.add('locked');
-                }
-                
-                stepDiv.innerHTML = `
-                    <div class="step-label">
-                        <span style="display: inline-block; width: 28px; height: 28px; background: var(--primary); 
-                              color: white; border-radius: 50%; text-align: center; line-height: 28px; font-weight: 700;">
-                            ${index + 1}
-                        </span>
-                        ${step.instruction}
-                    </div>
-                    <div class="input-group">
-                        <span style="font-family: 'Times New Roman', serif; font-size: 1.25rem;">
-                            ${step.formula.split('=')[0]} =
-                        </span>
-                        <input type="text" 
-                               class="input-field" 
-                               id="input-${index}" 
-                               placeholder="?"
-                               ${index > 0 ? 'disabled' : ''}
-                               onkeypress="if(event.key === 'Enter') checkStep(${index})">
-                        <button class="btn btn-primary" 
-                                id="check-${index}"
-                                onclick="checkStep(${index})"
-                                ${index > 0 ? 'disabled' : ''}>
-                            Semak
-                        </button>
-                    </div>
-                    <div id="feedback-${index}"></div>
-                `;
-                
-                solvingArea.appendChild(stepDiv);
-            });
-        }
-        
-        /* ========================================
-           VALIDATION & FEEDBACK
-           ======================================== */
-        
-        function checkStep(stepIndex) {
-            const input = document.getElementById(`input-${stepIndex}`);
-            const userAnswer = input.value.trim();
-            const correctAnswer = currentProblem.steps[stepIndex].answer;
-            
-            if (!userAnswer) {
-                showFeedback(stepIndex, 'error', 'Sila masukkan jawapan anda');
-                return;
-            }
-            
-            // Normalize answers for comparison
-            const normalized = normalizeAnswer(userAnswer);
-            const normalizedCorrect = normalizeAnswer(correctAnswer);
-            
-            const isCorrect = Math.abs(parseFloat(normalized) - parseFloat(normalizedCorrect)) < 0.01;
-            
-            if (isCorrect) {
-                showFeedback(stepIndex, 'success', `✅ BETUL! ${getEncouragement()}`);
-                input.classList.add('correct');
-                input.disabled = true;
-                document.getElementById(`check-${stepIndex}`).disabled = true;
-                
-                // Mark step as completed
-                document.getElementById(`step-${stepIndex}`).classList.add('completed');
-                
-                // Unlock next step or finish
-                if (stepIndex < currentProblem.steps.length - 1) {
-                    unlockStep(stepIndex + 1);
-                } else {
-                    completeProblem();
-                }
-                
-                attempts = 0; // Reset attempts for next step
-            } else {
-                attempts++;
-                input.classList.add('incorrect');
-                setTimeout(() => input.classList.remove('incorrect'), 300);
-                
-                if (attempts >= 2) {
-                    showFeedback(stepIndex, 'error', 
-                        `❌ Cuba lagi. Petunjuk: ${currentProblem.hints[stepIndex] || 'Semak operasi yang anda guna'}`);
-                } else {
-                    showFeedback(stepIndex, 'error', '❌ Tidak tepat. Cuba lagi!');
-                }
-            }
-        }
-        
-        function unlockStep(stepIndex) {
-            const stepDiv = document.getElementById(`step-${stepIndex}`);
-            stepDiv.classList.remove('locked');
-            
-            const input = document.getElementById(`input-${stepIndex}`);
-            const button = document.getElementById(`check-${stepIndex}`);
-            
-            input.disabled = false;
-            button.disabled = false;
-            input.focus();
-            
-            currentStep = stepIndex;
-        }
-        
-        function completeProblem() {
-            stats.correct++;
-            updateStats();
-            
-            // Show completion message
-            const feedbackArea = document.getElementById('feedbackArea');
-            feedbackArea.innerHTML = `
-                <div class="feedback feedback-success" style="font-size: var(--text-lg); animation: slideIn 0.5s ease;">
-                    <span class="feedback-icon">🎉</span>
-                    <div>
-                        <strong>TAHNIAH! Anda berjaya transpose formula dengan betul!</strong>
-                        <br>
-                        <span style="font-size: var(--text-base);">
-                            Formula final: ${currentProblem.target} = ${currentProblem.finalAnswer}
-                        </span>
-                    </div>
-                </div>
-            `;
-            
-            // Show confetti
-            createConfetti();
-            
-            // Scroll to feedback
-            feedbackArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-        
-        function showFeedback(stepIndex, type, message) {
-            const feedbackDiv = document.getElementById(`feedback-${stepIndex}`);
-            feedbackDiv.innerHTML = `
-                <div class="feedback feedback-${type}">
-                    <span class="feedback-icon">${type === 'success' ? '✅' : '❌'}</span>
-                    <div>${message}</div>
-                </div>
-            `;
-        }
-        
-        /* ========================================
-           HELPER FUNCTIONS
-           ======================================== */
-        
-        function normalizeAnswer(answer) {
-            // Remove spaces and convert to lowercase
-            let normalized = answer.toString().toLowerCase().replace(/\s/g, '');
-            
-            // Handle fractions
-            if (normalized.includes('/')) {
-                const parts = normalized.split('/');
-                normalized = (parseFloat(parts[0]) / parseFloat(parts[1])).toString();
-            }
-            
-            return normalized;
-        }
-        
-        function getEncouragement() {
-            const messages = [
-                'Hebat!',
-                'Bagus!',
-                'Cemerlang!',
-                'Teruskan!',
-                'Brilliant!',
-                'Perfect!',
-                'Excellent!',
-                'Well done!',
-                'Pandai!',
-                'Terbaik!'
-            ];
-            return messages[Math.floor(Math.random() * messages.length)];
-        }
-        
-        /* ========================================
-           HINT SYSTEM
-           ======================================== */
-        
-        function showHint(level) {
-            if (!currentProblem) return;
-            
-            const hintDiv = document.getElementById(`hint${level}`);
-            const hintText = currentProblem.hints[level - 1];
-            
-            if (hintText) {
-                hintDiv.innerHTML = `
-                    <strong>💡 Petunjuk ${level}:</strong><br>
-                    ${hintText}
-                `;
-                hintDiv.classList.add('show');
-                
-                stats.hintsUsed++;
-                hintsShown++;
-                updateStats();
-            }
-        }
-        
-        function resetHints() {
-            for (let i = 1; i <= 3; i++) {
-                const hintDiv = document.getElementById(`hint${i}`);
-                hintDiv.classList.remove('show');
-                hintDiv.innerHTML = '';
-            }
-        }
-        
-        /* ========================================
-           DIFFICULTY SELECTION
-           ======================================== */
-        
-        function selectDifficulty(level) {
-            currentDifficulty = level;
-            
-            // Update button states
-            document.querySelectorAll('.difficulty-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.closest('.difficulty-btn').classList.add('active');
-            
-            // Reset problem
-            document.getElementById('solvingArea').style.display = 'none';
-            document.getElementById('hintSystem').style.display = 'none';
-            document.getElementById('problemText').textContent = 'Klik "Soalan Baru" untuk mula!';
-            document.getElementById('problemFormula').innerHTML = '';
-            document.getElementById('problemInstruction').innerHTML = '';
-        }
-        
-        function resetProblem() {
-            if (!currentProblem) return;
-            
-            currentStep = 0;
-            attempts = 0;
-            hintsShown = 0;
-            
-            createSolvingSteps();
-            resetHints();
-            
-            document.getElementById('feedbackArea').innerHTML = '';
-        }
-        
-        /* ========================================
-           STATISTICS
-           ======================================== */
-        
-        function updateStats() {
-            document.getElementById('attemptedCount').textContent = stats.attempted;
-            document.getElementById('correctCount').textContent = stats.correct;
-            document.getElementById('hintsUsed').textContent = stats.hintsUsed;
-            
-            const successRate = stats.attempted > 0 
-                ? Math.round((stats.correct / stats.attempted) * 100) 
-                : 0;
-            document.getElementById('successRate').textContent = `${successRate}%`;
-        }
-        
-        /* ========================================
-           PROGRESS TRACKING
-           ======================================== */
-        
-        function updateProgress(section) {
-            const totalSections = 9;
-            const progress = (section / totalSections) * 100;
-            
-            document.getElementById('mainProgressBar').style.width = `${progress}%`;
-            document.getElementById('currentSection').textContent = section;
-            document.getElementById('totalSections').textContent = totalSections;
-        }
-        
-        // Update progress on scroll
-        let sectionObserver;
-        if ('IntersectionObserver' in window) {
-            sectionObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const sectionMap = {
-                            'section-concrete': 1,
-                            'section-visual': 2,
-                            'section-symbolic': 3,
-                            'section-examples': 4,
-                            'section-practice': 5,
-                            'section-reference': 6,
-                            'section-mistakes': 7,
-                            'section-challenge': 8
-                        };
-                        
-                        const sectionNum = sectionMap[entry.target.id];
-                        if (sectionNum) {
-                            updateProgress(sectionNum);
-                        }
-                    }
-                });
-            }, { threshold: 0.5 });
-            
-            // Observe all sections
-            document.querySelectorAll('[id^="section-"]').forEach(section => {
-                sectionObserver.observe(section);
-            });
-        }
-        
-        /* ========================================
-           CONFETTI ANIMATION
-           ======================================== */
-        
-        function createConfetti() {
-            const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
-            const confettiCount = 50;
-            
-            for (let i = 0; i < confettiCount; i++) {
-                setTimeout(() => {
-                    const confetti = document.createElement('div');
-                    confetti.className = 'confetti';
-                    confetti.style.left = Math.random() * 100 + '%';
-                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
-                    confetti.style.animationDelay = '0s';
-                    
-                    document.body.appendChild(confetti);
-                    
-                    setTimeout(() => confetti.remove(), 3000);
-                }, i * 30);
-            }
-        }
-        
-        /* ========================================
-           INITIALIZATION
-           ======================================== */
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            // Set initial progress
-            updateProgress(1);
-            
-            // Initialize stats
-            updateStats();
-            
-            // Log start time
-            console.log('Module loaded successfully');
-            
-            // Add keyboard shortcuts
-            document.addEventListener('keydown', (e) => {
-                // Ctrl/Cmd + Enter to check current step
-                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-                    const activeInput = document.querySelector('.input-field:not([disabled]):focus');
-                    if (activeInput) {
-                        const stepIndex = parseInt(activeInput.id.split('-')[1]);
-                        checkStep(stepIndex);
-                    }
-                }
-            });
+  </div>
+
+  <script>
+    const state = {
+      difficulty: "easy",
+      currentProblem: null,
+      attempted: 0,
+      correct: 0,
+      streak: 0,
+      checkedCurrent: false,
+      solvedCurrent: false,
+      canvasTick: 0
+    };
+
+    const problemTemplates = {
+      easy: [makeEasyAddProblem, makeEasyMultiplyProblem, makeWorkbookPhoneBalanceProblem, makeWorkbookElectricTimeProblem],
+      medium: [makeMediumLinearProblem, makeMediumFractionProblem, makeWorkbookQSubjectProblem, makeWorkbookGSubjectProblem, makeWorkbookAverageSubjectProblem, makeWorkbookYSubjectProblem],
+      hard: [makeHardReciprocalProblem, makeHardSquareProblem, makeWorkbookCubeSubjectProblem, makeWorkbookRadiusValueProblem, makeWorkbookFundValueProblem, makeWorkbookMValueProblem, makeWorkbookQValueProblem]
+    };
+
+    document.addEventListener("DOMContentLoaded", () => {
+      setupTabs();
+      setupValidation();
+      setupPractice();
+      startStoryCanvas();
+      formatMathElements(document);
+      generateProblem();
+    });
+
+    function setupTabs() {
+      document.querySelectorAll(".tab-button").forEach((button) => {
+        button.addEventListener("click", () => {
+          const targetId = button.dataset.tab;
+          document.querySelectorAll(".tab-button").forEach((tab) => tab.classList.toggle("active", tab === button));
+          document.querySelectorAll(".tab-panel").forEach((panel) => panel.classList.toggle("active", panel.id === targetId));
         });
-        
-        // Accessibility: Announce to screen readers
-        function announce(message) {
-            const announcement = document.createElement('div');
-            announcement.setAttribute('role', 'status');
-            announcement.setAttribute('aria-live', 'polite');
-            announcement.className = 'sr-only';
-            announcement.textContent = message;
-            document.body.appendChild(announcement);
-            setTimeout(() => announcement.remove(), 1000);
+      });
+    }
+
+    function setupValidation() {
+      document.addEventListener("input", (event) => {
+        if (event.target.matches(".math-input[data-answer]")) {
+          validateExpressionInput(event.target);
         }
-    </script>
+      });
+    }
+
+    function setupPractice() {
+      document.querySelectorAll(".difficulty-btn").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.difficulty = button.dataset.difficulty;
+          document.querySelectorAll(".difficulty-btn").forEach((item) => item.classList.toggle("active", item === button));
+          generateProblem();
+        });
+      });
+
+      document.getElementById("newProblemBtn").addEventListener("click", generateProblem);
+      document.getElementById("checkProblemBtn").addEventListener("click", checkPracticeProblem);
+      document.getElementById("showSolutionBtn").addEventListener("click", showSolution);
+      document.getElementById("finalAnswer").addEventListener("input", () => {
+        if (!state.currentProblem) return;
+        const finalInput = document.getElementById("finalAnswer");
+        finalInput.dataset.answer = state.currentProblem.finalAnswer;
+        finalInput.dataset.vars = state.currentProblem.vars.join(",");
+        validateExpressionInput(finalInput);
+      });
+    }
+
+    function startStoryCanvas() {
+      const canvas = document.getElementById("storyCanvas");
+      const ctx = canvas.getContext("2d");
+
+      function resizeCanvas() {
+        const ratio = window.devicePixelRatio || 1;
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = Math.max(760, Math.floor(rect.width * ratio));
+        canvas.height = Math.floor(360 * ratio);
+        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      }
+
+      function draw() {
+        const rect = canvas.getBoundingClientRect();
+        const width = rect.width;
+        const height = 360;
+        state.canvasTick += 0.018;
+
+        ctx.clearRect(0, 0, width, height);
+        drawPanel(ctx, 16, 18, width / 2 - 24, height - 36, "Game formula: d = s × t");
+        drawPanel(ctx, width / 2 + 8, 18, width / 2 - 24, height - 36, "Business formula: P = R − C");
+
+        drawRaceStory(ctx, 16, 18, width / 2 - 24, height - 36, state.canvasTick);
+        drawBusinessStory(ctx, width / 2 + 8, 18, width / 2 - 24, height - 36, state.canvasTick);
+        requestAnimationFrame(draw);
+      }
+
+      resizeCanvas();
+      window.addEventListener("resize", resizeCanvas);
+      draw();
+    }
+
+    function drawPanel(ctx, x, y, w, h, title) {
+      ctx.fillStyle = "#ffffff";
+      ctx.strokeStyle = "#dbe3ef";
+      roundRect(ctx, x, y, w, h, 8);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = "#1e40af";
+      ctx.font = "700 16px system-ui, sans-serif";
+      ctx.fillText(title, x + 18, y + 30);
+    }
+
+    function drawRaceStory(ctx, x, y, w, h, tick) {
+      const trackX = x + 28;
+      const trackY = y + h * 0.55;
+      const trackW = w - 56;
+      const carX = trackX + ((Math.sin(tick) + 1) / 2) * trackW;
+
+      ctx.strokeStyle = "#94a3b8";
+      ctx.lineWidth = 8;
+      ctx.beginPath();
+      ctx.moveTo(trackX, trackY);
+      ctx.lineTo(trackX + trackW, trackY);
+      ctx.stroke();
+
+      for (let i = 0; i <= 6; i++) {
+        const px = trackX + (trackW / 6) * i;
+        ctx.strokeStyle = i % 2 === 0 ? "#2563eb" : "#16a34a";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(px, trackY - 16);
+        ctx.lineTo(px, trackY + 16);
+        ctx.stroke();
+      }
+
+      ctx.fillStyle = "#2563eb";
+      roundRect(ctx, carX - 22, trackY - 30, 44, 24, 6);
+      ctx.fill();
+      ctx.fillStyle = "#0f172a";
+      ctx.beginPath();
+      ctx.arc(carX - 12, trackY - 4, 5, 0, Math.PI * 2);
+      ctx.arc(carX + 12, trackY - 4, 5, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#475569";
+      ctx.font = "14px system-ui, sans-serif";
+      ctx.fillText("Known: distance and time", x + 18, y + 76);
+      ctx.fillText("Find speed: s = d / t", x + 18, y + 102);
+
+      const speed = 40 + Math.round(((Math.sin(tick) + 1) / 2) * 60);
+      ctx.fillStyle = "#16a34a";
+      ctx.font = "800 24px system-ui, sans-serif";
+      ctx.fillText(`${speed} km/h`, x + 18, y + h - 38);
+    }
+
+    function drawBusinessStory(ctx, x, y, w, h, tick) {
+      const baseY = y + h - 64;
+      const barW = Math.min(72, (w - 90) / 3);
+      const revenue = 130 + Math.sin(tick * 1.2) * 18;
+      const cost = 82 + Math.cos(tick * 1.4) * 14;
+      const profit = revenue - cost;
+
+      drawBar(ctx, x + 34, baseY, barW, revenue, "#2563eb", "Revenue");
+      drawBar(ctx, x + 34 + barW + 28, baseY, barW, cost, "#dc2626", "Cost");
+      drawBar(ctx, x + 34 + (barW + 28) * 2, baseY, barW, profit, "#16a34a", "Profit");
+
+      ctx.fillStyle = "#475569";
+      ctx.font = "14px system-ui, sans-serif";
+      ctx.fillText("Known: target profit and cost", x + 18, y + 76);
+      ctx.fillText("Find revenue: R = P + C", x + 18, y + 102);
+      ctx.fillStyle = "#16a34a";
+      ctx.font = "800 24px system-ui, sans-serif";
+      ctx.fillText(`R = ${Math.round(profit)} + ${Math.round(cost)}`, x + 18, y + h - 20);
+    }
+
+    function drawBar(ctx, x, baseY, w, value, color, label) {
+      const height = Math.max(34, value * 1.25);
+      ctx.fillStyle = color;
+      roundRect(ctx, x, baseY - height, w, height, 6);
+      ctx.fill();
+      ctx.fillStyle = "#475569";
+      ctx.font = "12px system-ui, sans-serif";
+      ctx.fillText(label, x, baseY + 20);
+    }
+
+    function roundRect(ctx, x, y, width, height, radius) {
+      const r = Math.min(radius, width / 2, height / 2);
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + width, y, x + width, y + height, r);
+      ctx.arcTo(x + width, y + height, x, y + height, r);
+      ctx.arcTo(x, y + height, x, y, r);
+      ctx.arcTo(x, y, x + width, y, r);
+      ctx.closePath();
+    }
+
+    function generateProblem() {
+      const makers = problemTemplates[state.difficulty];
+      const maker = makers[randomInt(0, makers.length - 1)];
+      state.currentProblem = maker();
+      state.checkedCurrent = false;
+      state.solvedCurrent = false;
+
+      document.getElementById("problemTitle").textContent = `${capitalize(state.difficulty)} challenge`;
+      document.getElementById("problemPrompt").textContent = state.currentProblem.prompt;
+      document.getElementById("problemFormula").innerHTML = formatMathHtml(state.currentProblem.formula);
+      document.getElementById("practiceFeedback").textContent = "";
+      document.getElementById("practiceFeedback").className = "feedback";
+      document.getElementById("solutionBox").classList.remove("show");
+      document.getElementById("solutionBox").innerHTML = "";
+
+      const finalInput = document.getElementById("finalAnswer");
+      finalInput.value = "";
+      finalInput.dataset.answer = state.currentProblem.finalAnswer;
+      finalInput.dataset.vars = state.currentProblem.vars.join(",");
+      resetInputState(finalInput);
+
+      renderPracticeGrid(state.currentProblem);
+    }
+
+    function renderPracticeGrid(problem) {
+      const container = document.getElementById("practiceGrid");
+      const rows = problem.steps.map((step, index) => `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${escapeHtml(step.action)}</td>
+          <td><span class="math">${formatMathHtml(step.target)}</span></td>
+          <td>
+            <input class="math-input practice-step" data-answer="${escapeHtml(step.answer)}" data-vars="${problem.vars.join(",")}" placeholder="${escapeHtml(step.placeholder || "Type expression")}" />
+            <span class="validation-note"></span>
+          </td>
+        </tr>
+      `).join("");
+
+      container.innerHTML = `
+        <table class="step-table">
+          <thead>
+            <tr>
+              <th>Step</th>
+              <th>Undo action</th>
+              <th>Goal</th>
+              <th>Your intermediate result</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+      formatMathElements(container);
+    }
+
+    function checkPracticeProblem() {
+      if (!state.currentProblem) return;
+
+      const inputs = [...document.querySelectorAll("#practiceGrid .math-input"), document.getElementById("finalAnswer")];
+      const allCorrect = inputs.every((input) => validateExpressionInput(input, true));
+
+      if (!state.checkedCurrent) {
+        state.attempted += 1;
+        state.checkedCurrent = true;
+      }
+
+      const feedback = document.getElementById("practiceFeedback");
+      if (allCorrect) {
+        if (!state.solvedCurrent) {
+          state.correct += 1;
+          state.streak += 1;
+          state.solvedCurrent = true;
+        }
+        feedback.textContent = "Correct. Every operation kept the formula balanced.";
+        feedback.className = "feedback good";
+      } else {
+        state.streak = 0;
+        feedback.textContent = "Some boxes still need attention. Check signs, brackets, and division.";
+        feedback.className = "feedback bad";
+      }
+
+      updateStats();
+    }
+
+    function showSolution() {
+      if (!state.currentProblem) return;
+      const solution = document.getElementById("solutionBox");
+      const items = state.currentProblem.steps
+        .map((step) => `<li>${escapeHtml(step.explanation)} <span class="math">${formatMathHtml(`${step.target} ${step.answer}`)}</span></li>`)
+        .join("");
+      solution.innerHTML = `
+        <strong>Step-by-step solution</strong>
+        <ol>${items}<li>Final answer: <span class="math">${formatMathHtml(`${state.currentProblem.target} = ${state.currentProblem.finalAnswer}`)}</span></li></ol>
+      `;
+      solution.classList.add("show");
+    }
+
+    function updateStats() {
+      const accuracy = state.attempted === 0 ? 0 : Math.round((state.correct / state.attempted) * 100);
+      document.getElementById("attemptedCount").textContent = state.attempted;
+      document.getElementById("correctCount").textContent = state.correct;
+      document.getElementById("accuracyCount").textContent = `${accuracy}%`;
+      document.getElementById("headerAccuracy").textContent = `${accuracy}%`;
+      document.getElementById("streakCount").textContent = state.streak;
+    }
+
+    function formatMathElements(root) {
+      root.querySelectorAll(".math").forEach((element) => {
+        if (element.dataset.mathFormatted === "true") return;
+        element.innerHTML = formatMathHtml(element.textContent);
+        element.dataset.mathFormatted = "true";
+      });
+    }
+
+    function formatMathHtml(expression) {
+      let output = escapeHtml(expression)
+        .replace(/[−–—]/g, "-")
+        .replace(/sqrt\s*\(/g, "√(")
+        .replace(/cbrt\s*\(/g, "∛(");
+
+      output = renderFractions(output);
+      output = output
+        .replace(/\*/g, " ⋅ ")
+        .replace(/([A-Za-z0-9)\]])\^(-?\d+)/g, "$1<sup>$2</sup>")
+        .replace(/(^|[\s=(])-/g, "$1−");
+
+      return output;
+    }
+
+    function renderFractions(expression) {
+      const fraction = (numerator, denominator) =>
+        `<span class="fraction"><span class="num">${numerator.trim()}</span><span class="den">${denominator.trim()}</span></span>`;
+
+      let output = expression;
+      output = output.replace(/\(([^()<>]+)\)\s*\/\s*\(([^()<>]+)\)/g, (_, numerator, denominator) => fraction(numerator, denominator));
+      output = output.replace(/\(([^()<>]+)\)\s*\/\s*([A-Za-z0-9^]+)/g, (_, numerator, denominator) => fraction(numerator, denominator));
+      output = output.replace(/([A-Za-z0-9^]+)\s*\/\s*\(([^()<>]+)\)/g, (_, numerator, denominator) => fraction(numerator, denominator));
+      output = output.replace(/([A-Za-z0-9^]+)\s*\/\s*([A-Za-z0-9^]+)/g, (_, numerator, denominator) => fraction(numerator, denominator));
+      return output;
+    }
+
+    function validateExpressionInput(input, force = false) {
+      const value = input.value.trim();
+      const note = input.parentElement.querySelector(".validation-note");
+      if (!value) {
+        resetInputState(input);
+        if (force && note) {
+          note.textContent = "Enter an expression.";
+          note.className = "validation-note bad";
+          input.classList.add("incorrect");
+        }
+        return false;
+      }
+
+      const vars = (input.dataset.vars || "y").split(",").map((item) => item.trim()).filter(Boolean);
+      const answer = input.dataset.answer;
+      const isCorrect = expressionsEquivalent(value, answer, vars);
+      input.classList.toggle("correct", isCorrect);
+      input.classList.toggle("incorrect", !isCorrect);
+
+      if (note) {
+        note.textContent = isCorrect ? "Correct" : "Not equivalent yet";
+        note.className = `validation-note ${isCorrect ? "good" : "bad"}`;
+      }
+      return isCorrect;
+    }
+
+    function resetInputState(input) {
+      input.classList.remove("correct", "incorrect");
+      const note = input.parentElement.querySelector(".validation-note");
+      if (note) {
+        note.textContent = "";
+        note.className = "validation-note";
+      }
+    }
+
+    function expressionsEquivalent(userExpression, expectedExpression, variableNames) {
+      try {
+        const samples = buildSamples(variableNames);
+        return samples.every((values) => {
+          const userValue = evaluateExpression(userExpression, values);
+          const expectedValue = evaluateExpression(expectedExpression, values);
+          if (!Number.isFinite(userValue) || !Number.isFinite(expectedValue)) return false;
+          return Math.abs(userValue - expectedValue) <= 1e-7 * Math.max(1, Math.abs(expectedValue));
+        });
+      } catch (error) {
+        return false;
+      }
+    }
+
+    function evaluateExpression(expression, values) {
+      const prepared = prepareExpression(expression);
+      if (!/^[0-9A-Za-z_+\-*/().,\s^]+$/.test(prepared)) {
+        throw new Error("Unsupported characters");
+      }
+      const enrichedValues = addImplicitProductVariables(values);
+      const names = Object.keys(enrichedValues);
+      const args = names.map((name) => enrichedValues[name]);
+      const evaluator = Function(...names, `"use strict"; const sqrt = Math.sqrt; const cbrt = Math.cbrt; const abs = Math.abs; const pi = Math.PI; return (${prepared});`);
+      return evaluator(...args);
+    }
+
+    function addImplicitProductVariables(values) {
+      const enriched = { ...values };
+      const singleLetterNames = Object.keys(values).filter((name) => /^[A-Za-z]$/.test(name));
+
+      singleLetterNames.forEach((first) => {
+        singleLetterNames.forEach((second) => {
+          if (first !== second) enriched[first + second] = values[first] * values[second];
+          singleLetterNames.forEach((third) => {
+            if (first !== second && second !== third && first !== third) {
+              enriched[first + second + third] = values[first] * values[second] * values[third];
+            }
+          });
+        });
+      });
+
+      return enriched;
+    }
+
+    function prepareExpression(expression) {
+      let output = expression
+        .replace(/[−–—]/g, "-")
+        .replace(/[×·]/g, "*")
+        .replace(/[÷]/g, "/")
+        .replace(/\^/g, "**")
+        .replace(/\s+/g, "");
+
+      output = output.replace(/(\d|\))(?=\()/g, "$1*");
+      output = output.replace(/(\d)(?=[A-Za-z_])/g, "$1*");
+      output = output.replace(/\)(?=\d|[A-Za-z_])/g, ")*");
+      return output;
+    }
+
+    function buildSamples(variableNames) {
+      const base = [
+        { y: 18, x: 4, P: 40, L: 7, W: 13, g: 20, h: 5, I: 2, R: 10, T: 3, s: 6, t: -4, q: 2, A: 4, N: 2, C: 6, k: 1, m: -2, n: -3, p: 9, r: 3, a: 50, z: 2 },
+        { y: 27, x: -3, P: 64, L: 12, W: 20, g: -8, h: 9, I: 4, R: 6, T: 5, s: -5, t: 11, q: -4, A: 6, N: 5, C: -2, k: 8, m: 7, n: 4, p: -1, r: 5, a: 96, z: 3 },
+        { y: 9, x: 8, P: 22, L: -5, W: 16, g: 14, h: -7, I: 3, R: 8, T: -2, s: 3, t: 5, q: 6, A: -2, N: 7, C: 10, k: -4, m: 6, n: -8, p: 5, r: -2, a: 24, z: 4 },
+        { y: 35, x: 2, P: 81, L: 9, W: 31, g: 3, h: 12, I: 5, R: 11, T: 7, s: 10, t: -9, q: 1, A: 3, N: -4, C: 8, k: 2, m: -5, n: 6, p: 14, r: 4, a: 75, z: 5 }
+      ];
+
+      return base.map((row, sampleIndex) => {
+        const values = {};
+        variableNames.forEach((name, index) => {
+          values[name] = row[name] ?? (sampleIndex + 2) * (index + 3);
+          if (name.toLowerCase() === "y" && values[name] === 0) values[name] = 5;
+        });
+        return values;
+      });
+    }
+
+    function makeEasyAddProblem() {
+      const b = randomNonZero(-12, 12);
+      const action = b >= 0 ? `Subtract ${b}` : `Add ${Math.abs(b)}`;
+      const answer = inverseAddExpression("y", b);
+      return {
+        prompt: "Change the subject to x.",
+        formula: `x ${formatSigned(b)} = y`,
+        target: "x",
+        vars: ["y"],
+        finalAnswer: answer,
+        steps: [
+          {
+            action,
+            target: "x =",
+            answer,
+            placeholder: "Right side",
+            explanation: `${action} on both sides to remove ${formatSignedTerm(b)} from x.`
+          }
+        ]
+      };
+    }
+
+    function makeEasyMultiplyProblem() {
+      const a = randomNonZero(-9, 9);
+      return {
+        prompt: "Change the subject to x.",
+        formula: `${formatCoefficient(a)}x = y`,
+        target: "x",
+        vars: ["y"],
+        finalAnswer: `y / ${a}`,
+        steps: [
+          {
+            action: `Divide both sides by ${a}`,
+            target: "x =",
+            answer: `y / ${a}`,
+            placeholder: "y / coefficient",
+            explanation: `The coefficient ${a} is multiplying x, so divide both sides by ${a}.`
+          }
+        ]
+      };
+    }
+
+    function makeMediumLinearProblem() {
+      const a = randomNonZero(-9, 9);
+      const b = randomInt(-12, 12);
+      const first = inverseAddExpression("y", b);
+      const final = `(${first}) / ${a}`;
+      return {
+        prompt: "Use the box method to isolate x.",
+        formula: `${formatCoefficient(a)}x ${formatSigned(b)} = y`,
+        target: "x",
+        vars: ["y"],
+        finalAnswer: final,
+        steps: [
+          {
+            action: b >= 0 ? `Subtract ${b}` : `Add ${Math.abs(b)}`,
+            target: `${formatCoefficient(a)}x =`,
+            answer: first,
+            placeholder: "Right side after moving constant",
+            explanation: `Remove the outside constant ${formatSignedTerm(b)} first.`
+          },
+          {
+            action: `Divide by ${a}`,
+            target: "x =",
+            answer: final,
+            placeholder: "Final expression",
+            explanation: `The remaining coefficient ${a} is attached to x, so divide the whole right side by ${a}.`
+          }
+        ]
+      };
+    }
+
+    function makeMediumFractionProblem() {
+      const d = randomNonZero(2, 9);
+      const b = randomInt(-10, 10);
+      const first = inverseAddExpression("y", b);
+      const final = `${d} * (${first})`;
+      return {
+        prompt: "Change the subject to x. Watch the fraction carefully.",
+        formula: `x / ${d} ${formatSigned(b)} = y`,
+        target: "x",
+        vars: ["y"],
+        finalAnswer: final,
+        steps: [
+          {
+            action: b >= 0 ? `Subtract ${b}` : `Add ${Math.abs(b)}`,
+            target: `x / ${d} =`,
+            answer: first,
+            placeholder: "Right side after moving constant",
+            explanation: `Move the outside constant before clearing the denominator.`
+          },
+          {
+            action: `Multiply by ${d}`,
+            target: "x =",
+            answer: final,
+            placeholder: "Final expression",
+            explanation: `Because x is divided by ${d}, multiply the entire other side by ${d}.`
+          }
+        ]
+      };
+    }
+
+    function makeHardReciprocalProblem() {
+      const a = randomNonZero(4, 18);
+      const b = randomInt(-8, 8);
+      const middle = `${a} / y`;
+      const final = inverseAddExpression(middle, b);
+      return {
+        prompt: "The subject is inside a denominator. Isolate x.",
+        formula: `y = ${a} / (x ${formatSigned(b)})`,
+        target: "x",
+        vars: ["y"],
+        finalAnswer: final,
+        steps: [
+          {
+            action: `Multiply both sides by (x ${formatSigned(b)})`,
+            target: `y(x ${formatSigned(b)}) =`,
+            answer: `${a}`,
+            placeholder: `${a}`,
+            explanation: `Multiplying by the denominator removes the fraction.`
+          },
+          {
+            action: "Divide by y",
+            target: `x ${formatSigned(b)} =`,
+            answer: middle,
+            placeholder: `${a} / y`,
+            explanation: `Divide by y so the bracket containing x is alone.`
+          },
+          {
+            action: b >= 0 ? `Subtract ${b}` : `Add ${Math.abs(b)}`,
+            target: "x =",
+            answer: final,
+            placeholder: "Final expression",
+            explanation: `Undo the constant inside the bracket to leave x alone.`
+          }
+        ]
+      };
+    }
+
+    function makeHardSquareProblem() {
+      const a = randomNonZero(2, 7);
+      const b = randomInt(-9, 9);
+      const first = inverseAddExpression("y", b);
+      const second = `(${first}) / ${a}`;
+      const final = `sqrt(${second})`;
+      return {
+        prompt: "Assume x is non-negative. Change the subject to x.",
+        formula: `${formatCoefficient(a)}x^2 ${formatSigned(b)} = y`,
+        target: "x",
+        vars: ["y"],
+        finalAnswer: final,
+        steps: [
+          {
+            action: b >= 0 ? `Subtract ${b}` : `Add ${Math.abs(b)}`,
+            target: `${formatCoefficient(a)}x^2 =`,
+            answer: first,
+            placeholder: "Right side",
+            explanation: `Remove the outside constant first.`
+          },
+          {
+            action: `Divide by ${a}`,
+            target: "x^2 =",
+            answer: second,
+            placeholder: "Expression under the root",
+            explanation: `Divide by the coefficient of x^2.`
+          },
+          {
+            action: "Take the square root",
+            target: "x =",
+            answer: final,
+            placeholder: "sqrt(...)",
+            explanation: `The inverse of squaring is square root. This exercise uses the non-negative root.`
+          }
+        ]
+      };
+    }
+
+    function makeWorkbookPhoneBalanceProblem() {
+      return {
+        prompt: "Daily life: after a RM3 phone-credit bonus, final balance is g. Make h the original balance.",
+        formula: "g = 3 + h",
+        target: "h",
+        vars: ["g"],
+        finalAnswer: "g - 3",
+        steps: [
+          {
+            action: "Subtract 3 from both sides",
+            target: "h =",
+            answer: "g - 3",
+            placeholder: "g - 3",
+            explanation: "The RM3 bonus is added to h, so subtract 3 to recover the starting balance."
+          }
+        ]
+      };
+    }
+
+    function makeWorkbookElectricTimeProblem() {
+      return {
+        prompt: "Daily life: an electrical formula uses P = IRT. Make T the subject so you can find time.",
+        formula: "P = IRT",
+        target: "T",
+        vars: ["P", "I", "R", "T"],
+        finalAnswer: "P / (I * R)",
+        steps: [
+          {
+            action: "Divide both sides by I",
+            target: "P / I =",
+            answer: "R * T",
+            placeholder: "R * T",
+            explanation: "I is multiplying R and T, so divide by I first."
+          },
+          {
+            action: "Divide both sides by R",
+            target: "T =",
+            answer: "P / (I * R)",
+            placeholder: "P / (I * R)",
+            explanation: "R is still multiplying T, so divide by R too."
+          }
+        ]
+      };
+    }
+
+    function makeWorkbookQSubjectProblem() {
+      return {
+        prompt: "Workbook style: change the subject to q.",
+        formula: "2s + t = -8q",
+        target: "q",
+        vars: ["s", "t"],
+        finalAnswer: "(2 * s + t) / -8",
+        steps: [
+          {
+            action: "Swap sides so the q-term is on the left",
+            target: "-8q =",
+            answer: "2 * s + t",
+            placeholder: "2s + t",
+            explanation: "Changing left and right sides does not change equality."
+          },
+          {
+            action: "Divide by -8",
+            target: "q =",
+            answer: "(2 * s + t) / -8",
+            placeholder: "(2s + t) / -8",
+            explanation: "-8 is multiplying q, so divide the whole other side by -8."
+          }
+        ]
+      };
+    }
+
+    function makeWorkbookGSubjectProblem() {
+      return {
+        prompt: "Daily life: 4 items cost g each, with a 2h discount, and the final total is 7. Make g the subject.",
+        formula: "4g - 2h = 7",
+        target: "g",
+        vars: ["h"],
+        finalAnswer: "(7 + 2 * h) / 4",
+        steps: [
+          {
+            action: "Add 2h to both sides",
+            target: "4g =",
+            answer: "7 + 2 * h",
+            placeholder: "7 + 2h",
+            explanation: "The -2h is outside the g box, so add 2h to remove it."
+          },
+          {
+            action: "Divide by 4",
+            target: "g =",
+            answer: "(7 + 2 * h) / 4",
+            placeholder: "(7 + 2h) / 4",
+            explanation: "The 4 is multiplying g, so divide the whole right side by 4."
+          }
+        ]
+      };
+    }
+
+    function makeWorkbookAverageSubjectProblem() {
+      return {
+        prompt: "Daily life: three scores have average 5. If one known score is y, make x the missing score.",
+        formula: "(x + y) / 3 = 5",
+        target: "x",
+        vars: ["y"],
+        finalAnswer: "15 - y",
+        steps: [
+          {
+            action: "Multiply both sides by 3",
+            target: "x + y =",
+            answer: "15",
+            placeholder: "15",
+            explanation: "A fraction divided by 3 is undone by multiplying by 3."
+          },
+          {
+            action: "Subtract y",
+            target: "x =",
+            answer: "15 - y",
+            placeholder: "15 - y",
+            explanation: "Remove the known score y to leave the missing score x."
+          }
+        ]
+      };
+    }
+
+    function makeWorkbookYSubjectProblem() {
+      return {
+        prompt: "Workbook style: change the subject to y.",
+        formula: "12x - 4y = 20",
+        target: "y",
+        vars: ["x"],
+        finalAnswer: "(20 - 12 * x) / -4",
+        steps: [
+          {
+            action: "Subtract 12x from both sides",
+            target: "-4y =",
+            answer: "20 - 12 * x",
+            placeholder: "20 - 12x",
+            explanation: "Move the 12x term away from the y-term first."
+          },
+          {
+            action: "Divide by -4",
+            target: "y =",
+            answer: "(20 - 12 * x) / -4",
+            placeholder: "(20 - 12x) / -4",
+            explanation: "-4 is multiplying y, so divide the whole right side by -4."
+          }
+        ]
+      };
+    }
+
+    function makeWorkbookCubeSubjectProblem() {
+      return {
+        prompt: "Daily life: a packaging formula hides z inside a cube. Make z the subject.",
+        formula: "x = yz^3 / 6",
+        target: "z",
+        vars: ["x", "y", "z"],
+        finalAnswer: "cbrt((6 * x) / y)",
+        steps: [
+          {
+            action: "Multiply both sides by 6",
+            target: "6x =",
+            answer: "y * z^3",
+            placeholder: "y * z^3",
+            explanation: "Multiplying by 6 clears the denominator."
+          },
+          {
+            action: "Divide by y",
+            target: "z^3 =",
+            answer: "6 * x / y",
+            placeholder: "6x / y",
+            explanation: "Divide by y so only z^3 remains."
+          },
+          {
+            action: "Take the cube root",
+            target: "z =",
+            answer: "cbrt((6 * x) / y)",
+            placeholder: "cbrt((6x) / y)",
+            explanation: "The inverse of cubing is cube root."
+          }
+        ]
+      };
+    }
+
+    function makeWorkbookRadiusValueProblem() {
+      return {
+        prompt: "Daily life: A is area-like sharing over 2L. Make r the subject, then find r when A = 4 and L = 3.",
+        formula: "A = r / (2L)",
+        target: "r",
+        vars: ["A", "L"],
+        finalAnswer: "24",
+        steps: [
+          {
+            action: "Multiply both sides by 2L",
+            target: "r =",
+            answer: "2 * L * A",
+            placeholder: "2 * L * A",
+            explanation: "r is divided by 2L, so multiply by 2L."
+          },
+          {
+            action: "Substitute A = 4 and L = 3",
+            target: "r =",
+            answer: "24",
+            placeholder: "24",
+            explanation: "2 x 3 x 4 = 24."
+          }
+        ]
+      };
+    }
+
+    function makeWorkbookFundValueProblem() {
+      return {
+        prompt: "Daily life: each student's share is P. Make R the subject, then find R when P = -1, N = 2, and C = 6.",
+        formula: "(R - C) / N = P",
+        target: "R",
+        vars: ["P", "N", "C"],
+        finalAnswer: "4",
+        steps: [
+          {
+            action: "Multiply both sides by N",
+            target: "R - C =",
+            answer: "P * N",
+            placeholder: "P * N",
+            explanation: "The expression R - C is divided by N, so multiply by N."
+          },
+          {
+            action: "Add C",
+            target: "R =",
+            answer: "P * N + C",
+            placeholder: "P * N + C",
+            explanation: "Add C to leave R alone."
+          },
+          {
+            action: "Substitute P = -1, N = 2, C = 6",
+            target: "R =",
+            answer: "4",
+            placeholder: "4",
+            explanation: "(-1)(2) + 6 = 4."
+          }
+        ]
+      };
+    }
+
+    function makeWorkbookMValueProblem() {
+      return {
+        prompt: "Workbook style: make m the subject, then find m when k = 1, n = -3, and p = 2.",
+        formula: "k = (2 / 3)mn - p^2",
+        target: "m",
+        vars: ["k", "m", "n", "p"],
+        finalAnswer: "-2.5",
+        steps: [
+          {
+            action: "Add p^2",
+            target: "k + p^2 =",
+            answer: "(2 / 3) * m * n",
+            placeholder: "(2 / 3)mn",
+            explanation: "The -p^2 is outside the m-term, so add p^2 first."
+          },
+          {
+            action: "Multiply by 3",
+            target: "3(k + p^2) =",
+            answer: "2 * m * n",
+            placeholder: "2mn",
+            explanation: "This clears the denominator 3."
+          },
+          {
+            action: "Divide by 2n",
+            target: "m =",
+            answer: "3 * (k + p^2) / (2 * n)",
+            placeholder: "3(k + p^2) / (2n)",
+            explanation: "2n is multiplying m."
+          },
+          {
+            action: "Substitute k = 1, n = -3, p = 2",
+            target: "m =",
+            answer: "-2.5",
+            placeholder: "-2.5",
+            explanation: "3(1 + 4) / (2 x -3) = 15 / -6 = -2.5."
+          }
+        ]
+      };
+    }
+
+    function makeWorkbookQValueProblem() {
+      return {
+        prompt: "Workbook style: make q the subject, then find q when p = 9 and r = 3.",
+        formula: "p = 3q - 2r^2",
+        target: "q",
+        vars: ["p", "q", "r"],
+        finalAnswer: "9",
+        steps: [
+          {
+            action: "Add 2r^2",
+            target: "p + 2r^2 =",
+            answer: "3 * q",
+            placeholder: "3q",
+            explanation: "The -2r^2 is outside the q-term, so add 2r^2."
+          },
+          {
+            action: "Divide by 3",
+            target: "q =",
+            answer: "(p + 2 * r^2) / 3",
+            placeholder: "(p + 2r^2) / 3",
+            explanation: "3 is multiplying q, so divide by 3."
+          },
+          {
+            action: "Substitute p = 9 and r = 3",
+            target: "q =",
+            answer: "9",
+            placeholder: "9",
+            explanation: "(9 + 2 x 3^2) / 3 = 27 / 3 = 9."
+          }
+        ]
+      };
+    }
+
+    function inverseAddExpression(base, constant) {
+      if (constant === 0) return base;
+      return constant > 0 ? `${base} - ${constant}` : `${base} + ${Math.abs(constant)}`;
+    }
+
+    function formatSigned(value) {
+      if (value === 0) return "+ 0";
+      return value > 0 ? `+ ${value}` : `− ${Math.abs(value)}`;
+    }
+
+    function formatSignedTerm(value) {
+      if (value === 0) return "0";
+      return value > 0 ? `+${value}` : `-${Math.abs(value)}`;
+    }
+
+    function formatCoefficient(value) {
+      if (value === 1) return "";
+      if (value === -1) return "−";
+      return String(value).replace("-", "−");
+    }
+
+    function randomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function randomNonZero(min, max) {
+      let value = 0;
+      while (value === 0 || value === 1 || value === -1) {
+        value = randomInt(min, max);
+      }
+      return value;
+    }
+
+    function capitalize(text) {
+      return text.charAt(0).toUpperCase() + text.slice(1);
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+  </script>
 </body>
 </html>

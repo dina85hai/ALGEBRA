@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polynomial Video Notes and Operations</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #f8fafc;
+            color: #111827;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .merge-nav {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.94);
+            border-bottom: 1px solid #e5e7eb;
+            box-shadow: 0 2px 12px rgba(15, 23, 42, 0.08);
+            backdrop-filter: blur(10px);
+        }
+
+        .merge-title {
+            min-width: 0;
+            font-size: 1rem;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .merge-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .merge-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 36px;
+            padding: 8px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            color: #1f2937;
+            background: #ffffff;
+            font-size: 0.9rem;
+            font-weight: 700;
+            line-height: 1;
+            text-decoration: none;
+        }
+
+        .merge-links a:hover,
+        .merge-links a:focus-visible {
+            border-color: #2563eb;
+            color: #1d4ed8;
+            outline: none;
+        }
+
+        .merged-section {
+            min-height: calc(100vh - 61px);
+            border-bottom: 1px solid #d1d5db;
+            background: #ffffff;
+        }
+
+        .section-label {
+            margin: 0;
+            padding: 12px 20px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f1f5f9;
+            color: #0f172a;
+            font-size: 0.95rem;
+            font-weight: 800;
+            letter-spacing: 0;
+        }
+
+        iframe {
+            display: block;
+            width: 100%;
+            min-height: calc(100vh - 110px);
+            border: 0;
+            background: #ffffff;
+        }
+
+        #polynomial-notes iframe {
+            height: 820px;
+            min-height: calc(100vh - 110px);
+        }
+
+        #polynomial-operations iframe {
+            min-height: 1200px;
+        }
+
+        @media (max-width: 700px) {
+            .merge-nav {
+                align-items: stretch;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .merge-title {
+                white-space: normal;
+            }
+
+            .merge-links {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="merge-nav" aria-label="Merged polynomial document navigation">
+        <div class="merge-title">Polynomial Video Notes and Practice Operations</div>
+        <div class="merge-links">
+            <a href="#polynomial-notes">Video Notes</a>
+            <a href="#polynomial-operations">Practice</a>
+        </div>
+    </nav>
+
+    <main>
+        <section class="merged-section" id="polynomial-notes" aria-labelledby="polynomial-notes-heading">
+            <h1 class="section-label" id="polynomial-notes-heading">Simple Polynomial Video Notes</h1>
+            <iframe
+                id="notes-frame"
+                src="polynomial_notes.html?v=frame-fix"
+                title="Polynomial Video Notes"
+                loading="eager">
+            </iframe>
+        </section>
+
+        <section class="merged-section" id="polynomial-operations" aria-labelledby="polynomial-operations-heading">
+            <h1 class="section-label" id="polynomial-operations-heading">Polynomial Operations Practice</h1>
+            <iframe
+                id="operations-frame"
+                src="polynomial_operations_updated.html"
+                title="Polynomial Operations"
+                loading="lazy">
+            </iframe>
+        </section>
+    </main>
+
+    <script>
+        const operationsFrame = document.getElementById('operations-frame');
+
+        function resizeOperationsFrame() {
+            try {
+                const doc = operationsFrame.contentDocument || operationsFrame.contentWindow.document;
+                const body = doc.body;
+                const html = doc.documentElement;
+                const height = Math.max(
+                    body.scrollHeight,
+                    body.offsetHeight,
+                    html.clientHeight,
+                    html.scrollHeight,
+                    html.offsetHeight
+                );
+
+                operationsFrame.style.height = `${height}px`;
+            } catch (error) {
+                operationsFrame.style.height = '1200px';
+            }
+        }
+
+        operationsFrame.addEventListener('load', resizeOperationsFrame);
+        window.addEventListener('resize', resizeOperationsFrame);
+    </script>
+</body>
+    <a href="index.html" style="display:inline-block; margin:16px; padding:10px 16px; background:#4f46e5; color:white; border-radius:8px; text-decoration:none;">
+        Home
+    </a>
+
+    <header class="hero-section">
+</html>

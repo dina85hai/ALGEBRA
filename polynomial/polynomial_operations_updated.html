@@ -111,6 +111,100 @@
             background: var(--background-light);
             transform: translateY(-2px);
         }
+
+        .learning-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            background: #eff6ff;
+            border: 2px solid #bfdbfe;
+            border-radius: 12px;
+            padding: 16px 18px;
+            margin-bottom: 24px;
+        }
+
+        .instruction-text {
+            flex: 1;
+            color: #1e3a8a;
+            font-size: 0.98rem;
+        }
+
+        .instruction-text strong {
+            display: block;
+            margin-bottom: 4px;
+            color: #1d4ed8;
+        }
+
+        .pause-btn {
+            min-width: 128px;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 16px;
+            background: var(--warning-color);
+            color: white;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .pause-btn:hover,
+        .pause-btn:focus-visible {
+            background: #d97706;
+            transform: translateY(-2px);
+            outline: none;
+        }
+
+        .pause-btn.is-paused {
+            background: var(--secondary-color);
+        }
+
+        .student-path {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 28px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+        }
+
+        .student-path h3 {
+            margin: 0 0 12px 0;
+            color: var(--primary-color);
+        }
+
+        .path-steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .path-step {
+            background: var(--background-light);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .path-step strong {
+            display: block;
+            margin-bottom: 4px;
+            color: var(--text-dark);
+        }
+
+        .path-step span {
+            color: var(--text-medium);
+            font-size: 0.92rem;
+        }
+
+        .key-rule {
+            margin-top: 14px;
+            padding: 12px;
+            background: #dcfce7;
+            border-radius: 8px;
+            color: #14532d;
+            font-weight: 600;
+        }
         
         .tab-content {
             display: none;
@@ -752,6 +846,19 @@
             .header h1 {
                 font-size: 1.8rem;
             }
+
+            .learning-controls {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .pause-btn {
+                width: 100%;
+            }
+
+            .path-steps {
+                grid-template-columns: 1fr;
+            }
             
             .problem-text {
                 font-size: 1.4rem;
@@ -792,11 +899,11 @@
         <div class="objectives">
             <h3>📚 Objektif Pembelajaran</h3>
             <ul>
-                <li>Mahir dalam addition dan subtraction polynomials dengan mengumpul like terms</li>
-                <li>Faham cara expand brackets dan multiply dengan polynomials</li>
-                <li>Boleh multiply polynomials menggunakan box diagram method</li>
-                <li>Dapat divide polynomials menggunakan synthetic division</li>
-                <li>Apply polynomial operations dalam situasi real-world</li>
+                <li>Kenal like terms: x², x, dan nombor biasa</li>
+                <li>Add dan subtract dengan cara kumpul like terms</li>
+                <li>Multiply menggunakan box method</li>
+                <li>Divide menggunakan synthetic division table</li>
+                <li>Check jawapan menggunakan langkah yang jelas</li>
             </ul>
         </div>
         
@@ -810,36 +917,70 @@
             <div class="tab" onclick="showTab('tips')">💡 Tips</div>
         </div>
         
+        <div class="learning-controls" aria-label="Learning controls">
+            <div class="instruction-text">
+                <strong>Arahan:</strong>
+                Pilih tab operasi, isi jawapan dalam kotak yang disediakan, kemudian tekan Semak Jawapan. Gunakan Hint atau Show Solution jika perlu. Tekan Pause untuk hentikan animasi demo sementara.
+            </div>
+            <button class="pause-btn" id="pauseLearningBtn" type="button" onclick="toggleLearningPause()" aria-pressed="false">
+                &#9208; Pause
+            </button>
+        </div>
+
+        <div class="student-path">
+            <h3>Start Here: Cara Belajar Polynomial Operations</h3>
+            <div class="path-steps">
+                <div class="path-step">
+                    <strong>1. Watch</strong>
+                    <span>Tengok video notes. Pause selepas setiap step.</span>
+                </div>
+                <div class="path-step">
+                    <strong>2. Basics</strong>
+                    <span>Add/subtract: kumpul like terms sahaja.</span>
+                </div>
+                <div class="path-step">
+                    <strong>3. Multiply/Divide</strong>
+                    <span>Ikut box method atau synthetic table satu kotak demi satu kotak.</span>
+                </div>
+                <div class="path-step">
+                    <strong>4. Practice</strong>
+                    <span>Cuba soalan baru sampai boleh jawab tanpa Hint.</span>
+                </div>
+            </div>
+            <div class="key-rule">
+                Key rule: x² terms dengan x² terms, x terms dengan x terms, constants dengan constants.
+            </div>
+        </div>
+
         <!-- TAB 1: PENGENALAN -->
         <div id="intro" class="tab-content active">
             <div class="section">
-                <h2>🏠 Pengenalan: Kenapa Polynomial Penting?</h2>
+                <h2>🏠 Pengenalan Ringkas</h2>
                 
                 <!-- Story 1 -->
                 <div class="story-box">
-                    <h3>🎮 Story 1: Gaming Character Stats</h3>
-                    <p><strong>Ahmad sedang main RPG game kegemaran dia.</strong> Dalam game tu, character stats diwakili dengan polynomial expressions.</p>
+                    <h3>🎮 Example 1: Game Stats</h3>
+                    <p><strong>Idea mudah:</strong> Polynomial boleh mewakili jumlah points, bonus, atau growth.</p>
                     
-                    <p>Character Ahmad:</p>
+                    <p>Contoh stats:</p>
                     <ul style="margin-left: 20px;">
-                        <li>Base stats: 2x² + 3x + 5 (strength, agility, defense)</li>
-                        <li>Power-up bonus: 3x² + 2x + 7</li>
-                        <li>Lepas level up, dapat special multiplier 2× untuk semua stats!</li>
+                        <li>Base stats: 2x² + 3x + 5</li>
+                        <li>Bonus: 3x² + 2x + 7</li>
+                        <li>Total = base + bonus</li>
                     </ul>
                     
                     <div class="story-highlight">
-                        <strong>🤔 Masalah Game Player:</strong><br>
-                        Macam mana nak kira total stats lepas power-up?<br>
-                        Macam mana nak predict stats untuk level seterusnya?
+                        <strong>Soalan utama:</strong><br>
+                        Bagaimana kita tambah dua polynomial dengan betul?
                     </div>
                     
                     <div class="benefits">
-                        <strong>💡 Penyelesaian: Guna Polynomial Operations!</strong>
+                        <strong>Jawapan:</strong>
                         <ul>
-                            <li>✓ Add stats: (2x² + 3x + 5) + (3x² + 2x + 7) = 5x² + 5x + 12</li>
-                            <li>✓ Multiply dengan bonus: 2(5x² + 5x + 12) = 10x² + 10x + 24</li>
-                            <li>✓ Senang track progression!</li>
-                            <li>✓ Boleh plan strategy dengan betul!</li>
+                            <li>✓ x² dengan x²: 2x² + 3x² = 5x²</li>
+                            <li>✓ x dengan x: 3x + 2x = 5x</li>
+                            <li>✓ nombor dengan nombor: 5 + 7 = 12</li>
+                            <li>✓ Final: 5x² + 5x + 12</li>
                         </ul>
                     </div>
                     
@@ -868,29 +1009,27 @@
                 
                 <!-- Story 2 -->
                 <div class="story-box">
-                    <h3>📸 Story 2: Social Media Growth</h3>
-                    <p><strong>Siti ada Instagram account untuk bisnes kecil dia.</strong> Dia jual handmade craft dan nak track berapa followers bertambah setiap bulan.</p>
+                    <h3>📈 Example 2: Growth</h3>
+                    <p><strong>Idea mudah:</strong> Jika sesuatu bertambah mengikut pattern, polynomial boleh bantu kira growth.</p>
                     
-                    <p>Growth formula Siti:</p>
+                    <p>Formula growth:</p>
                     <ul style="margin-left: 20px;">
-                        <li>Bulan 1: x² + 2x followers</li>
-                        <li>Bulan 2: Darab dengan 2 (viral post!) = 2(x² + 2x)</li>
-                        <li>Tambah pulak dapat 50 organic followers</li>
+                        <li>Original: x² + 2x</li>
+                        <li>Double growth: 2(x² + 2x)</li>
+                        <li>Tambah 50 followers</li>
                     </ul>
                     
                     <div class="story-highlight">
-                        <strong>🤔 Masalah Content Creator:</strong><br>
-                        Berapa total followers dalam 2 bulan?<br>
-                        Macam mana nak predict growth untuk bulan depan?
+                        <strong>Soalan utama:</strong><br>
+                        Bagaimana kita expand bracket dan tambah polynomial?
                     </div>
                     
                     <div class="benefits">
-                        <strong>💡 Penyelesaian: Guna Polynomial Operations!</strong>
+                        <strong>Jawapan:</strong>
                         <ul>
-                            <li>✓ Boleh darab dengan bracket - 2(x² + 2x) = 2x² + 4x</li>
-                            <li>✓ Boleh predict pattern growth</li>
-                            <li>✓ Senang adjust strategy based on formula</li>
-                            <li>✓ Track progress dengan accurate!</li>
+                            <li>✓ 2(x² + 2x) = 2x² + 4x</li>
+                            <li>✓ (x² + 2x) + (2x² + 4x) + 50</li>
+                            <li>✓ Final: 3x² + 6x + 50</li>
                         </ul>
                     </div>
                     
@@ -1478,6 +1617,38 @@
     </div>
     
     <script>
+        let isLearningPaused = false;
+        const activeAnimationIntervals = new Set();
+
+        function registerPausableInterval(callback, delay) {
+            const interval = setInterval(() => {
+                if (!isLearningPaused) {
+                    callback();
+                }
+            }, delay);
+
+            activeAnimationIntervals.add(interval);
+            return interval;
+        }
+
+        function clearPausableInterval(interval) {
+            clearInterval(interval);
+            activeAnimationIntervals.delete(interval);
+        }
+
+        function toggleLearningPause() {
+            isLearningPaused = !isLearningPaused;
+
+            const pauseBtn = document.getElementById('pauseLearningBtn');
+            if (!pauseBtn) {
+                return;
+            }
+
+            pauseBtn.classList.toggle('is-paused', isLearningPaused);
+            pauseBtn.setAttribute('aria-pressed', isLearningPaused ? 'true' : 'false');
+            pauseBtn.innerHTML = isLearningPaused ? '&#9654; Resume' : '&#9208; Pause';
+        }
+
         // ===================================
         // TAB NAVIGATION
         // ===================================
@@ -1561,7 +1732,7 @@
         
         function animateStats() {
             let frame = 0;
-            const interval = setInterval(() => {
+            const interval = registerPausableInterval(() => {
                 frame++;
                 const canvas = document.getElementById('gameCanvas');
                 const ctx = canvas.getContext('2d');
@@ -1578,7 +1749,7 @@
                 ctx.restore();
                 
                 if (frame > 30) {
-                    clearInterval(interval);
+                    clearPausableInterval(interval);
                     drawGameCanvas();
                 }
             }, 50);
@@ -1650,13 +1821,13 @@
             const targetMonth = parseInt(document.getElementById('monthSlider').value);
             let currentMonth = 1;
             
-            const interval = setInterval(() => {
+            const interval = registerPausableInterval(() => {
                 if (currentMonth <= targetMonth) {
                     document.getElementById('monthSlider').value = currentMonth;
                     updateSocialDemo();
                     currentMonth++;
                 } else {
-                    clearInterval(interval);
+                    clearPausableInterval(interval);
                 }
             }, 500);
         }

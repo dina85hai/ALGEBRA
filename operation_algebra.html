@@ -280,6 +280,9 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+            justify-content: center;
+            min-height: 44px;
+            touch-action: manipulation;
         }
         
         .btn-primary {
@@ -633,6 +636,8 @@
             cursor: pointer;
             transition: all var(--transition-normal);
             font-weight: 600;
+            min-height: 44px;
+            touch-action: manipulation;
         }
         
         .difficulty-btn:hover {
@@ -670,6 +675,7 @@
             margin: 1.5rem 0;
             text-align: center;
             font-family: 'Times New Roman', serif;
+            overflow-wrap: anywhere;
         }
         
         .step-solver {
@@ -714,10 +720,10 @@
             padding: 0.75rem 1rem;
             border: 2px solid var(--border-medium);
             border-radius: 0.5rem;
-            font-size: var(--text-xl);
+            font-size: max(16px, var(--text-xl));
             text-align: center;
             transition: all var(--transition-fast);
-            width: 150px;
+            width: min(100%, 180px);
             font-family: 'Times New Roman', serif;
             font-weight: 600;
         }
@@ -755,6 +761,8 @@
             font-weight: 600;
             font-size: var(--text-lg);
             transition: all var(--transition-normal);
+            min-height: 44px;
+            touch-action: manipulation;
         }
         
         .btn-check:hover {
@@ -828,6 +836,8 @@
             cursor: pointer;
             font-weight: 600;
             transition: all var(--transition-normal);
+            min-height: 44px;
+            touch-action: manipulation;
         }
         
         .btn-hint:hover {
@@ -877,6 +887,22 @@
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 1rem;
             box-shadow: var(--shadow-sm);
+        }
+
+        .home-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            margin: 0.75rem 1rem 0;
+            padding: 0.65rem 1rem;
+            background: #4f46e5;
+            color: white;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 700;
+            box-shadow: var(--shadow-md);
+            touch-action: manipulation;
         }
         
         .stat-item {
@@ -1129,6 +1155,19 @@
            RESPONSIVE DESIGN
            ======================================== */
         @media (max-width: 768px) {
+            body {
+                line-height: 1.5;
+            }
+
+            .container {
+                padding: 0 0.75rem;
+            }
+
+            .hero-section {
+                padding: 2rem 0.75rem;
+                margin-bottom: 1rem;
+            }
+
             .hero-section h1 {
                 font-size: var(--text-3xl);
             }
@@ -1138,7 +1177,18 @@
             }
             
             .section {
-                padding: 1.5rem;
+                padding: 1.25rem;
+                margin-bottom: 1rem;
+                border-radius: 0.75rem;
+            }
+
+            .section-header {
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
+
+            .section-icon {
+                font-size: 2rem;
             }
             
             .section-header h2 {
@@ -1159,6 +1209,8 @@
             
             .formula-display {
                 font-size: var(--text-2xl);
+                padding: 1rem;
+                overflow-wrap: anywhere;
             }
             
             .problem-text {
@@ -1172,6 +1224,63 @@
             
             .stats-display {
                 grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .learning-objectives,
+            .mission-card,
+            .visual-demo,
+            .formula-card,
+            .practice-container,
+            .problem-display,
+            .reference-card,
+            .challenge-section,
+            .achievement-display {
+                padding: 1rem;
+            }
+
+            .difficulty-selector,
+            .hint-buttons,
+            .action-buttons,
+            .animation-controls {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+
+            .difficulty-btn,
+            .step-btn,
+            .btn,
+            .btn-check,
+            .btn-hint {
+                width: 100%;
+            }
+
+            .input-group {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+
+            .input-field {
+                width: 100%;
+            }
+
+            .feedback-box {
+                align-items: flex-start;
+                padding: 0.875rem 1rem;
+            }
+
+            .stats-display {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+
+            .badge {
+                width: 100%;
+                justify-content: center;
+                border-radius: 0.75rem;
             }
         }
         
@@ -1236,6 +1345,8 @@
     </style>
 </head>
 <body>
+    <a href="index.html" class="home-link">Home</a>
+
     <!-- ========================================
          SECTION 1: HERO HEADER
          ======================================== -->
@@ -1702,13 +1813,13 @@
             
             <div class="practice-container">
                 <div class="difficulty-selector">
-                    <button class="difficulty-btn active" onclick="setDifficulty('mudah')">
+                    <button class="difficulty-btn active" onclick="setDifficulty('mudah', this)">
                         😊 Mudah
                     </button>
-                    <button class="difficulty-btn" onclick="setDifficulty('sederhana')">
+                    <button class="difficulty-btn" onclick="setDifficulty('sederhana', this)">
                         🤔 Sederhana
                     </button>
-                    <button class="difficulty-btn" onclick="setDifficulty('susah')">
+                    <button class="difficulty-btn" onclick="setDifficulty('susah', this)">
                         🔥 Susah
                     </button>
                 </div>
@@ -2097,6 +2208,7 @@ Tulis soalan anda di sini..." rows="6"></textarea>
             currentProblem: null,
             currentStep: 0,
             totalSteps: 9,
+            problemNumber: 0,
             attempts: 0,
             hintsUsedThisProblem: 0,
             
@@ -2297,6 +2409,7 @@ Tulis soalan anda di sini..." rows="6"></textarea>
                         const a = randomChoice(['a', 'p', 'm']);
                         const b = getRandomInt(2, 5);
                         const c = randomChoice(['b', 'q', 'n']);
+                        const sortedVariables = [a, c].sort().join('');
                         return {
                             expression: `${a} × ${b}${c}`,
                             steps: [
@@ -2309,13 +2422,13 @@ Tulis soalan anda di sini..." rows="6"></textarea>
                                 },
                                 {
                                     instruction: `Susun: nombor dahulu, kemudian huruf mengikut abjad`,
-                                    correctAnswer: `${b}${a}${c}`,
+                                    correctAnswer: `${b}${sortedVariables}`,
                                     hint1: `Nombor ${b} patut di depan sekali`,
                                     hint2: `Kemudian susun ${a} dan ${c} ikut abjad`,
-                                    hint3: `Jawapan: ${b}${a}${c}`
+                                    hint3: `Jawapan: ${b}${sortedVariables}`
                                 }
                             ],
-                            finalAnswer: `${b}${a}${c}`
+                            finalAnswer: `${b}${sortedVariables}`
                         };
                     }
                 }
@@ -2340,6 +2453,47 @@ Tulis soalan anda di sini..." rows="6"></textarea>
                 .replace(/\*/g, '')
                 .replace(/×/g, '');
         }
+
+        function parseTerm(termText, sign) {
+            const match = termText.match(/^(\d*)([a-z]+)?$/);
+            if (!match) return null;
+
+            const coefficient = match[1] === '' ? 1 : Number(match[1]);
+            const variables = match[2] ? match[2].split('').sort().join('') : '';
+
+            return {
+                variables,
+                coefficient: sign === '-' ? -coefficient : coefficient
+            };
+        }
+
+        function parsePolynomial(expression) {
+            const normalized = normalizeAnswer(expression);
+            if (!/^[+-]?\d*[a-z]*([+-]\d*[a-z]*)*$/.test(normalized)) {
+                return null;
+            }
+
+            const terms = new Map();
+            const prepared = /^[+-]/.test(normalized) ? normalized : '+' + normalized;
+            const termPattern = /([+-])([^+-]+)/g;
+            let match;
+
+            while ((match = termPattern.exec(prepared)) !== null) {
+                const parsed = parseTerm(match[2], match[1]);
+                if (!parsed) return null;
+
+                terms.set(
+                    parsed.variables,
+                    (terms.get(parsed.variables) || 0) + parsed.coefficient
+                );
+            }
+
+            return Array.from(terms.entries())
+                .filter(([, coefficient]) => coefficient !== 0)
+                .sort(([a], [b]) => a.localeCompare(b))
+                .map(([variables, coefficient]) => `${coefficient}${variables}`)
+                .join('+');
+        }
         
         function areEquivalent(userInput, correctAnswer) {
             const normalized1 = normalizeAnswer(userInput);
@@ -2350,9 +2504,10 @@ Tulis soalan anda di sini..." rows="6"></textarea>
             
             // Check alternative forms (e.g., 1x = x)
             if (normalized1 === '1' + normalized2 || normalized2 === '1' + normalized1) return true;
-            
-            // Check reordered (e.g., 3ab = 3ba for some cases)
-            // This is simplified - in production, you'd want more robust checking
+
+            const parsed1 = parsePolynomial(userInput);
+            const parsed2 = parsePolynomial(correctAnswer);
+            if (parsed1 && parsed2 && parsed1 === parsed2) return true;
             
             return false;
         }
@@ -2502,14 +2657,16 @@ Tulis soalan anda di sini..." rows="6"></textarea>
         /* ========================================
            PROBLEM GENERATION & MANAGEMENT
            ======================================== */
-        function setDifficulty(level) {
+        function setDifficulty(level, button) {
             state.currentDifficulty = level;
             
             // Update button states
             document.querySelectorAll('.difficulty-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
-            event.target.classList.add('active');
+            if (button) {
+                button.classList.add('active');
+            }
             
             // Generate new problem
             generateNewProblem();
@@ -2525,6 +2682,7 @@ Tulis soalan anda di sini..." rows="6"></textarea>
             const templates = problemTemplates[state.currentDifficulty];
             const template = randomChoice(templates);
             state.currentProblem = template.generate();
+            state.problemNumber++;
             
             // Display problem
             displayProblem();
@@ -2539,6 +2697,7 @@ Tulis soalan anda di sini..." rows="6"></textarea>
         function displayProblem() {
             const problem = state.currentProblem;
             
+            document.getElementById('problemNumber').textContent = state.problemNumber;
             document.getElementById('problemText').innerHTML = `
                 <div style="font-family: 'Times New Roman', serif;">
                     Simplify: <strong>${problem.expression}</strong>
@@ -2568,6 +2727,10 @@ Tulis soalan anda di sini..." rows="6"></textarea>
                             class="input-field" 
                             id="input${index}"
                             placeholder="Jawapan anda"
+                            inputmode="text"
+                            autocomplete="off"
+                            autocapitalize="none"
+                            spellcheck="false"
                             ${index > 0 ? 'disabled' : ''}
                         >
                         <button 
