@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guru Algebra: Kaedah Bar Model</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+        
+        :root {
+            --primary: #0f172a;
+            --secondary: #3b82f6;
+            --accent: #f59e0b;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .bar-container {
+            display: flex;
+            height: 42px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #1e293b;
+            position: relative;
+            background: #fff;
+        }
+
+        .bar-segment {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.4s ease;
+        }
+
+        .comparison-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .label-name {
+            width: 110px;
+            font-weight: 700;
+            color: #475569;
+            font-size: 0.95rem;
+        }
+
+        .slide-enter {
+            animation: slideIn 0.5s ease-out forwards;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .math-box {
+            font-family: 'Courier New', Courier, monospace;
+            background: #f1f5f9;
+            padding: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+            text-align: center;
+        }
+
+        .slide-enter > .bg-yellow-50 {
+            text-align: center;
+        }
+
+        .slide-title-wrap {
+            text-align: center;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .slide-title {
+            white-space: nowrap;
+            max-width: 100%;
+            font-size: 1.5rem;
+            line-height: 1.25;
+        }
+
+        .slide-title mjx-container {
+            font-size: 0.95em !important;
+        }
+
+        @media (max-width: 640px) {
+            .slide-title {
+                font-size: 1rem;
+            }
+        }
+
+        .step-badge {
+            display: inline-block;
+            background: #3b82f6;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .solution-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px;
+        }
+
+        .solution-steps {
+            display: grid;
+            gap: 10px;
+        }
+
+        .solution-step {
+            display: grid;
+            grid-template-columns: 28px 1fr;
+            gap: 10px;
+            align-items: start;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .step-number {
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            background: #0f172a;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 800;
+        }
+
+        .equation-line {
+            font-weight: 800;
+            color: #0f172a;
+            margin-top: 2px;
+        }
+
+        .home-menu {
+            display: grid;
+            gap: 16px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+        }
+
+        .menu-btn {
+            min-height: 54px;
+            border: 1px solid #dbe4f0;
+            border-radius: 10px;
+            padding: 10px 12px;
+            background: #ffffff;
+            color: #0f172a;
+            font-weight: 800;
+            text-align: left;
+            transition: all 0.2s ease;
+        }
+
+        .menu-btn:hover {
+            border-color: #3b82f6;
+            background: #eff6ff;
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body class="p-2 md:p-6">
+
+    <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-200">
+        <!-- Header -->
+        <header class="bg-slate-900 p-6 text-white text-center">
+            <h1 class="text-2xl font-extrabold mb-1">🎓 Kaedah Model Drawing</h1>
+            <p class="text-blue-400 text-sm font-semibold uppercase tracking-wider">Langkah-demi-Langkah Penyelesaian Persamaan</p>
+            
+            <!-- Progress Tracker -->
+            <div class="mt-6">
+                <div class="flex justify-between text-xs font-bold mb-2 text-slate-400">
+                    <span id="progress-text">Slide 1 / 19</span>
+                    <span id="percentage-text">0%</span>
+                </div>
+                <div class="h-2.5 bg-slate-800 rounded-full overflow-hidden">
+                    <div id="progress-bar" class="h-full bg-blue-500 transition-all duration-500" style="width: 0%"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <main id="slide-container" class="p-8 min-h-[550px] flex flex-col justify-center bg-white">
+            <!-- Content Injected via JS -->
+        </main>
+
+        <!-- Navigation -->
+        <footer class="bg-slate-50 p-5 border-t flex flex-wrap gap-3 justify-between items-center">
+            <button id="prev-btn" onclick="prevSlide()" class="px-6 py-2.5 rounded-xl font-bold text-slate-600 hover:bg-slate-200 disabled:opacity-20 transition-all">
+                ← Kembali
+            </button>
+            
+            <div id="dot-nav" class="hidden lg:flex gap-1.5"></div>
+
+            <div class="flex flex-wrap justify-end gap-2">
+                <button id="home-btn" onclick="goHome()" class="px-5 py-2.5 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 shadow transition-transform active:scale-95">
+                    Home
+                </button>
+                <button id="step-btn" onclick="revealStep()" class="px-5 py-2.5 bg-amber-500 text-white rounded-xl font-bold hover:bg-amber-600 disabled:opacity-35 disabled:cursor-not-allowed shadow transition-transform active:scale-95">
+                    Tunjuk Langkah
+                </button>
+                <button id="next-btn" onclick="nextSlide()" class="px-6 py-2.5 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 shadow-lg transition-transform active:scale-95">
+                    Seterusnya →
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        const slides = [
+            {
+                title: "Persamaan Algebra & Bar Model",
+                content: `
+                    <div class="text-center space-y-6 slide-enter">
+                        <div class="text-6xl">📘</div>
+                        <h3 class="text-2xl font-bold text-slate-800">Apa itu Persamaan?</h3>
+                        <p class="text-slate-600 max-w-lg mx-auto leading-relaxed">
+                            Persamaan adalah kenyataan matematik yang menunjukkan dua ekspresi adalah <strong>SAMA</strong> ($=$).
+                        </p>
+                        <div class="p-6 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 inline-block">
+                            <span class="text-3xl font-black text-slate-800">$x + 3 = 5$</span>
+                        </div>
+                        <p class="text-sm text-slate-500">
+                            <strong>Menyelesaikan persamaan:</strong> Mencari nilai anu ($x$) yang menjadikan persamaan itu benar.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                title: "7 Langkah Emas Penyelesaian",
+                content: `
+                    <div class="slide-enter space-y-3">
+                        <p class="text-sm text-slate-500 mb-4 font-semibold italic">Rujuk: Step-by-Step Model Drawing Guide</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                            <div class="flex items-start gap-3 p-3 bg-blue-50 rounded-xl">
+                                <span class="bg-blue-600 text-white w-6 h-6 flex items-center justify-center rounded-full flex-shrink-0">1</span>
+                                <span><strong>Baca:</strong> Baca seluruh masalah dengan teliti.</span>
+                            </div>
+                            <div class="flex items-start gap-3 p-3 bg-blue-50 rounded-xl">
+                                <span class="bg-blue-600 text-white w-6 h-6 flex items-center justify-center rounded-full flex-shrink-0">2</span>
+                                <span><strong>Tulis Ayat:</strong> Tulis soalan dalam bentuk ayat penyata.</span>
+                            </div>
+                            <div class="flex items-start gap-3 p-3 bg-blue-50 rounded-xl">
+                                <span class="bg-blue-600 text-white w-6 h-6 flex items-center justify-center rounded-full flex-shrink-0">3</span>
+                                <span><strong>Kenalpasti:</strong> Tentukan siapa/apa yang terlibat.</span>
+                            </div>
+                            <div class="flex items-start gap-3 p-3 bg-blue-50 rounded-xl">
+                                <span class="bg-blue-600 text-white w-6 h-6 flex items-center justify-center rounded-full flex-shrink-0">4</span>
+                                <span><strong>Lukis Bar:</strong> Lukis bar unit untuk mewakili nilai.</span>
+                            </div>
+                            <div class="flex items-start gap-3 p-3 bg-blue-50 rounded-xl">
+                                <span class="bg-blue-600 text-white w-6 h-6 flex items-center justify-center rounded-full flex-shrink-0">5</span>
+                                <span><strong>Pecahkan:</strong> Masukkan maklumat dan tanda soal (?).</span>
+                            </div>
+                            <div class="flex items-start gap-3 p-3 bg-blue-50 rounded-xl">
+                                <span class="bg-blue-600 text-white w-6 h-6 flex items-center justify-center rounded-full flex-shrink-0">6</span>
+                                <span><strong>Kira:</strong> Lakukan pengiraan matematik.</span>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-slate-900 text-white rounded-xl text-center text-sm">
+                            <strong>Langkah 7:</strong> Tulis jawapan dalam ayat dan pastikan ia logik.
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Contoh 1: Tambah $x + 6 = 10$",
+                content: `
+                    <div class="slide-enter space-y-4">
+                        <div class="step-badge">Visualisasi</div>
+                        <div class="py-6">
+                            <div class="comparison-row">
+                                <span class="label-name text-blue-600">Kiri ($x + 6$)</span>
+                                <div class="bar-container w-full">
+                                    <div class="bar-segment bg-blue-500 w-[40%] border-r border-white">$x$</div>
+                                    <div class="bar-segment bg-blue-300 w-[60%]">$6$</div>
+                                </div>
+                            </div>
+                            <div class="comparison-row">
+                                <span class="label-name text-slate-600">Kanan ($10$)</span>
+                                <div class="bar-container w-full"><div class="bar-segment bg-slate-400 w-full">$10$</div></div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-blue-50 p-4 rounded-xl text-center">
+                                <p class="text-xs text-slate-500">Langkah Kira:</p>
+                                <p class="font-bold text-blue-700">$x = 10 - 6 = 4$</p>
+                            </div>
+                            <div class="bg-green-50 p-4 rounded-xl text-center">
+                                <p class="text-xs text-slate-500">Semakan:</p>
+                                <p class="font-bold text-green-700">$4 + 6 = 10$ ✓</p>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Contoh 2: Tolak $x - 7 = 13$",
+                content: `
+                    <div class="slide-enter space-y-4">
+                        <div class="step-badge">Visualisasi Tolak</div>
+                        <div class="py-6">
+                            <div class="comparison-row">
+                                <span class="label-name text-emerald-600">Nilai Asal ($x$)</span>
+                                <div class="bar-container w-full">
+                                    <div class="bar-segment bg-emerald-500 w-[65%] border-r border-white">$13$</div>
+                                    <div class="bar-segment bg-emerald-300 w-[35%]">$7$</div>
+                                </div>
+                            </div>
+                            <div class="comparison-row">
+                                <span class="label-name text-slate-600">Baki</span>
+                                <div class="bar-container w-[65%]"><div class="bar-segment bg-slate-400 w-full">$13$</div></div>
+                            </div>
+                        </div>
+                        <div class="bg-emerald-50 p-4 rounded-xl text-center">
+                            <p class="text-sm text-slate-600">Untuk mencari <strong>$x$</strong>, kita perlu menggabungkan baki dan nilai yang ditolak.</p>
+                            <p class="font-bold text-emerald-700 mt-1">$x = 13 + 7 = 20$</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Contoh 3: 2-Langkah $2x + 5 = 9$",
+                content: `
+                    <div class="slide-enter space-y-4">
+                        <div class="math-box">Persamaan: <strong>$2x + 5 = 9$</strong></div>
+                        <div class="py-4">
+                            <div class="comparison-row">
+                                <span class="label-name">$2x + 5$</span>
+                                <div class="bar-container w-full">
+                                    <div class="bar-segment bg-amber-600 w-[25%] border-r border-white">$x$</div>
+                                    <div class="bar-segment bg-amber-600 w-[25%] border-r border-white">$x$</div>
+                                    <div class="bar-segment bg-amber-300 w-[50%]">$5$</div>
+                                </div>
+                            </div>
+                            <div class="comparison-row">
+                                <span class="label-name">$9$</span>
+                                <div class="bar-container w-full"><div class="bar-segment bg-slate-400 w-full">$9$</div></div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 text-xs">
+                            <div class="p-3 bg-slate-100 rounded-lg"><strong>Langkah 1:</strong><br>Buang $5$ daripada $9$.<br>$2x = 9 - 5 = 4$</div>
+                            <div class="p-3 bg-amber-600 text-white rounded-lg"><strong>Langkah 2:</strong><br>Bahagi $4$ kepada $2$ unit.<br>$x = 4 \div 2 = 2$</div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Contoh 4: 2-Langkah $3x - 2 = 7$",
+                content: `
+                    <div class="slide-enter space-y-4">
+                        <div class="math-box">Persamaan: <strong>$3x - 2 = 7$</strong></div>
+                        <div class="py-4">
+                            <div class="comparison-row">
+                                <span class="label-name text-rose-600">$3x$</span>
+                                <div class="bar-container w-full">
+                                    <div class="bar-segment bg-rose-600 w-1/3 border-r border-white">$x$</div>
+                                    <div class="bar-segment bg-rose-600 w-1/3 border-r border-white">$x$</div>
+                                    <div class="bar-segment bg-rose-600 w-1/3">$x$</div>
+                                </div>
+                            </div>
+                            <div class="comparison-row">
+                                <span class="label-name text-slate-600">$7 + 2$</span>
+                                <div class="bar-container w-full">
+                                    <div class="bar-segment bg-slate-400 w-[78%] border-r border-white">$7$</div>
+                                    <div class="bar-segment bg-rose-300 w-[22%]">$2$</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-rose-50 p-4 rounded-xl text-center">
+                            <p class="text-xs text-slate-500">Langkah Penyelesaian:</p>
+                            <p class="text-sm">$3x = 7 + 2 = 9$ <br> <strong>$x = 9 \div 3 = 3$</strong></p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Kes Lanjutan: $x$ di Dua Belah",
+                content: `
+                    <div class="slide-enter space-y-4">
+                        <div class="math-box">Persamaan: <strong>$2x + 4 = x + 5$</strong></div>
+                        <p class="text-xs text-slate-500 italic">Rujuk: Example 5 daripada PDF</p>
+                        <div class="py-4">
+                            <div class="comparison-row">
+                                <span class="label-name">$2x + 4$</span>
+                                <div class="bar-container w-full">
+                                    <div class="bar-segment bg-indigo-600 w-[30%] border-r border-white">$x$</div>
+                                    <div class="bar-segment bg-indigo-600 w-[30%] border-r border-white">$x$</div>
+                                    <div class="bar-segment bg-indigo-300 w-[40%]">$4$</div>
+                                </div>
+                            </div>
+                            <div class="comparison-row">
+                                <span class="label-name">$x + 5$</span>
+                                <div class="bar-container w-full">
+                                    <div class="bar-segment bg-indigo-600 w-[30%] border-r border-white">$x$</div>
+                                    <div class="bar-segment bg-indigo-400 w-[70%]">$5$</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-indigo-50 rounded-xl">
+                            <p class="text-sm font-bold text-indigo-800">Teknik 'Matching':</p>
+                            <p class="text-xs text-slate-600">Buang satu '$x$' daripada kedua-dua belah: <br><strong>$x + 4 = 5$</strong> → $x = 5 - 4 = 1$</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Cabaran: $3x - 1 = 2x + 4$",
+                content: `
+                    <div class="slide-enter text-center space-y-6">
+                        <p class="font-bold text-slate-700">Cuba selesaikan: $3x - 1 = 2x + 4$</p>
+                        <div class="max-w-xs mx-auto space-y-2">
+                             <div class="comparison-row">
+                                <span class="w-12 text-xs">Atas</span>
+                                <div class="bar-container flex-1"><div class="bar-segment bg-blue-600 w-full">$x$ | $x$ | $x$</div></div>
+                            </div>
+                            <div class="comparison-row">
+                                <span class="w-12 text-xs">Bawah</span>
+                                <div class="bar-container flex-1">
+                                    <div class="bar-segment bg-blue-400 w-[66%] border-r border-white">$x$ | $x$</div>
+                                    <div class="bar-segment bg-slate-300 w-[34%]">$5?$</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center gap-4">
+                            <input type="number" id="quiz-input" class="w-32 p-3 text-2xl font-bold text-center border-4 border-slate-100 rounded-xl outline-none" placeholder="?">
+                            <button onclick="checkQuiz(5)" class="bg-blue-600 text-white px-8 py-2 rounded-xl font-bold">Semak Jawapan</button>
+                            <div id="quiz-feedback" class="h-6 font-bold text-sm"></div>
+                            <p class="text-[10px] text-slate-400 italic">Petunjuk: Buang $2x$ daripada kedua-dua belah.</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Latihan: Persamaan Darab $3x = 21$",
+                content: `
+                    <div class="slide-enter space-y-4 text-center">
+                         <div class="math-box">Persamaan: <strong>$3x = 21$</strong></div>
+                        <div class="py-6 max-w-sm mx-auto">
+                            <div class="bar-container mb-2">
+                                <div class="bar-segment bg-amber-500 w-1/3 border-r border-white">$x$</div>
+                                <div class="bar-segment bg-amber-500 w-1/3 border-r border-white">$x$</div>
+                                <div class="bar-segment bg-amber-500 w-1/3">$x$</div>
+                            </div>
+                            <div class="bar-container h-8">
+                                <div class="bar-segment bg-slate-400 w-full">$21$</div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center gap-4">
+                            <input type="number" id="quiz-input" class="w-32 p-3 text-2xl font-bold text-center border-4 border-slate-100 rounded-xl outline-none" placeholder="?">
+                            <button onclick="checkQuiz(7)" class="bg-amber-600 text-white px-8 py-2 rounded-xl font-bold">Berapakah $x$?</button>
+                            <div id="quiz-feedback" class="h-6 font-bold text-sm"></div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Latihan: Persamaan Bahagi $x/4 = 8$",
+                content: `
+                    <div class="slide-enter space-y-4 text-center">
+                         <div class="math-box">Persamaan: <strong>$\frac{x}{4} = 8$</strong></div>
+                         <p class="text-sm text-slate-500">Bayangkan satu bar besar ($x$) dibahagi $4$ kotak, setiap satu bernilai $8$.</p>
+                        <div class="py-6 max-w-sm mx-auto">
+                            <div class="bar-container h-10">
+                                <div class="bar-segment bg-indigo-500 w-1/4 border-r border-white">$8$</div>
+                                <div class="bar-segment bg-indigo-500 w-1/4 border-r border-white">$8$</div>
+                                <div class="bar-segment bg-indigo-500 w-1/4 border-r border-white">$8$</div>
+                                <div class="bar-segment bg-indigo-500 w-1/4">$8$</div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center gap-4">
+                            <input type="number" id="quiz-input" class="w-32 p-3 text-2xl font-bold text-center border-4 border-slate-100 rounded-xl outline-none" placeholder="?">
+                            <button onclick="checkQuiz(32)" class="bg-indigo-600 text-white px-8 py-2 rounded-xl font-bold">Berapakah jumlah $x$?</button>
+                            <div id="quiz-feedback" class="h-6 font-bold text-sm"></div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Problem Solving: Tiket Taman",
+                content: `
+                    <div class="slide-enter space-y-4">
+                        <div class="bg-yellow-50 p-4 rounded-xl border-l-4 border-yellow-500">
+                            <p class="text-sm font-bold text-yellow-800">Soalan Aktiviti B (PDF)</p>
+                            <p class="text-slate-700 font-medium">Jika harga tiket masuk taman ialah RM$15$ seorang, berapa orang kanak-kanak yang membeli tiket jika jumlah bayaran ialah RM$120$?</p>
+                        </div>
+                        <div class="py-4 text-center">
+                            <div class="bar-container mb-2 w-full">
+                                <div class="bar-segment bg-yellow-500 w-1/5 border-r border-white">$15$</div>
+                                <div class="bar-segment bg-yellow-500 w-1/5 border-r border-white">$15$</div>
+                                <div class="bar-segment bg-yellow-500 w-1/5 border-r border-white">...</div>
+                                <div class="bar-segment bg-slate-200 text-slate-500 w-2/5 font-normal">Satu unit = $15$</div>
+                            </div>
+                            <p class="font-bold text-slate-800">Jumlah = $120$</p>
+                            <p class="text-sm text-slate-500 mt-2">Gunakan persamaan: $15x = 120$</p>
+                        </div>
+                        <div class="flex flex-col items-center gap-4">
+                            <input type="number" id="quiz-input" class="w-32 p-3 text-2xl font-bold text-center border-4 border-slate-100 rounded-xl outline-none" placeholder="?">
+                            <button onclick="checkQuiz(8)" class="bg-yellow-600 text-white px-8 py-2 rounded-xl font-bold">Berapa orang?</button>
+                            <div id="quiz-feedback" class="h-6 font-bold text-sm"></div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Rumusan Operasi Songsang",
+                content: `
+                    <div class="slide-enter space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="p-4 bg-slate-900 text-white rounded-2xl text-center">
+                                <h4 class="text-sm font-bold text-blue-400">Tambah ($+$)</h4>
+                                <p class="text-2xl font-bold">⟷</p>
+                                <p class="text-sm font-bold text-red-400">Tolak ($-$)</p>
+                            </div>
+                            <div class="p-4 bg-slate-900 text-white rounded-2xl text-center">
+                                <h4 class="text-sm font-bold text-amber-400">Darab ($\times$)</h4>
+                                <p class="text-2xl font-bold">⟷</p>
+                                <p class="text-sm font-bold text-green-400">Bahagi ($\div$)</p>
+                            </div>
+                        </div>
+                        <div class="p-5 bg-blue-50 rounded-2xl border border-blue-100 mt-4">
+                            <h4 class="font-bold text-blue-800 mb-2">Tips untuk Guru 💡</h4>
+                            <ul class="text-sm text-slate-600 space-y-2">
+                                <li>• Tekankan keseimbangan (kiri = kanan).</li>
+                                <li>• Gunakan visual 'memotong' bar untuk operasi tolak.</li>
+                                <li>• Benarkan murid melabel setiap kotak kecil dengan '$x$'.</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Kesilapan Biasa ⚠️",
+                content: `
+                    <div class="slide-enter space-y-4">
+                        <div class="p-4 bg-red-50 rounded-xl border border-red-100">
+                            <p class="text-red-700 font-bold text-sm">❌ Melukis bar tanpa menyelaraskan kiri</p>
+                            <p class="text-xs text-red-500">Perbandingan hanya sah jika kedua-dua bar bermula dari garisan yang sama.</p>
+                        </div>
+                        <div class="p-4 bg-red-50 rounded-xl border border-red-100">
+                            <p class="text-red-700 font-bold text-sm">❌ Menggunakan operasi yang salah</p>
+                            <p class="text-xs text-red-500">Contoh: Menambah nilai baki kepada nilai asal dalam masalah tolak.</p>
+                        </div>
+                        <div class="p-4 bg-emerald-50 rounded-xl border border-emerald-100">
+                            <p class="text-emerald-700 font-bold text-sm">✅ Tips Kejayaan</p>
+                            <p class="text-xs text-emerald-600">Sentiasa lukis label 'Siapa' dan 'Apa' di sebelah kiri bar unit.</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Ujian Penguasaan 1",
+                content: `
+                    <div class="slide-enter text-center space-y-6">
+                        <p class="font-bold text-slate-700 leading-tight">Selesaikan menggunakan Bar Model:<br>$2x + 12 = 28$</p>
+                        <div class="max-w-xs mx-auto py-2">
+                            <div class="bar-container mb-1 h-8">
+                                <div class="bar-segment bg-blue-500 w-1/4 border-r border-white">$x$</div>
+                                <div class="bar-segment bg-blue-500 w-1/4 border-r border-white">$x$</div>
+                                <div class="bar-segment bg-blue-200 w-2/4">$12$</div>
+                            </div>
+                             <div class="bar-container h-8">
+                                <div class="bar-segment bg-slate-400 w-full">$28$</div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center gap-4">
+                            <input type="number" id="quiz-input" class="w-32 p-3 text-2xl font-bold text-center border-4 border-slate-100 rounded-xl outline-none" placeholder="?">
+                            <button onclick="checkQuiz(8)" class="bg-indigo-600 text-white px-8 py-2 rounded-xl font-bold shadow-lg">Berapakah $x$?</button>
+                            <div id="quiz-feedback" class="h-6 font-bold text-sm"></div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Ujian Penguasaan 2",
+                content: `
+                    <div class="slide-enter text-center space-y-6">
+                        <p class="font-bold text-slate-700 leading-tight">Selesaikan menggunakan Bar Model:<br>$2x - 10 = x + 5$</p>
+                        <div class="max-w-xs mx-auto py-2">
+                             <div class="bar-container mb-2 h-8">
+                                <div class="bar-segment bg-rose-600 w-full">$x$ | $x$</div>
+                            </div>
+                            <div class="bar-container h-8">
+                                <div class="bar-segment bg-rose-400 w-1/2 border-r border-white">$x$</div>
+                                <div class="bar-segment bg-slate-300 w-1/2">$5 + 10?$</div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center gap-4">
+                            <input type="number" id="quiz-input" class="w-32 p-3 text-2xl font-bold text-center border-4 border-slate-100 rounded-xl outline-none" placeholder="?">
+                            <button onclick="checkQuiz(15)" class="bg-rose-600 text-white px-8 py-2 rounded-xl font-bold">Berapakah $x$?</button>
+                            <div id="quiz-feedback" class="h-6 font-bold text-sm"></div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Tahniah! 🥇",
+                content: `
+                    <div class="slide-enter text-center space-y-6">
+                        <div class="text-8xl">🥇</div>
+                        <h2 class="text-3xl font-black text-slate-800">Syabas Cikgu!</h2>
+                        <p class="text-slate-600 leading-relaxed max-w-sm mx-auto">
+                            Anda telah menamatkan panduan pengajaran Bar Model untuk Algebra. Visualisasi ini akan sangat membantu murid anda!
+                        </p>
+                        <button onclick="location.reload()" class="px-8 py-3 bg-slate-900 text-white rounded-2xl font-bold">Mula Semula Panduan</button>
+                    </div>
+                `
+            }
+        ];
+
+        function stepHtml(steps) {
+            return `
+                <div class="solution-steps text-sm">
+                    ${steps.map((step, index) => `
+                        <div class="solution-step">
+                            <span class="step-number">${index + 1}</span>
+                            <div>
+                                <p class="font-bold text-slate-700">${step.label}</p>
+                                <p class="equation-line">${step.eq}</p>
+                                ${step.note ? `<p class="text-xs text-slate-500 mt-1">${step.note}</p>` : ''}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function miniBar(rows) {
+            return `
+                <div class="py-4 space-y-3">
+                    ${rows.map(row => `
+                        <div class="comparison-row">
+                            <span class="label-name ${row.labelClass || ''}">${row.label}</span>
+                            <div class="bar-container w-full">
+                                ${row.segments.map(segment => `
+                                    <div class="bar-segment ${segment.className}" style="width:${segment.width}">${segment.text}</div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function menuSection(title, items) {
+            return `
+                <div class="solution-card">
+                    <h3 class="font-black text-slate-800 mb-3 text-center">${title}</h3>
+                    <div class="menu-grid">
+                        ${items.map(item => `
+                            <button class="menu-btn" onclick="goToSlide(${item.index})">${item.label}</button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        const improvedSlides = [
+            {
+                title: "Persamaan Algebra & Bar Model",
+                content: `
+                    <div class="text-center space-y-6 slide-enter">
+                        <div class="text-5xl">=</div>
+                        <h3 class="text-2xl font-bold text-slate-800">Persamaan bermaksud kedua-dua belah seimbang</h3>
+                        <p class="text-slate-600 max-w-lg mx-auto leading-relaxed">
+                            Nilai di sebelah kiri mesti sama dengan nilai di sebelah kanan.
+                        </p>
+                        <div class="p-6 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 inline-block">
+                            <span class="text-3xl font-black text-slate-800">$x + 3 = 5$</span>
+                        </div>
+                        ${stepHtml([
+                            { label: "Cari nilai yang hilang", eq: "$x + 3 = 5$" },
+                            { label: "Buang 3 daripada kedua-dua belah", eq: "$x + 3 - 3 = 5 - 3$" },
+                            { label: "Jawapan", eq: "$x = 2$", note: "Semakan: $2 + 3 = 5$." }
+                        ])}
+                    </div>
+                `
+            },
+            {
+                title: "7 Langkah Emas Penyelesaian",
+                content: `
+                    <div class="slide-enter space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                            <div class="flex items-start gap-3 p-3 bg-blue-50 rounded-xl"><span class="bg-blue-600 text-white w-6 h-6 flex items-center justify-center rounded-full flex-shrink-0">1</span><span><strong>Baca:</strong> Kenal pasti apa yang diminta.</span></div>
+                            <div class="flex items-start gap-3 p-3 bg-blue-50 rounded-xl"><span class="bg-blue-600 text-white w-6 h-6 flex items-center justify-center rounded-full flex-shrink-0">2</span><span><strong>Tulis:</strong> Nyatakan anu sebagai $x$.</span></div>
+                            <div class="flex items-start gap-3 p-3 bg-blue-50 rounded-xl"><span class="bg-blue-600 text-white w-6 h-6 flex items-center justify-center rounded-full flex-shrink-0">3</span><span><strong>Bina persamaan:</strong> Pastikan kiri dan kanan seimbang.</span></div>
+                            <div class="flex items-start gap-3 p-3 bg-blue-50 rounded-xl"><span class="bg-blue-600 text-white w-6 h-6 flex items-center justify-center rounded-full flex-shrink-0">4</span><span><strong>Lukis bar:</strong> Satu kotak mewakili satu $x$.</span></div>
+                            <div class="flex items-start gap-3 p-3 bg-blue-50 rounded-xl"><span class="bg-blue-600 text-white w-6 h-6 flex items-center justify-center rounded-full flex-shrink-0">5</span><span><strong>Operasi songsang:</strong> Tambah lawan tolak, darab lawan bahagi.</span></div>
+                            <div class="flex items-start gap-3 p-3 bg-blue-50 rounded-xl"><span class="bg-blue-600 text-white w-6 h-6 flex items-center justify-center rounded-full flex-shrink-0">6</span><span><strong>Selesaikan:</strong> Buat operasi yang sama pada kedua-dua belah.</span></div>
+                        </div>
+                        <div class="p-3 bg-slate-900 text-white rounded-xl text-center text-sm">
+                            <strong>Langkah 7:</strong> Semak jawapan dengan menggantikan nilai $x$ ke dalam persamaan asal.
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Contoh 1: Tambah $x + 6 = 10$",
+                content: `
+                    <div class="slide-enter space-y-4">
+                        <div class="step-badge">Model tambah</div>
+                        ${miniBar([
+                            { label: "Kiri", labelClass: "text-blue-600", segments: [
+                                { text: "$x$", width: "40%", className: "bg-blue-500 border-r border-white" },
+                                { text: "$6$", width: "60%", className: "bg-blue-300" }
+                            ]},
+                            { label: "Kanan", labelClass: "text-slate-600", segments: [
+                                { text: "$10$", width: "100%", className: "bg-slate-400" }
+                            ]}
+                        ])}
+                        ${stepHtml([
+                            { label: "Persamaan asal", eq: "$x + 6 = 10$" },
+                            { label: "Tolak 6 pada kedua-dua belah", eq: "$x + 6 - 6 = 10 - 6$" },
+                            { label: "Ringkaskan", eq: "$x = 4$" },
+                            { label: "Semakan", eq: "$4 + 6 = 10$" }
+                        ])}
+                    </div>
+                `
+            },
+            {
+                title: "Contoh 2: Tolak $x - 7 = 13$",
+                content: `
+                    <div class="slide-enter space-y-4">
+                        <div class="step-badge">Model tolak</div>
+                        ${miniBar([
+                            { label: "$x$", labelClass: "text-emerald-600", segments: [
+                                { text: "$x$", width: "100%", className: "bg-emerald-600" }
+                            ]},
+                            { label: "$13 + 7$", labelClass: "text-slate-600", segments: [
+                                { text: "$13$", width: "65%", className: "bg-slate-500 border-r border-white" },
+                                { text: "$7$", width: "35%", className: "bg-emerald-300 text-emerald-950" }
+                            ]}
+                        ])}
+                        ${stepHtml([
+                            { label: "Persamaan asal", eq: "$x - 7 = 13$" },
+                            { label: "Tambah 7 pada kedua-dua belah", eq: "$x - 7 + 7 = 13 + 7$" },
+                            { label: "Ringkaskan", eq: "$x = 20$" },
+                            { label: "Semakan", eq: "$20 - 7 = 13$" }
+                        ])}
+                    </div>
+                `
+            },
+            {
+                title: "Contoh 3: Dua Langkah $2x + 5 = 9$",
+                content: `
+                    <div class="slide-enter space-y-4">
+                        <div class="math-box">Persamaan: <strong>$2x + 5 = 9$</strong></div>
+                        ${miniBar([
+                            { label: "$2x + 5$", segments: [
+                                { text: "$x$", width: "22%", className: "bg-amber-600 border-r border-white" },
+                                { text: "$x$", width: "22%", className: "bg-amber-600 border-r border-white" },
+                                { text: "$5$", width: "56%", className: "bg-amber-300" }
+                            ]},
+                            { label: "$9$", segments: [
+                                { text: "$9$", width: "100%", className: "bg-slate-400" }
+                            ]}
+                        ])}
+                        ${stepHtml([
+                            { label: "Persamaan asal", eq: "$2x + 5 = 9$" },
+                            { label: "Tolak 5 pada kedua-dua belah", eq: "$2x + 5 - 5 = 9 - 5$" },
+                            { label: "Dapatkan nilai dua unit", eq: "$2x = 4$" },
+                            { label: "Bahagi kepada 2 unit sama besar", eq: "$x = 4 \\div 2 = 2$" },
+                            { label: "Semakan", eq: "$2(2) + 5 = 9$" }
+                        ])}
+                    </div>
+                `
+            },
+            {
+                title: "Contoh 4: Dua Langkah $3x - 2 = 7$",
+                content: `
+                    <div class="slide-enter space-y-4">
+                        <div class="math-box">Persamaan: <strong>$3x - 2 = 7$</strong></div>
+                        ${miniBar([
+                            { label: "$3x$", labelClass: "text-rose-600", segments: [
+                                { text: "$x$", width: "33.33%", className: "bg-rose-600 border-r border-white" },
+                                { text: "$x$", width: "33.33%", className: "bg-rose-600 border-r border-white" },
+                                { text: "$x$", width: "33.34%", className: "bg-rose-600" }
+                            ]},
+                            { label: "$7 + 2$", labelClass: "text-slate-600", segments: [
+                                { text: "$7$", width: "77.78%", className: "bg-slate-400 border-r border-white" },
+                                { text: "$2$", width: "22.22%", className: "bg-rose-300" }
+                            ]}
+                        ])}
+                        ${stepHtml([
+                            { label: "Persamaan asal", eq: "$3x - 2 = 7$" },
+                            { label: "Tambah 2 pada kedua-dua belah", eq: "$3x - 2 + 2 = 7 + 2$" },
+                            { label: "Dapatkan nilai tiga unit", eq: "$3x = 9$" },
+                            { label: "Bahagi kepada 3 unit sama besar", eq: "$x = 9 \\div 3 = 3$" },
+                            { label: "Semakan", eq: "$3(3) - 2 = 7$" }
+                        ])}
+                    </div>
+                `
+            },
+            {
+                title: "Kes Lanjutan: $x$ di Dua Belah",
+                content: `
+                    <div class="slide-enter space-y-4">
+                        <div class="math-box">Persamaan: <strong>$2x + 4 = x + 5$</strong></div>
+                        ${miniBar([
+                            { label: "$2x + 4$", segments: [
+                                { text: "$x$", width: "33.33%", className: "bg-indigo-600 border-r border-white" },
+                                { text: "$x$", width: "33.33%", className: "bg-indigo-600 border-r border-white" },
+                                { text: "$4$", width: "33.34%", className: "bg-indigo-300" }
+                            ]},
+                            { label: "$x + 5$", segments: [
+                                { text: "$x$", width: "33.33%", className: "bg-indigo-600 border-r border-white" },
+                                { text: "$5$", width: "66.67%", className: "bg-indigo-400" }
+                            ]}
+                        ])}
+                        ${stepHtml([
+                            { label: "Persamaan asal", eq: "$2x + 4 = x + 5$" },
+                            { label: "Tolak $x$ pada kedua-dua belah", eq: "$2x - x + 4 = x - x + 5$" },
+                            { label: "Ringkaskan", eq: "$x + 4 = 5$" },
+                            { label: "Tolak 4 pada kedua-dua belah", eq: "$x = 5 - 4 = 1$" },
+                            { label: "Semakan", eq: "$2(1) + 4 = 1 + 5$" }
+                        ])}
+                    </div>
+                `
+            },
+            {
+                title: "Cabaran Berpandu: $3x - 1 = 2x + 4$",
+                content: `
+                    <div class="slide-enter space-y-4">
+                        <div class="math-box">Persamaan: <strong>$3x - 1 = 2x + 4$</strong></div>
+                        ${miniBar([
+                            { label: "Kiri", labelClass: "text-blue-600", segments: [
+                                { text: "$x$", width: "33.33%", className: "bg-blue-600 border-r border-white" },
+                                { text: "$x$", width: "33.33%", className: "bg-blue-600 border-r border-white" },
+                                { text: "$x$", width: "33.34%", className: "bg-blue-600" }
+                            ]},
+                            { label: "Kanan + 1", labelClass: "text-slate-600", segments: [
+                                { text: "$x$", width: "33.33%", className: "bg-blue-400 border-r border-white" },
+                                { text: "$x$", width: "33.33%", className: "bg-blue-400 border-r border-white" },
+                                { text: "$4$", width: "26.67%", className: "bg-slate-300 border-r border-white text-slate-700" },
+                                { text: "$1$", width: "6.67%", className: "bg-amber-300 text-amber-950" }
+                            ]}
+                        ])}
+                        ${stepHtml([
+                            { label: "Persamaan asal", eq: "$3x - 1 = 2x + 4$" },
+                            { label: "Tambah 1 pada kedua-dua belah", eq: "$3x = 2x + 5$" },
+                            { label: "Tolak $2x$ pada kedua-dua belah", eq: "$3x - 2x = 2x - 2x + 5$" },
+                            { label: "Jawapan", eq: "$x = 5$" },
+                            { label: "Semakan", eq: "$3(5) - 1 = 2(5) + 4$" }
+                        ])}
+                    </div>
+                `
+            },
+            {
+                title: "Latihan Darab $3x = 21$",
+                content: `
+                    <div class="slide-enter space-y-4">
+                        <div class="math-box">Persamaan: <strong>$3x = 21$</strong></div>
+                        ${miniBar([
+                            { label: "$3x$", labelClass: "text-amber-600", segments: [
+                                { text: "$x$", width: "33.33%", className: "bg-amber-500 border-r border-white" },
+                                { text: "$x$", width: "33.33%", className: "bg-amber-500 border-r border-white" },
+                                { text: "$x$", width: "33.34%", className: "bg-amber-500" }
+                            ]},
+                            { label: "$21$", segments: [
+                                { text: "$21$", width: "100%", className: "bg-slate-400" }
+                            ]}
+                        ])}
+                        ${stepHtml([
+                            { label: "Persamaan asal", eq: "$3x = 21$" },
+                            { label: "Bahagi kedua-dua belah dengan 3", eq: "$\\frac{3x}{3} = \\frac{21}{3}$" },
+                            { label: "Jawapan", eq: "$x = 7$" },
+                            { label: "Semakan", eq: "$3(7) = 21$" }
+                        ])}
+                    </div>
+                `
+            },
+            {
+                title: "Latihan Bahagi $\\frac{x}{4} = 8$",
+                content: `
+                    <div class="slide-enter space-y-4">
+                        <div class="math-box">Persamaan: <strong>$\\frac{x}{4} = 8$</strong></div>
+                        ${miniBar([
+                            { label: "$x$", labelClass: "text-indigo-600", segments: [
+                                { text: "$8$", width: "25%", className: "bg-indigo-500 border-r border-white" },
+                                { text: "$8$", width: "25%", className: "bg-indigo-500 border-r border-white" },
+                                { text: "$8$", width: "25%", className: "bg-indigo-500 border-r border-white" },
+                                { text: "$8$", width: "25%", className: "bg-indigo-500" }
+                            ]}
+                        ])}
+                        ${stepHtml([
+                            { label: "Persamaan asal", eq: "$\\frac{x}{4} = 8$" },
+                            { label: "Darab kedua-dua belah dengan 4", eq: "$4 \\times \\frac{x}{4} = 8 \\times 4$" },
+                            { label: "Jawapan", eq: "$x = 32$" },
+                            { label: "Semakan", eq: "$\\frac{32}{4} = 8$" }
+                        ])}
+                    </div>
+                `
+            },
+            {
+                title: "Problem Solving: Tiket Taman",
+                content: `
+                    <div class="slide-enter space-y-4">
+                        <div class="bg-yellow-50 p-4 rounded-xl border-l-4 border-yellow-500">
+                            <p class="text-sm font-bold text-yellow-800">Soalan</p>
+                            <p class="text-slate-700 font-medium">Harga tiket ialah RM 15 seorang. Jumlah bayaran ialah RM 120. Berapa orang kanak-kanak membeli tiket?</p>
+                        </div>
+                        ${miniBar([
+                            { label: "Jumlah", labelClass: "text-yellow-700", segments: [
+                                { text: "RM 120", width: "100%", className: "bg-slate-400 text-white" }
+                            ]},
+                            { label: "Unit RM15", labelClass: "text-yellow-700", segments: [
+                                { text: "15", width: "12.5%", className: "bg-yellow-500 border-r border-white text-[11px]" },
+                                { text: "15", width: "12.5%", className: "bg-yellow-500 border-r border-white text-[11px]" },
+                                { text: "15", width: "12.5%", className: "bg-yellow-500 border-r border-white text-[11px]" },
+                                { text: "15", width: "12.5%", className: "bg-yellow-500 border-r border-white text-[11px]" },
+                                { text: "15", width: "12.5%", className: "bg-yellow-500 border-r border-white text-[11px]" },
+                                { text: "15", width: "12.5%", className: "bg-yellow-500 border-r border-white text-[11px]" },
+                                { text: "15", width: "12.5%", className: "bg-yellow-500 border-r border-white text-[11px]" },
+                                { text: "15", width: "12.5%", className: "bg-yellow-500 text-[11px]" }
+                            ]}
+                        ])}
+                        ${stepHtml([
+                            { label: "Tentukan anu", eq: "$x =$ bilangan kanak-kanak" },
+                            { label: "Bina persamaan", eq: "$15x = 120$" },
+                            { label: "Bahagi kedua-dua belah dengan 15", eq: "$x = 120 \\div 15$" },
+                            { label: "Jawapan", eq: "$x = 8$", note: "Jadi, 8 orang kanak-kanak membeli tiket." },
+                            { label: "Semakan", eq: "$15(8) = 120$" }
+                        ])}
+                    </div>
+                `
+            },
+            {
+                title: "Latihan Tambahan: $4x + 3 = 19$",
+                content: `
+                    <div class="slide-enter space-y-4">
+                        <div class="math-box">Persamaan: <strong>$4x + 3 = 19$</strong></div>
+                        ${miniBar([
+                            { label: "$4x + 3$", labelClass: "text-blue-600", segments: [
+                                { text: "$x$", width: "21.05%", className: "bg-blue-500 border-r border-white" },
+                                { text: "$x$", width: "21.05%", className: "bg-blue-500 border-r border-white" },
+                                { text: "$x$", width: "21.05%", className: "bg-blue-500 border-r border-white" },
+                                { text: "$x$", width: "21.05%", className: "bg-blue-500 border-r border-white" },
+                                { text: "$3$", width: "15.8%", className: "bg-blue-200 text-blue-900" }
+                            ]},
+                            { label: "$19$", labelClass: "text-slate-600", segments: [
+                                { text: "$19$", width: "100%", className: "bg-slate-400" }
+                            ]}
+                        ])}
+                        ${stepHtml([
+                            { label: "Persamaan asal", eq: "$4x + 3 = 19$" },
+                            { label: "Tolak 3 pada kedua-dua belah", eq: "$4x = 19 - 3$" },
+                            { label: "Ringkaskan", eq: "$4x = 16$" },
+                            { label: "Bahagi kepada 4 unit sama besar", eq: "$x = 16 \\div 4 = 4$" },
+                            { label: "Semakan", eq: "$4(4) + 3 = 19$" }
+                        ])}
+                    </div>
+                `
+            },
+            {
+                title: "Latihan Tambahan: $\\frac{x}{5} + 2 = 9$",
+                content: `
+                    <div class="slide-enter space-y-4">
+                        <div class="math-box">Persamaan: <strong>$\\frac{x}{5} + 2 = 9$</strong></div>
+                        <div class="solution-card">
+                            <p class="text-center text-sm font-black text-indigo-700 mb-2">Langkah 1: Bandingkan $\\frac{x}{5} + 2$ dengan $9$</p>
+                            ${miniBar([
+                                { label: "$\\frac{x}{5} + 2$", labelClass: "text-indigo-600", segments: [
+                                    { text: "$\\frac{x}{5}$", width: "77.78%", className: "bg-indigo-500 border-r border-white" },
+                                    { text: "$2$", width: "22.22%", className: "bg-indigo-200 text-indigo-950" }
+                                ]},
+                                { label: "$9$", labelClass: "text-slate-600", segments: [
+                                    { text: "$9$", width: "100%", className: "bg-slate-500" }
+                                ]}
+                            ])}
+                        </div>
+                        <div class="solution-card">
+                            <p class="text-center text-sm font-black text-indigo-700 mb-2">Langkah 2: Tolak $2$, jadi $\\frac{x}{5} = 7$</p>
+                            ${miniBar([
+                                { label: "$7$", labelClass: "text-slate-600", segments: [
+                                    { text: "$7$", width: "100%", className: "bg-slate-500" }
+                                ]},
+                                { label: "$x$", labelClass: "text-indigo-600", segments: [
+                                    { text: "$7$", width: "20%", className: "bg-indigo-500 border-r border-white" },
+                                    { text: "$7$", width: "20%", className: "bg-indigo-500 border-r border-white" },
+                                    { text: "$7$", width: "20%", className: "bg-indigo-500 border-r border-white" },
+                                    { text: "$7$", width: "20%", className: "bg-indigo-500 border-r border-white" },
+                                    { text: "$7$", width: "20%", className: "bg-indigo-500" }
+                                ]}
+                            ])}
+                        </div>
+                        ${stepHtml([
+                            { label: "Persamaan asal", eq: "$\\frac{x}{5} + 2 = 9$" },
+                            { label: "Tolak 2 pada kedua-dua belah", eq: "$\\frac{x}{5} = 9 - 2$" },
+                            { label: "Ringkaskan", eq: "$\\frac{x}{5} = 7$" },
+                            { label: "Darab kedua-dua belah dengan 5", eq: "$x = 7 \\times 5 = 35$" },
+                            { label: "Semakan", eq: "$\\frac{35}{5} + 2 = 9$" }
+                        ])}
+                    </div>
+                `
+            },
+            {
+                title: "Rumusan Operasi Songsang",
+                content: `
+                    <div class="slide-enter space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="solution-card text-center">
+                                <p class="text-sm font-bold text-blue-700">Jika persamaan ada tambah</p>
+                                <p class="text-xl font-black">$x + a = b$</p>
+                                <p class="text-sm text-slate-600">guna tolak: $x = b - a$</p>
+                            </div>
+                            <div class="solution-card text-center">
+                                <p class="text-sm font-bold text-rose-700">Jika persamaan ada tolak</p>
+                                <p class="text-xl font-black">$x - a = b$</p>
+                                <p class="text-sm text-slate-600">guna tambah: $x = b + a$</p>
+                            </div>
+                            <div class="solution-card text-center">
+                                <p class="text-sm font-bold text-amber-700">Jika persamaan ada darab</p>
+                                <p class="text-xl font-black">$ax = b$</p>
+                                <p class="text-sm text-slate-600">guna bahagi: $x = b \\div a$</p>
+                            </div>
+                            <div class="solution-card text-center">
+                                <p class="text-sm font-bold text-emerald-700">Jika persamaan ada bahagi</p>
+                                <p class="text-xl font-black">$\\frac{x}{a} = b$</p>
+                                <p class="text-sm text-slate-600">guna darab: $x = b \\times a$</p>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Kesilapan Biasa",
+                content: `
+                    <div class="slide-enter space-y-4">
+                        <div class="p-4 bg-red-50 rounded-xl border border-red-100">
+                            <p class="text-red-700 font-bold text-sm">Salah: Buat operasi pada satu belah sahaja</p>
+                            <p class="text-xs text-red-500">$x + 6 = 10$ tidak boleh menjadi $x = 10$.</p>
+                        </div>
+                        <div class="p-4 bg-emerald-50 rounded-xl border border-emerald-100">
+                            <p class="text-emerald-700 font-bold text-sm">Betul: Operasi sama pada kedua-dua belah</p>
+                            <p class="text-xs text-emerald-600">$x + 6 - 6 = 10 - 6$, jadi $x = 4$.</p>
+                        </div>
+                        <div class="p-4 bg-red-50 rounded-xl border border-red-100">
+                            <p class="text-red-700 font-bold text-sm">Salah: Terbalik operasi songsang</p>
+                            <p class="text-xs text-red-500">Untuk $x - 7 = 13$, jangan tolak 7 lagi. Tambah 7 untuk mendapatkan $x = 20$.</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Ujian Penguasaan 1: $2x + 12 = 28$",
+                content: `
+                    <div class="slide-enter space-y-4">
+                        ${miniBar([
+                            { label: "$2x + 12$", segments: [
+                                { text: "$x$", width: "28.57%", className: "bg-blue-500 border-r border-white" },
+                                { text: "$x$", width: "28.57%", className: "bg-blue-500 border-r border-white" },
+                                { text: "$12$", width: "42.86%", className: "bg-blue-200 text-blue-900" }
+                            ]},
+                            { label: "$28$", segments: [
+                                { text: "$28$", width: "100%", className: "bg-slate-400" }
+                            ]}
+                        ])}
+                        ${stepHtml([
+                            { label: "Persamaan asal", eq: "$2x + 12 = 28$" },
+                            { label: "Tolak 12 pada kedua-dua belah", eq: "$2x = 28 - 12$" },
+                            { label: "Ringkaskan", eq: "$2x = 16$" },
+                            { label: "Bahagi kepada 2 unit sama besar", eq: "$x = 16 \\div 2 = 8$" }
+                        ])}
+                        <div class="flex flex-col items-center gap-4">
+                            <input type="number" id="quiz-input" class="w-32 p-3 text-2xl font-bold text-center border-4 border-slate-100 rounded-xl outline-none" placeholder="?">
+                            <button onclick="checkQuiz(8)" class="bg-indigo-600 text-white px-8 py-2 rounded-xl font-bold shadow-lg">Semak $x$</button>
+                            <div id="quiz-feedback" class="h-6 font-bold text-sm"></div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Ujian Penguasaan 2: $2x - 10 = x + 5$",
+                content: `
+                    <div class="slide-enter space-y-4">
+                        <div class="math-box">Persamaan: <strong>$2x - 10 = x + 5$</strong></div>
+                        ${miniBar([
+                            { label: "$2x$", labelClass: "text-rose-600", segments: [
+                                { text: "$x$", width: "50%", className: "bg-rose-600 border-r border-white" },
+                                { text: "$x$", width: "50%", className: "bg-rose-600" }
+                            ]},
+                            { label: "$x + 15$", labelClass: "text-slate-600", segments: [
+                                { text: "$x$", width: "50%", className: "bg-rose-400 border-r border-white" },
+                                { text: "$5$", width: "16.67%", className: "bg-slate-300 border-r border-white text-slate-700" },
+                                { text: "$10$", width: "33.33%", className: "bg-amber-300 text-amber-950" }
+                            ]}
+                        ])}
+                        ${stepHtml([
+                            { label: "Persamaan asal", eq: "$2x - 10 = x + 5$" },
+                            { label: "Tambah 10 pada kedua-dua belah", eq: "$2x = x + 15$" },
+                            { label: "Tolak $x$ pada kedua-dua belah", eq: "$2x - x = x - x + 15$" },
+                            { label: "Jawapan", eq: "$x = 15$" },
+                            { label: "Semakan", eq: "$2(15) - 10 = 15 + 5$" }
+                        ])}
+                        <div class="flex flex-col items-center gap-4">
+                            <input type="number" id="quiz-input" class="w-32 p-3 text-2xl font-bold text-center border-4 border-slate-100 rounded-xl outline-none" placeholder="?">
+                            <button onclick="checkQuiz(15)" class="bg-rose-600 text-white px-8 py-2 rounded-xl font-bold">Semak $x$</button>
+                            <div id="quiz-feedback" class="h-6 font-bold text-sm"></div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Tahniah",
+                content: `
+                    <div class="slide-enter text-center space-y-6">
+                        <div class="text-7xl font-black text-amber-500">100%</div>
+                        <h2 class="text-3xl font-black text-slate-800">Syabas Cikgu!</h2>
+                        <p class="text-slate-600 leading-relaxed max-w-sm mx-auto">
+                            Semua contoh kini menunjukkan persamaan asal, operasi songsang, ringkasan, jawapan dan semakan.
+                        </p>
+                        <button onclick="location.reload()" class="px-8 py-3 bg-slate-900 text-white rounded-2xl font-bold">Mula Semula Panduan</button>
+                    </div>
+                `
+            }
+        ];
+
+        improvedSlides.unshift({
+            title: "Home: Subtopik dan Soalan",
+            content: `
+                <div class="home-menu slide-enter">
+                    <div class="text-center space-y-2">
+                        <h3 class="text-2xl font-black text-slate-800">Pilih Subtopik atau Soalan</h3>
+                        <p class="text-sm text-slate-500">Klik mana-mana pilihan untuk pergi terus ke bahagian tersebut.</p>
+                    </div>
+                    ${menuSection("Subtopik", [
+                        { label: "Persamaan Algebra & Bar Model", index: 1 },
+                        { label: "7 Langkah Emas Penyelesaian", index: 2 },
+                        { label: "Kes Lanjutan: $x$ di Dua Belah", index: 7 },
+                        { label: "Rumusan Operasi Songsang", index: 14 },
+                        { label: "Kesilapan Biasa", index: 15 }
+                    ])}
+                    ${menuSection("Contoh dan Latihan", [
+                        { label: "Contoh 1: Tambah $x + 6 = 10$", index: 3 },
+                        { label: "Contoh 2: Tolak $x - 7 = 13$", index: 4 },
+                        { label: "Contoh 3: Dua Langkah $2x + 5 = 9$", index: 5 },
+                        { label: "Contoh 4: Dua Langkah $3x - 2 = 7$", index: 6 },
+                        { label: "Cabaran Berpandu $3x - 1 = 2x + 4$", index: 8 },
+                        { label: "Latihan Darab $3x = 21$", index: 9 },
+                        { label: "Latihan Bahagi $\\frac{x}{4} = 8$", index: 10 }
+                    ])}
+                    ${menuSection("Soalan", [
+                        { label: "Problem Solving: Tiket Taman", index: 11 },
+                        { label: "Latihan Tambahan $4x + 3 = 19$", index: 12 },
+                        { label: "Latihan Tambahan $\\frac{x}{5} + 2 = 9$", index: 13 },
+                        { label: "Ujian Penguasaan 1: $2x + 12 = 28$", index: 16 },
+                        { label: "Ujian Penguasaan 2: $2x - 10 = x + 5$", index: 17 }
+                    ])}
+                </div>
+            `
+        });
+
+        slides.splice(0, slides.length, ...improvedSlides);
+
+        let currentSlideIndex = 0;
+        let visibleStepCount = 0;
+
+        function renderSlide() {
+            const slide = slides[currentSlideIndex];
+            const container = document.getElementById('slide-container');
+            visibleStepCount = 0;
+            
+            container.innerHTML = `
+                <div class="mb-6 slide-title-wrap">
+                    <h2 class="slide-title font-extrabold text-slate-800 border-b-4 border-blue-500 inline-block pb-1">${slide.title}</h2>
+                </div>
+                <div class="flex-1 flex flex-col justify-center">
+                    ${slide.content}
+                </div>
+            `;
+
+            const progress = ((currentSlideIndex + 1) / slides.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+            document.getElementById('progress-text').textContent = `Slide ${currentSlideIndex + 1} / ${slides.length}`;
+            document.getElementById('percentage-text').textContent = `${Math.round(progress)}%`;
+            
+            document.getElementById('prev-btn').disabled = currentSlideIndex === 0;
+            
+            updateStepReveal();
+            updateDots();
+            typesetMath();
+        }
+
+        function getSolutionSteps() {
+            return Array.from(document.querySelectorAll('#slide-container .solution-step'));
+        }
+
+        function updateStepReveal() {
+            const steps = getSolutionSteps();
+            steps.forEach((step, index) => {
+                const isVisible = index < visibleStepCount;
+                step.style.display = isVisible ? 'grid' : 'none';
+                if (isVisible) {
+                    step.classList.add('slide-enter');
+                }
+            });
+            updateNavigationButtons(steps.length);
+        }
+
+        function updateNavigationButtons(stepCount = getSolutionSteps().length) {
+            const nextBtn = document.getElementById('next-btn');
+            const stepBtn = document.getElementById('step-btn');
+            const homeBtn = document.getElementById('home-btn');
+            const hasMoreSteps = stepCount > 0 && visibleStepCount < stepCount;
+
+            stepBtn.disabled = !hasMoreSteps;
+            stepBtn.textContent = hasMoreSteps ? `Tunjuk Langkah ${visibleStepCount + 1}` : 'Tunjuk Langkah';
+            homeBtn.disabled = currentSlideIndex === 0;
+
+            if (currentSlideIndex === slides.length - 1) {
+                nextBtn.textContent = 'Tamat';
+                return;
+            }
+            nextBtn.textContent = 'Seterusnya →';
+        }
+
+        function typesetMath() {
+            const container = document.getElementById('slide-container');
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetClear && MathJax.typesetClear([container]);
+                MathJax.typesetPromise([container]).catch(() => {});
+            }
+        }
+
+        function revealStep() {
+            const steps = getSolutionSteps();
+            if (visibleStepCount < steps.length) {
+                visibleStepCount++;
+                updateStepReveal();
+                typesetMath();
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlideIndex < slides.length - 1) {
+                currentSlideIndex++;
+                renderSlide();
+            }
+        }
+
+        function prevSlide() {
+            const steps = getSolutionSteps();
+            if (visibleStepCount > 0 && steps.length > 0) {
+                visibleStepCount--;
+                updateStepReveal();
+                typesetMath();
+                return;
+            }
+
+            if (currentSlideIndex > 0) {
+                currentSlideIndex--;
+                renderSlide();
+            }
+        }
+
+        function goToSlide(index) {
+            if (index >= 0 && index < slides.length) {
+                currentSlideIndex = index;
+                renderSlide();
+            }
+        }
+
+        function goHome() {
+            goToSlide(0);
+        }
+
+        function updateDots() {
+            const dotNav = document.getElementById('dot-nav');
+            dotNav.innerHTML = slides.map((_, i) => `
+                <div class="w-2 h-2 rounded-full transition-all ${i === currentSlideIndex ? 'bg-blue-600 w-4' : 'bg-slate-300'}"></div>
+            `).join('');
+        }
+
+        function checkQuiz(correctValue) {
+            const input = document.getElementById('quiz-input');
+            const feedback = document.getElementById('quiz-feedback');
+            const userVal = parseInt(input.value);
+
+            if (userVal === correctValue) {
+                feedback.innerHTML = `<span class="text-green-600">✨ Tepat! Jawapan ialah ${correctValue}.</span>`;
+                input.className = "w-32 p-3 text-2xl font-bold text-center border-4 border-green-500 bg-green-50 rounded-2xl outline-none";
+                triggerConfetti();
+            } else {
+                feedback.innerHTML = `<span class="text-red-600">❌ Tidak tepat. Sila cuba lagi.</span>`;
+                input.className = "w-32 p-3 text-2xl font-bold text-center border-4 border-red-500 bg-red-50 rounded-2xl outline-none";
+            }
+        }
+
+        function triggerConfetti() {
+            for (let i = 0; i < 50; i++) {
+                const conf = document.createElement('div');
+                conf.style.position = 'fixed';
+                conf.style.width = '10px';
+                conf.style.height = '10px';
+                conf.style.backgroundColor = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'][Math.floor(Math.random() * 5)];
+                conf.style.left = Math.random() * 100 + 'vw';
+                conf.style.top = '-10px';
+                conf.style.zIndex = '1000';
+                document.body.appendChild(conf);
+
+                conf.animate([
+                    { transform: 'translateY(0) rotate(0)', opacity: 1 },
+                    { transform: `translateY(100vh) rotate(${Math.random() * 1000}deg)`, opacity: 0 }
+                ], { duration: 1500 + Math.random() * 1500 }).onfinish = () => conf.remove();
+            }
+        }
+
+        renderSlide();
+        window.addEventListener('load', typesetMath);
+    </script>
+</body>
+    <a href="index.html" style="display:inline-block; margin:16px; padding:10px 16px; background:#4f46e5; color:white; border-radius:8px; text-decoration:none;">
+        Home
+    </a>
+
+    <header class="hero-section">
+</html>

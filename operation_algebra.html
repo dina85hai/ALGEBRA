@@ -1,0 +1,2917 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Simplifikasi Ungkapan Algebra - Pembelajaran Interaktif dengan Chef Amin">
+    <title>Simplifikasi Ungkapan Algebra | Pembelajaran Interaktif CVSA</title>
+    
+    <style>
+        /* ========================================
+           DESIGN SYSTEM & CSS VARIABLES
+           ======================================== */
+        :root {
+            /* Brand Colors */
+            --primary: #3b82f6;
+            --secondary: #8b5cf6;
+            
+            /* Semantic Colors */
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            --info: #06b6d4;
+            
+            /* Educational Colors (CVSA) */
+            --concrete-color: #fb923c;
+            --visual-color: #a78bfa;
+            --symbolic-color: #3b82f6;
+            --abstract-color: #10b981;
+            
+            /* Formula Component Colors */
+            --variable-x: #3b82f6;      /* Blue for x terms */
+            --variable-y: #10b981;      /* Green for y terms */
+            --variable-other: #f59e0b;  /* Orange for other variables */
+            --coefficient: #ef4444;     /* Red for coefficients */
+            --constant: #8b5cf6;        /* Purple for constants */
+            
+            /* Backgrounds */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-tertiary: #f3f4f6;
+            --bg-hero: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            
+            /* Text */
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-tertiary: #9ca3af;
+            
+            /* Borders */
+            --border-light: #e5e7eb;
+            --border-medium: #d1d5db;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            
+            /* Animations */
+            --transition-fast: 150ms ease;
+            --transition-normal: 300ms ease;
+            --transition-slow: 500ms ease;
+            
+            /* Typography */
+            --text-xs: 0.75rem;
+            --text-sm: 0.875rem;
+            --text-base: 1rem;
+            --text-lg: 1.125rem;
+            --text-xl: 1.25rem;
+            --text-2xl: 1.5rem;
+            --text-3xl: 1.875rem;
+            --text-4xl: 2.25rem;
+        }
+        
+        /* ========================================
+           BASE STYLES
+           ======================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        /* ========================================
+           SECTION 1: HERO HEADER
+           ======================================== */
+        .hero-section {
+            background: var(--bg-hero);
+            color: white;
+            padding: 3rem 1rem;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 2rem;
+        }
+        
+        .hero-section h1 {
+            font-size: var(--text-4xl);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .tagline {
+            font-size: var(--text-xl);
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+        
+        .learning-objectives {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            display: inline-block;
+            text-align: left;
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+        
+        .learning-objectives div {
+            margin: 0.5rem 0;
+            font-size: var(--text-lg);
+        }
+        
+        .progress-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.2);
+            border-radius: 999px;
+            padding: 0.5rem;
+        }
+        
+        .progress-bar-wrapper {
+            background: rgba(255,255,255,0.3);
+            border-radius: 999px;
+            height: 24px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #06b6d4);
+            border-radius: 999px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+        
+        .progress-text {
+            text-align: center;
+            margin-top: 0.5rem;
+            font-size: var(--text-sm);
+        }
+        
+        /* ========================================
+           CONTENT SECTIONS
+           ======================================== */
+        .section {
+            background: var(--bg-primary);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-light);
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid var(--border-light);
+        }
+        
+        .section-icon {
+            font-size: 2.5rem;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
+        }
+        
+        .section-header h2 {
+            font-size: var(--text-3xl);
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .section-subtitle {
+            font-size: var(--text-lg);
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+        
+        /* ========================================
+           SECTION 2: CONCRETE STAGE (MISI)
+           ======================================== */
+        .mission-card {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 1rem;
+            padding: 2rem;
+            border: 3px solid #f59e0b;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .mission-card::before {
+            content: '🌟';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 8rem;
+            opacity: 0.1;
+        }
+        
+        .mission-title {
+            font-size: var(--text-2xl);
+            font-weight: 700;
+            color: #92400e;
+            margin-bottom: 1rem;
+        }
+        
+        .character-story {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .character-image {
+            flex: 0 0 200px;
+            text-align: center;
+        }
+        
+        .character-image .emoji {
+            font-size: 8rem;
+            display: block;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .story-text {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .story-text p {
+            font-size: var(--text-lg);
+            color: #78350f;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: var(--text-lg);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            border: none;
+            outline: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        .real-world-examples {
+            background: rgba(255,255,255,0.7);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .real-world-examples h3 {
+            color: #92400e;
+            margin-bottom: 1rem;
+            font-size: var(--text-xl);
+        }
+        
+        .real-world-examples ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .real-world-examples li {
+            padding: 0.5rem 0;
+            padding-left: 2rem;
+            position: relative;
+            color: #78350f;
+        }
+        
+        .real-world-examples li::before {
+            content: '✨';
+            position: absolute;
+            left: 0;
+        }
+        
+        /* ========================================
+           SECTION 3: VISUAL STAGE
+           ======================================== */
+        .visual-demo {
+            background: var(--bg-tertiary);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin: 1.5rem 0;
+        }
+        
+        .cvs-bridge {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .cvs-stage {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 2px solid var(--border-light);
+            transition: all var(--transition-normal);
+        }
+        
+        .cvs-stage:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .cvs-stage h4 {
+            margin-bottom: 1rem;
+            font-size: var(--text-lg);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .stage-concrete { border-color: var(--concrete-color); }
+        .stage-visual { border-color: var(--visual-color); }
+        .stage-symbolic { border-color: var(--symbolic-color); }
+        
+        .visual-canvas {
+            border: 2px dashed var(--border-medium);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            min-height: 200px;
+            background: white;
+            margin: 1rem 0;
+        }
+        
+        .term-group {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 2rem;
+            font-size: var(--text-xl);
+            font-weight: 600;
+            margin: 0.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-normal);
+        }
+        
+        .term-group:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .term-x { background: #dbeafe; color: #1e40af; border: 2px solid var(--variable-x); }
+        .term-y { background: #d1fae5; color: #065f46; border: 2px solid var(--variable-y); }
+        .term-other { background: #fed7aa; color: #9a3412; border: 2px solid var(--variable-other); }
+        .term-constant { background: #e9d5ff; color: #6b21a8; border: 2px solid var(--constant); }
+        
+        .animation-controls {
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+        
+        .step-btn {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 2px solid var(--border-medium);
+            padding: 0.5rem 1.5rem;
+            margin: 0.25rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        
+        .step-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .step-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        /* ========================================
+           SECTION 4: FORMULA DISPLAY
+           ======================================== */
+        .formula-card {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-radius: 1rem;
+            padding: 2rem;
+            border: 3px solid var(--symbolic-color);
+            margin: 2rem 0;
+            text-align: center;
+        }
+        
+        .formula-title {
+            font-size: var(--text-2xl);
+            color: var(--symbolic-color);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+        
+        .formula-display {
+            font-size: var(--text-3xl);
+            font-weight: 600;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: var(--shadow-md);
+            font-family: 'Times New Roman', serif;
+        }
+        
+        .formula-legend {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+            text-align: left;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .legend-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 0.25rem;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .formula-tips {
+            background: rgba(255,255,255,0.7);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            text-align: left;
+        }
+        
+        .formula-tips h4 {
+            color: var(--symbolic-color);
+            margin-bottom: 1rem;
+            font-size: var(--text-xl);
+        }
+        
+        .tip-item {
+            margin: 0.75rem 0;
+            padding-left: 2rem;
+            position: relative;
+        }
+        
+        .tip-item::before {
+            content: '💡';
+            position: absolute;
+            left: 0;
+        }
+        
+        .warning-box {
+            background: #fee2e2;
+            border-left: 4px solid var(--error);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+        }
+        
+        .warning-box strong {
+            color: var(--error);
+        }
+        
+        /* ========================================
+           SECTION 5: WORKED EXAMPLES
+           ======================================== */
+        .example-grid {
+            display: grid;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .example-card {
+            background: var(--bg-tertiary);
+            border-radius: 1rem;
+            padding: 2rem;
+            border: 2px solid var(--border-light);
+        }
+        
+        .example-header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            margin: -2rem -2rem 1.5rem -2rem;
+            font-weight: 600;
+            font-size: var(--text-lg);
+        }
+        
+        .example-steps {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .step-item {
+            margin: 1.5rem 0;
+            padding: 1rem;
+            border-left: 4px solid var(--primary);
+            background: var(--bg-secondary);
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        
+        .step-label {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: var(--text-lg);
+        }
+        
+        .step-content {
+            font-size: var(--text-xl);
+            font-family: 'Times New Roman', serif;
+            margin: 0.5rem 0;
+        }
+        
+        .step-explanation {
+            color: var(--text-secondary);
+            font-size: var(--text-sm);
+            font-style: italic;
+            margin-top: 0.5rem;
+        }
+        
+        .final-answer {
+            background: #d1fae5;
+            border: 3px solid var(--success);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+        
+        .final-answer strong {
+            color: var(--success);
+            font-size: var(--text-xl);
+        }
+        
+        .final-answer .answer {
+            font-size: var(--text-3xl);
+            font-weight: 700;
+            color: var(--text-primary);
+            font-family: 'Times New Roman', serif;
+            margin: 0.5rem 0;
+        }
+        
+        /* ========================================
+           SECTION 6: INTERACTIVE PRACTICE
+           ======================================== */
+        .practice-container {
+            background: var(--bg-tertiary);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .difficulty-selector {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .difficulty-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            border: 2px solid var(--border-medium);
+            background: white;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            font-weight: 600;
+        }
+        
+        .difficulty-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .difficulty-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .problem-display {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .problem-number {
+            background: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            display: inline-block;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        .problem-text {
+            font-size: var(--text-2xl);
+            font-weight: 600;
+            margin: 1.5rem 0;
+            text-align: center;
+            font-family: 'Times New Roman', serif;
+        }
+        
+        .step-solver {
+            margin: 2rem 0;
+        }
+        
+        .solver-step {
+            background: var(--bg-secondary);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border: 2px solid var(--border-light);
+            transition: all var(--transition-normal);
+        }
+        
+        .solver-step.locked {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        
+        .solver-step.completed {
+            border-color: var(--success);
+            background: #f0fdf4;
+        }
+        
+        .step-instruction {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: var(--text-lg);
+        }
+        
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .input-field {
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-medium);
+            border-radius: 0.5rem;
+            font-size: var(--text-xl);
+            text-align: center;
+            transition: all var(--transition-fast);
+            width: 150px;
+            font-family: 'Times New Roman', serif;
+            font-weight: 600;
+        }
+        
+        .input-field:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            outline: none;
+        }
+        
+        .input-field.correct {
+            border-color: var(--success);
+            background: #f0fdf4;
+        }
+        
+        .input-field.incorrect {
+            border-color: var(--error);
+            background: #fef2f2;
+            animation: shake 0.3s ease;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        .btn-check {
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: var(--text-lg);
+            transition: all var(--transition-normal);
+        }
+        
+        .btn-check:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-check:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .feedback-box {
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(-10px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+        
+        .feedback-success {
+            background: #dcfce7;
+            border-left: 4px solid var(--success);
+            color: #166534;
+        }
+        
+        .feedback-error {
+            background: #fee2e2;
+            border-left: 4px solid var(--error);
+            color: #991b1b;
+        }
+        
+        .feedback-hint {
+            background: #fef3c7;
+            border-left: 4px solid var(--warning);
+            color: #92400e;
+        }
+        
+        .hint-system {
+            margin: 1.5rem 0;
+        }
+        
+        .hint-buttons {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .btn-hint {
+            background: var(--warning);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all var(--transition-normal);
+        }
+        
+        .btn-hint:hover {
+            background: #d97706;
+            transform: translateY(-2px);
+        }
+        
+        .btn-hint:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 2px solid var(--border-medium);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--border-medium);
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #059669;
+        }
+        
+        .stats-display {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background: var(--bg-secondary);
+        }
+        
+        .stat-value {
+            font-size: var(--text-3xl);
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .stat-label {
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+        
+        /* ========================================
+           SECTION 7: REFERENCE CARD
+           ======================================== */
+        .reference-card {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            border-radius: 1rem;
+            padding: 2rem;
+            border: 2px solid var(--border-medium);
+        }
+        
+        .reference-grid {
+            display: grid;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .reference-item {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 1rem 1.5rem;
+            border-left: 4px solid var(--primary);
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+        }
+        
+        .reference-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .reference-content strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+        
+        /* ========================================
+           SECTION 8: COMMON MISTAKES
+           ======================================== */
+        .mistakes-grid {
+            display: grid;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .mistake-card {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            border: 2px solid var(--border-light);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .mistake-wrong {
+            background: #fee2e2;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid var(--error);
+            margin: 1rem 0;
+        }
+        
+        .mistake-wrong strong {
+            color: var(--error);
+        }
+        
+        .mistake-explanation {
+            color: var(--text-secondary);
+            margin: 1rem 0;
+            font-style: italic;
+        }
+        
+        .mistake-correct {
+            background: #dcfce7;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid var(--success);
+            margin: 1rem 0;
+        }
+        
+        .mistake-correct strong {
+            color: var(--success);
+        }
+        
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .tip-card {
+            background: #fef3c7;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            border: 2px solid var(--warning);
+        }
+        
+        .tip-card h4 {
+            color: var(--warning);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* ========================================
+           SECTION 9: FINAL CHALLENGE
+           ======================================== */
+        .challenge-section {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 1rem;
+            padding: 2rem;
+            border: 3px solid var(--warning);
+        }
+        
+        .challenge-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .challenge-header h3 {
+            font-size: var(--text-3xl);
+            color: var(--warning);
+            margin-bottom: 0.5rem;
+        }
+        
+        .creative-challenges {
+            display: grid;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .challenge-card {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .challenge-card h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: var(--text-xl);
+        }
+        
+        .canvas-area {
+            border: 2px dashed var(--border-medium);
+            border-radius: 0.5rem;
+            min-height: 200px;
+            background: var(--bg-secondary);
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 1rem;
+            border: 2px solid var(--border-medium);
+            border-radius: 0.5rem;
+            font-family: inherit;
+            font-size: var(--text-base);
+            resize: vertical;
+        }
+        
+        textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .achievement-display {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+        
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 1.5rem 0;
+        }
+        
+        .badge {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .badge.locked {
+            background: var(--bg-tertiary);
+            color: var(--text-tertiary);
+            opacity: 0.5;
+        }
+        
+        /* ========================================
+           CONFETTI ANIMATION
+           ======================================== */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #f59e0b;
+            position: fixed;
+            animation: confetti-fall 3s linear;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* ========================================
+           RESPONSIVE DESIGN
+           ======================================== */
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: var(--text-3xl);
+            }
+            
+            .tagline {
+                font-size: var(--text-lg);
+            }
+            
+            .section {
+                padding: 1.5rem;
+            }
+            
+            .section-header h2 {
+                font-size: var(--text-2xl);
+            }
+            
+            .character-story {
+                flex-direction: column;
+            }
+            
+            .character-image .emoji {
+                font-size: 5rem;
+            }
+            
+            .cvs-bridge {
+                grid-template-columns: 1fr;
+            }
+            
+            .formula-display {
+                font-size: var(--text-2xl);
+            }
+            
+            .problem-text {
+                font-size: var(--text-xl);
+            }
+            
+            .btn {
+                padding: 0.75rem 1.5rem;
+                font-size: var(--text-base);
+            }
+            
+            .stats-display {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        /* ========================================
+           PRINT STYLES
+           ======================================== */
+        @media print {
+            .btn, .action-buttons, .animation-controls {
+                display: none;
+            }
+            
+            .section {
+                page-break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #000;
+            }
+            
+            body {
+                background: white;
+            }
+        }
+        
+        /* ========================================
+           ACCESSIBILITY
+           ======================================== */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+        
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            :root {
+                --primary: #0066cc;
+                --success: #008800;
+                --error: #cc0000;
+                --text-primary: #000000;
+            }
+        }
+        
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
+        /* Focus visible for keyboard navigation */
+        *:focus-visible {
+            outline: 3px solid var(--primary);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <!-- ========================================
+         SECTION 1: HERO HEADER
+         ======================================== -->
+    <header class="hero-section">
+        <h1>🎯 Simplifikasi Ungkapan Algebra</h1>
+        <p class="tagline">Jadi Pakar Algebra dengan Chef Amin!</p>
+        
+        <div class="learning-objectives">
+            <div>✅ Kenal pasti sebutan yang serupa (like terms)</div>
+            <div>✅ Gabungkan sebutan dengan betul</div>
+            <div>✅ Simplify ungkapan algebra dengan yakin</div>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar-wrapper">
+                <div class="progress-bar" id="mainProgress"></div>
+            </div>
+            <div class="progress-text">
+                Step <span id="currentStep">0</span> of <span id="totalSteps">9</span>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <!-- ========================================
+             SECTION 2: MISI & CERITA (Concrete)
+             ======================================== -->
+        <section class="section" id="section-mission">
+            <div class="section-header">
+                <span class="section-icon">🌟</span>
+                <h2>Misi Chef Amin</h2>
+            </div>
+            
+            <div class="mission-card">
+                <h3 class="mission-title">🍴 MISI: Tolong Chef Amin Susun Dapur!</h3>
+                
+                <div class="character-story">
+                    <div class="character-image">
+                        <span class="emoji">👨‍🍳</span>
+                        <div style="font-weight: 600; color: #92400e;">Chef Amin</div>
+                    </div>
+                    
+                    <div class="story-text">
+                        <p><strong>Chef Amin</strong> ada satu masalah besar! Restoran barunya, "Restoran Algebra", akan dibuka esok. Tetapi dapurnya sangat berselerak!</p>
+                        
+                        <p>Di meja ada <strong>3 epal</strong>, kemudian <strong>5 oren</strong>, lepas tu <strong>2 epal</strong> lagi, dan <strong>3 oren</strong> lagi!</p>
+                        
+                        <p>"Macam mana nak kira semua ni?" Chef Amin keliru. "Kalau saya tak susun betul-betul, nanti pekerja keliru!"</p>
+                        
+                        <p><strong>Anda kena tolong Chef Amin susun semua bahan mengikut jenis!</strong></p>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" onclick="showConcretDemo()">
+                    <span>🎬</span> Tunjuk Saya Macam Mana!
+                </button>
+                
+                <div class="real-world-examples">
+                    <h3>💡 Kenapa Ini Penting?</h3>
+                    <ul>
+                        <li><strong>Shopping:</strong> "Saya beli 3 baju + 2 seluar + 5 baju = ? baju dan ? seluar"</li>
+                        <li><strong>Duit poket:</strong> "RM10 + RM5 - RM3 + RM8 = ?"</li>
+                        <li><strong>Masa:</strong> "2 jam + 30 minit + 1 jam + 15 minit = ?"</li>
+                        <li><strong>Algebra:</strong> "3x + 5y + 2x + 3y = ?"</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ========================================
+             SECTION 3: KONSEP VISUAL (Visual Stage)
+             ======================================== -->
+        <section class="section" id="section-visual">
+            <div class="section-header">
+                <span class="section-icon">🎨</span>
+                <h2>Lihat & Faham</h2>
+            </div>
+            
+            <p class="section-subtitle">Mari kita lihat bagaimana Chef Amin susun bahan-bahannya!</p>
+            
+            <div class="visual-demo">
+                <div class="animation-controls">
+                    <button class="step-btn" onclick="showVisualStep(1)">Langkah 1: Asal</button>
+                    <button class="step-btn" onclick="showVisualStep(2)">Langkah 2: Kumpul</button>
+                    <button class="step-btn" onclick="showVisualStep(3)">Langkah 3: Kira</button>
+                    <button class="step-btn" onclick="showVisualStep(4)">Langkah 4: Jawapan</button>
+                </div>
+                
+                <div class="visual-canvas" id="visualCanvas">
+                    <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                        Klik butang di atas untuk mula!
+                    </div>
+                </div>
+            </div>
+            
+            <div class="cvs-bridge">
+                <div class="cvs-stage stage-concrete">
+                    <h4>
+                        <span style="color: var(--concrete-color);">🍎</span>
+                        CONCRETE (Nyata)
+                    </h4>
+                    <p>3 epal + 2 epal = 5 epal</p>
+                    <p>5 oren + 3 oren = 8 oren</p>
+                    <p style="margin-top: 1rem; font-size: var(--text-sm); color: var(--text-secondary);">
+                        Kita kumpul yang sama jenis sahaja!
+                    </p>
+                </div>
+                
+                <div class="cvs-stage stage-visual">
+                    <h4>
+                        <span style="color: var(--visual-color);">👁️</span>
+                        VISUAL (Gambar)
+                    </h4>
+                    <div style="margin: 1rem 0;">
+                        <span class="term-x">3x</span>
+                        <span class="term-y">5y</span>
+                        <span class="term-x">2x</span>
+                        <span class="term-y">3y</span>
+                    </div>
+                    <div style="margin: 1rem 0;">
+                        ↓ Kumpulkan ↓
+                    </div>
+                    <div>
+                        <span class="term-x">5x</span>
+                        <span class="term-y">8y</span>
+                    </div>
+                </div>
+                
+                <div class="cvs-stage stage-symbolic">
+                    <h4>
+                        <span style="color: var(--symbolic-color);">📐</span>
+                        SYMBOLIC (Simbolik)
+                    </h4>
+                    <div style="font-family: 'Times New Roman', serif; font-size: var(--text-xl); margin: 1rem 0;">
+                        3<span style="color: var(--variable-x);">x</span> + 5<span style="color: var(--variable-y);">y</span> + 2<span style="color: var(--variable-x);">x</span> + 3<span style="color: var(--variable-y);">y</span>
+                    </div>
+                    <div style="margin: 0.5rem 0;">= (3<span style="color: var(--variable-x);">x</span> + 2<span style="color: var(--variable-x);">x</span>) + (5<span style="color: var(--variable-y);">y</span> + 3<span style="color: var(--variable-y);">y</span>)</div>
+                    <div style="font-weight: 600;">= 5<span style="color: var(--variable-x);">x</span> + 8<span style="color: var(--variable-y);">y</span></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ========================================
+             SECTION 4: FORMULA & RULES
+             ======================================== -->
+        <section class="section" id="section-formula">
+            <div class="section-header">
+                <span class="section-icon">📐</span>
+                <h2>Formula & Peraturan</h2>
+            </div>
+            
+            <div class="formula-card">
+                <div class="formula-title">📋 PERATURAN UTAMA</div>
+                
+                <div class="formula-display">
+                    <div style="margin: 1rem 0;">
+                        <span style="color: var(--coefficient);">a</span><span style="color: var(--variable-x);">x</span> + 
+                        <span style="color: var(--coefficient);">b</span><span style="color: var(--variable-x);">x</span> = 
+                        <span style="color: var(--coefficient);">(a + b)</span><span style="color: var(--variable-x);">x</span>
+                    </div>
+                </div>
+                
+                <div class="formula-legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: var(--coefficient);"></div>
+                        <div>
+                            <strong>Pekali (Coefficient)</strong>
+                            <div style="font-size: var(--text-sm); color: var(--text-secondary);">
+                                Nombor di depan pembolehubah
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: var(--variable-x);"></div>
+                        <div>
+                            <strong>Pembolehubah (Variable)</strong>
+                            <div style="font-size: var(--text-sm); color: var(--text-secondary);">
+                                Huruf seperti x, y, a, b
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: var(--constant);"></div>
+                        <div>
+                            <strong>Pemalar (Constant)</strong>
+                            <div style="font-size: var(--text-sm); color: var(--text-secondary);">
+                                Nombor tanpa pembolehubah
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="formula-tips">
+                    <h4>💡 Tips Penting</h4>
+                    <div class="tip-item">
+                        <strong>Sebutan Serupa (Like Terms)</strong> = Pembolehubah yang SAMA
+                        <div style="margin-top: 0.5rem; font-family: 'Times New Roman', serif;">
+                            Contoh: 3x, 5x, -2x (semua ada x)
+                        </div>
+                    </div>
+                    
+                    <div class="tip-item">
+                        <strong>Sebutan Tak Serupa (Unlike Terms)</strong> = Pembolehubah BERBEZA
+                        <div style="margin-top: 0.5rem; font-family: 'Times New Roman', serif;">
+                            Contoh: 3x dan 5y (x dan y berbeza!)
+                        </div>
+                    </div>
+                    
+                    <div class="tip-item">
+                        <strong>Kumpulkan sahaja</strong> yang serupa, jangan gabung yang berbeza!
+                    </div>
+                </div>
+                
+                <div class="warning-box">
+                    <strong>⚠️ JANGAN BUAT INI!</strong>
+                    <div style="margin-top: 0.5rem;">
+                        ❌ 3x + 5y ≠ 8xy (Tidak boleh gabung x dengan y!)
+                    </div>
+                    <div style="margin-top: 0.5rem;">
+                        ✅ 3x + 5y = 3x + 5y (Biarkan sahaja jika tak serupa)
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ========================================
+             SECTION 5: WORKED EXAMPLES
+             ======================================== -->
+        <section class="section" id="section-examples">
+            <div class="section-header">
+                <span class="section-icon">📝</span>
+                <h2>Tunjuk Cara (Saya Buat, Awak Perhatikan)</h2>
+            </div>
+            
+            <div class="example-grid">
+                <!-- Example 1 -->
+                <div class="example-card">
+                    <div class="example-header">
+                        📚 Contoh 1: Satu Pembolehubah (Mudah)
+                    </div>
+                    
+                    <div style="text-align: center; font-size: var(--text-2xl); font-weight: 600; margin: 1rem 0; font-family: 'Times New Roman', serif;">
+                        Simplify: 3x + 8y - 2x
+                    </div>
+                    
+                    <div class="example-steps">
+                        <div class="step-item">
+                            <div class="step-label">Langkah 1: Kenal pasti sebutan serupa</div>
+                            <div class="step-content">
+                                <span style="background: #dbeafe; padding: 0.25rem 0.5rem; border-radius: 0.25rem;">3x</span> + 
+                                <span style="background: #d1fae5; padding: 0.25rem 0.5rem; border-radius: 0.25rem;">8y</span> - 
+                                <span style="background: #dbeafe; padding: 0.25rem 0.5rem; border-radius: 0.25rem;">2x</span>
+                            </div>
+                            <div class="step-explanation">
+                                3x dan -2x adalah sebutan serupa (sama-sama ada x)
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-label">Langkah 2: Kumpulkan sebutan serupa</div>
+                            <div class="step-content">
+                                = (3x - 2x) + 8y
+                            </div>
+                            <div class="step-explanation">
+                                Letak sebutan x bersama dalam kurungan
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-label">Langkah 3: Kira sebutan serupa</div>
+                            <div class="step-content">
+                                = (3 - 2)x + 8y
+                            </div>
+                            <div class="step-explanation">
+                                Tolak pekali: 3 - 2 = 1
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-label">Langkah 4: Tulis jawapan akhir</div>
+                            <div class="step-content">
+                                = 1x + 8y = x + 8y
+                            </div>
+                            <div class="step-explanation">
+                                1x boleh ditulis sebagai x sahaja
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="final-answer">
+                        <strong>✅ JAWAPAN AKHIR:</strong>
+                        <div class="answer">x + 8y</div>
+                    </div>
+                </div>
+                
+                <!-- Example 2 -->
+                <div class="example-card">
+                    <div class="example-header">
+                        📚 Contoh 2: Darab Pembolehubah
+                    </div>
+                    
+                    <div style="text-align: center; font-size: var(--text-2xl); font-weight: 600; margin: 1rem 0; font-family: 'Times New Roman', serif;">
+                        Simplify: a × 3b
+                    </div>
+                    
+                    <div class="example-steps">
+                        <div class="step-item">
+                            <div class="step-label">Langkah 1: Tulis semula tanpa tanda ×</div>
+                            <div class="step-content">
+                                a × 3b = a · 3 · b
+                            </div>
+                            <div class="step-explanation">
+                                Dalam algebra, × boleh diganti dengan ·
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-label">Langkah 2: Susun nombor dahulu, kemudian huruf</div>
+                            <div class="step-content">
+                                = 3 · a · b
+                            </div>
+                            <div class="step-explanation">
+                                Nombor (pekali) biasanya di depan
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-label">Langkah 3: Tulis dalam bentuk standard</div>
+                            <div class="step-content">
+                                = 3ab
+                            </div>
+                            <div class="step-explanation">
+                                Tak perlu tulis tanda darab antara huruf
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="final-answer">
+                        <strong>✅ JAWAPAN AKHIR:</strong>
+                        <div class="answer">3ab</div>
+                    </div>
+                </div>
+                
+                <!-- Example 3 -->
+                <div class="example-card">
+                    <div class="example-header">
+                        📚 Contoh 3: Subscript Variables
+                    </div>
+                    
+                    <div style="text-align: center; font-size: var(--text-2xl); font-weight: 600; margin: 1rem 0; font-family: 'Times New Roman', serif;">
+                        Simplify: 7V₁ - 4V₁
+                    </div>
+                    
+                    <div class="example-steps">
+                        <div class="step-item">
+                            <div class="step-label">Langkah 1: Kenal pasti sebutan serupa</div>
+                            <div class="step-content">
+                                7V₁ dan 4V₁
+                            </div>
+                            <div class="step-explanation">
+                                Kedua-dua sebutan ada V₁ (subscript 1 sama!)
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-label">Langkah 2: Tolak pekali</div>
+                            <div class="step-content">
+                                = (7 - 4)V₁
+                            </div>
+                            <div class="step-explanation">
+                                7 - 4 = 3
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-label">Langkah 3: Tulis jawapan</div>
+                            <div class="step-content">
+                                = 3V₁
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="final-answer">
+                        <strong>✅ JAWAPAN AKHIR:</strong>
+                        <div class="answer">3V₁</div>
+                    </div>
+                </div>
+                
+                <!-- Example 4 -->
+                <div class="example-card">
+                    <div class="example-header">
+                        📚 Contoh 4: Dua Pembolehubah Berbeza
+                    </div>
+                    
+                    <div style="text-align: center; font-size: var(--text-2xl); font-weight: 600; margin: 1rem 0; font-family: 'Times New Roman', serif;">
+                        Simplify: 2R + 4R - 3I - 4I
+                    </div>
+                    
+                    <div class="example-steps">
+                        <div class="step-item">
+                            <div class="step-label">Langkah 1: Kenal pasti & warna kodkan</div>
+                            <div class="step-content">
+                                <span style="background: #dbeafe; padding: 0.25rem 0.5rem; border-radius: 0.25rem;">2R</span> + 
+                                <span style="background: #dbeafe; padding: 0.25rem 0.5rem; border-radius: 0.25rem;">4R</span> - 
+                                <span style="background: #d1fae5; padding: 0.25rem 0.5rem; border-radius: 0.25rem;">3I</span> - 
+                                <span style="background: #d1fae5; padding: 0.25rem 0.5rem; border-radius: 0.25rem;">4I</span>
+                            </div>
+                            <div class="step-explanation">
+                                Sebutan R berwarna biru, sebutan I berwarna hijau
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-label">Langkah 2: Kumpulkan mengikut jenis</div>
+                            <div class="step-content">
+                                = (2R + 4R) + (-3I - 4I)
+                            </div>
+                            <div class="step-explanation">
+                                R bersama R, I bersama I
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-label">Langkah 3: Kira setiap kumpulan</div>
+                            <div class="step-content">
+                                = (2 + 4)R + (-3 - 4)I
+                            </div>
+                            <div class="step-explanation">
+                                2 + 4 = 6, dan -3 - 4 = -7
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-label">Langkah 4: Tulis jawapan akhir</div>
+                            <div class="step-content">
+                                = 6R - 7I
+                            </div>
+                            <div class="step-explanation">
+                                Tulis pembolehubah mengikut abjad
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="final-answer">
+                        <strong>✅ JAWAPAN AKHIR:</strong>
+                        <div class="answer">6R - 7I</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ========================================
+             SECTION 6: INTERACTIVE PRACTICE
+             ======================================== -->
+        <section class="section" id="section-practice">
+            <div class="section-header">
+                <span class="section-icon">🎮</span>
+                <h2>Cuba Sendiri!</h2>
+            </div>
+            
+            <p class="section-subtitle">Sekarang giliran anda! Selesaikan soalan langkah demi langkah.</p>
+            
+            <div class="practice-container">
+                <div class="difficulty-selector">
+                    <button class="difficulty-btn active" onclick="setDifficulty('mudah')">
+                        😊 Mudah
+                    </button>
+                    <button class="difficulty-btn" onclick="setDifficulty('sederhana')">
+                        🤔 Sederhana
+                    </button>
+                    <button class="difficulty-btn" onclick="setDifficulty('susah')">
+                        🔥 Susah
+                    </button>
+                </div>
+                
+                <div class="problem-display">
+                    <div class="problem-number">Soalan <span id="problemNumber">1</span></div>
+                    <div class="problem-text" id="problemText">Klik butang di bawah untuk mula!</div>
+                    
+                    <div id="stepSolver" style="display: none;">
+                        <!-- Steps will be dynamically generated -->
+                    </div>
+                    
+                    <div id="feedbackArea"></div>
+                    
+                    <div class="hint-system" id="hintSystem" style="display: none;">
+                        <div class="hint-buttons">
+                            <button class="btn-hint" onclick="showHint(1)" id="hint1Btn">
+                                💡 Petunjuk 1
+                            </button>
+                            <button class="btn-hint" onclick="showHint(2)" id="hint2Btn" disabled>
+                                💡 Petunjuk 2
+                            </button>
+                            <button class="btn-hint" onclick="showHint(3)" id="hint3Btn" disabled>
+                                💡 Petunjuk 3
+                            </button>
+                        </div>
+                        <div id="hintDisplay"></div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="generateNewProblem()">
+                        🆕 Soalan Baru
+                    </button>
+                    <button class="btn btn-secondary" onclick="resetProblem()">
+                        🔄 Reset
+                    </button>
+                </div>
+                
+                <div class="stats-display">
+                    <div class="stat-item">
+                        <div class="stat-value" id="problemsSolved">0</div>
+                        <div class="stat-label">Soalan Selesai</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="correctAnswers">0</div>
+                        <div class="stat-label">Betul</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="hintsUsed">0</div>
+                        <div class="stat-label">Petunjuk Digunakan</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="successRate">0%</div>
+                        <div class="stat-label">Kadar Kejayaan</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ========================================
+             SECTION 7: REFERENCE CARD
+             ======================================== -->
+        <section class="section" id="section-reference">
+            <div class="section-header">
+                <span class="section-icon">📋</span>
+                <h2>Carta Rujukan Pantas</h2>
+            </div>
+            
+            <div class="reference-card">
+                <div class="reference-grid">
+                    <div class="reference-item">
+                        <div class="reference-icon">🔹</div>
+                        <div class="reference-content">
+                            <strong>Formula Utama:</strong>
+                            ax + bx = (a + b)x
+                        </div>
+                    </div>
+                    
+                    <div class="reference-item">
+                        <div class="reference-icon">🔹</div>
+                        <div class="reference-content">
+                            <strong>Bila Guna:</strong>
+                            Bila ada sebutan dengan pembolehubah yang SAMA
+                        </div>
+                    </div>
+                    
+                    <div class="reference-item">
+                        <div class="reference-icon">🔹</div>
+                        <div class="reference-content">
+                            <strong>Langkah-langkah:</strong>
+                            1) Kenal pasti sebutan serupa
+                            2) Kumpulkan bersama
+                            3) Tambah/tolak pekali
+                            4) Tulis jawapan
+                        </div>
+                    </div>
+                    
+                    <div class="reference-item">
+                        <div class="reference-icon">🔹</div>
+                        <div class="reference-content">
+                            <strong>Kes Khas:</strong>
+                            • 1x = x (pekali 1 tak perlu tulis)
+                            • -1x = -x (pekali -1 tulis tanda - sahaja)
+                            • 0x = 0 (hilang terus)
+                        </div>
+                    </div>
+                    
+                    <div class="reference-item">
+                        <div class="reference-icon">⚠️</div>
+                        <div class="reference-content">
+                            <strong>JANGAN:</strong>
+                            Gabungkan x dengan y (berbeza pembolehubah!)
+                        </div>
+                    </div>
+                    
+                    <div class="reference-item">
+                        <div class="reference-icon">✅</div>
+                        <div class="reference-content">
+                            <strong>Semak Kerja:</strong>
+                            Pastikan semua sebutan serupa sudah digabung
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ========================================
+             SECTION 8: COMMON MISTAKES
+             ======================================== -->
+        <section class="section" id="section-mistakes">
+            <div class="section-header">
+                <span class="section-icon">⚠️</span>
+                <h2>Kesilapan Biasa & Tips</h2>
+            </div>
+            
+            <div class="mistakes-grid">
+                <div class="mistake-card">
+                    <h3 style="color: var(--error); margin-bottom: 1rem;">❌ KESILAPAN 1: Gabung Yang Berbeza</h3>
+                    
+                    <div class="mistake-wrong">
+                        <strong>SALAH:</strong>
+                        <div style="font-size: var(--text-xl); margin-top: 0.5rem;">
+                            3x + 5y = 8xy
+                        </div>
+                    </div>
+                    
+                    <div class="mistake-explanation">
+                        <strong>Sebab Salah:</strong> x dan y adalah pembolehubah berbeza! Tak boleh gabung macam ni. Ini seperti kata "3 epal + 5 oren = 8 epal-oren" - tak masuk akal!
+                    </div>
+                    
+                    <div class="mistake-correct">
+                        <strong>BETUL:</strong>
+                        <div style="font-size: var(--text-xl); margin-top: 0.5rem;">
+                            3x + 5y = 3x + 5y
+                        </div>
+                        <div style="font-size: var(--text-sm); margin-top: 0.5rem;">
+                            Biarkan sahaja jika pembolehubah berbeza!
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mistake-card">
+                    <h3 style="color: var(--error); margin-bottom: 1rem;">❌ KESILAPAN 2: Lupa Tanda</h3>
+                    
+                    <div class="mistake-wrong">
+                        <strong>SALAH:</strong>
+                        <div style="font-size: var(--text-xl); margin-top: 0.5rem;">
+                            5x - 3x = 8x
+                        </div>
+                    </div>
+                    
+                    <div class="mistake-explanation">
+                        <strong>Sebab Salah:</strong> Tanda - (tolak) ditukar jadi + (tambah)! Kena berhati-hati dengan tanda.
+                    </div>
+                    
+                    <div class="mistake-correct">
+                        <strong>BETUL:</strong>
+                        <div style="font-size: var(--text-xl); margin-top: 0.5rem;">
+                            5x - 3x = 2x
+                        </div>
+                        <div style="font-size: var(--text-sm); margin-top: 0.5rem;">
+                            5 - 3 = 2 (bukan 8!)
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mistake-card">
+                    <h3 style="color: var(--error); margin-bottom: 1rem;">❌ KESILAPAN 3: Lupa Pekali</h3>
+                    
+                    <div class="mistake-wrong">
+                        <strong>SALAH:</strong>
+                        <div style="font-size: var(--text-xl); margin-top: 0.5rem;">
+                            a × 3b = ab
+                        </div>
+                    </div>
+                    
+                    <div class="mistake-explanation">
+                        <strong>Sebab Salah:</strong> Pekali 3 hilang! Bila darab, pekali kena kekal.
+                    </div>
+                    
+                    <div class="mistake-correct">
+                        <strong>BETUL:</strong>
+                        <div style="font-size: var(--text-xl); margin-top: 0.5rem;">
+                            a × 3b = 3ab
+                        </div>
+                        <div style="font-size: var(--text-sm); margin-top: 0.5rem;">
+                            Jangan lupa nombor 3!
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mistake-card">
+                    <h3 style="color: var(--error); margin-bottom: 1rem;">❌ KESILAPAN 4: Keliru x² dengan 2x</h3>
+                    
+                    <div class="mistake-wrong">
+                        <strong>SALAH:</strong>
+                        <div style="font-size: var(--text-xl); margin-top: 0.5rem;">
+                            x² + x = 2x²
+                        </div>
+                    </div>
+                    
+                    <div class="mistake-explanation">
+                        <strong>Sebab Salah:</strong> x² (x kuasa dua) dan x (x sahaja) adalah BERBEZA! x² = x×x, manakala x = x
+                    </div>
+                    
+                    <div class="mistake-correct">
+                        <strong>BETUL:</strong>
+                        <div style="font-size: var(--text-xl); margin-top: 0.5rem;">
+                            x² + x = x² + x
+                        </div>
+                        <div style="font-size: var(--text-sm); margin-top: 0.5rem;">
+                            Tak boleh gabung sebab kuasa berbeza!
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h3 style="margin: 2rem 0 1rem 0; color: var(--warning);">💡 TIPS & TRICKS UNTUK JADI PAKAR!</h3>
+            
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <h4>🎨 TIP 1: Guna Warna</h4>
+                    <p>Warna kodkan setiap pembolehubah berbeza. x = biru, y = hijau. Senang nampak mana yang serupa!</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h4>🔢 TIP 2: Kumpul Dulu</h4>
+                    <p>Letak semua sebutan x dalam ( ), semua sebutan y dalam ( ) lain. Kemudian baru kira.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h4>✓ TIP 3: Semak Semula</h4>
+                    <p>Lepas siap, tanya: "Ada lagi sebutan serupa yang belum digabung?" Jika ada, gabungkan!</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h4>📝 TIP 4: Tulis Rapi</h4>
+                    <p>Susun mengikut abjad: Ax + By + Cz. Lebih mudah dibaca dan periksa.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h4>🧮 TIP 5: Ingat Pekali 1</h4>
+                    <p>x bermaksud 1x. Jadi kalau jumpa x + 2x, maksudnya 1x + 2x = 3x!</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h4>⚡ TIP 6: Praktisl!</h4>
+                    <p>Semakin banyak latihan, semakin cepat dan yakin. Jangan takut silap, dari silap kita belajar!</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ========================================
+             SECTION 9: FINAL CHALLENGE
+             ======================================== -->
+        <section class="section" id="section-challenge">
+            <div class="section-header">
+                <span class="section-icon">🏆</span>
+                <h2>Cabaran Akhir & Refleksi</h2>
+            </div>
+            
+            <div class="challenge-section">
+                <div class="challenge-header">
+                    <h3>🎖️ ANDA SUDAH JADI PAKAR ALGEBRA!</h3>
+                    <p style="color: var(--text-secondary); margin-top: 0.5rem;">
+                        Sekarang tunjukkan kemahiran anda dengan cabaran kreatif ini!
+                    </p>
+                </div>
+                
+                <div class="creative-challenges">
+                    <div class="challenge-card">
+                        <h4>🎨 Cabaran 1: Lukis Komik Algebra</h4>
+                        <p>Lukis komik 3 panel untuk terangkan "sebutan serupa" kepada adik anda yang umur 9 tahun. Gunakan contoh buah-buahan atau mainan!</p>
+                        <div class="canvas-area" id="drawingCanvas">
+                            <textarea placeholder="Tulis cerita komik anda di sini, atau lukis di kertas dan snap gambar!" rows="6"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="challenge-card">
+                        <h4>🌍 Cabaran 2: Cipta Soalan Sendiri</h4>
+                        <p>Cipta SATU soalan algebra berdasarkan situasi dalam kehidupan anda. Contoh: duit poket, koleksi kad permainan, masa belajar, dll.</p>
+                        <textarea placeholder="Contoh: Saya ada x batang pensil merah dan y batang pensil biru. Kawan saya bagi saya 3x pensil merah lagi. Berapa pensil merah saya ada sekarang?
+
+Tulis soalan anda di sini..." rows="6"></textarea>
+                    </div>
+                    
+                    <div class="challenge-card">
+                        <h4>🎤 Cabaran 3: Ajar Balik (Feynman Technique)</h4>
+                        <p>Bayangkan anda guru. Terangkan dalam 60 saat:</p>
+                        <ul style="margin: 1rem 0; padding-left: 2rem;">
+                            <li>Apa itu sebutan serupa?</li>
+                            <li>Macam mana nak simplify ungkapan algebra?</li>
+                            <li>Kenapa ia penting?</li>
+                        </ul>
+                        <textarea placeholder="Tulis penjelasan anda di sini (bayangkan anda cakap dengan kawan)..." rows="6"></textarea>
+                    </div>
+                </div>
+                
+                <div class="achievement-display">
+                    <h3 style="color: var(--primary); margin-bottom: 1rem;">📊 Statistik Pembelajaran Anda</h3>
+                    
+                    <div class="stats-display" style="margin: 2rem 0;">
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalTime">0</div>
+                            <div class="stat-label">Minit Belajar</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="finalProblems">0</div>
+                            <div class="stat-label">Soalan Dicuba</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="finalCorrect">0</div>
+                            <div class="stat-label">Jawapan Betul</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="finalRate">0%</div>
+                            <div class="stat-label">Kadar Kejayaan</div>
+                        </div>
+                    </div>
+                    
+                    <h4 style="margin: 2rem 0 1rem 0;">🎖️ Badges Yang Anda Perolehi:</h4>
+                    <div class="badges">
+                        <div class="badge" id="badge1">
+                            <span>🌟</span> Permulaan Hebat
+                        </div>
+                        <div class="badge locked" id="badge2">
+                            <span>🔒</span> Separuh Jalan (5 soalan)
+                        </div>
+                        <div class="badge locked" id="badge3">
+                            <span>🔒</span> Konsisten (10 soalan)
+                        </div>
+                        <div class="badge locked" id="badge4">
+                            <span>🔒</span> Perfeksionis (100% betul)
+                        </div>
+                        <div class="badge locked" id="badge5">
+                            <span>🔒</span> Master Algebra (20 soalan)
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 2rem;">
+                        <button class="btn btn-primary" onclick="window.print()">
+                            📥 Cetak Sijil Pencapaian
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <footer style="background: var(--bg-tertiary); padding: 2rem; text-align: center; margin-top: 3rem;">
+        <p style="color: var(--text-secondary);">
+            🎓 Modul Pembelajaran Interaktif CVSA - Simplifikasi Ungkapan Algebra
+        </p>
+        <p style="color: var(--text-tertiary); margin-top: 0.5rem; font-size: var(--text-sm);">
+            Dicipta dengan ❤️ untuk pelajar Malaysia • © 2026
+        </p>
+    </footer>
+    
+    <script>
+        /* ========================================
+           GLOBAL STATE MANAGEMENT
+           ======================================== */
+        const state = {
+            currentDifficulty: 'mudah',
+            currentProblem: null,
+            currentStep: 0,
+            totalSteps: 9,
+            attempts: 0,
+            hintsUsedThisProblem: 0,
+            
+            stats: {
+                problemsSolved: 0,
+                correctAnswers: 0,
+                totalHintsUsed: 0,
+                startTime: Date.now()
+            }
+        };
+        
+        /* ========================================
+           PROBLEM TEMPLATES
+           ======================================== */
+        const problemTemplates = {
+            mudah: [
+                {
+                    type: 'oneVariable',
+                    generate: () => {
+                        const a = getRandomInt(2, 8);
+                        const b = getRandomInt(2, 8);
+                        const var1 = 'x';
+                        return {
+                            expression: `${a}${var1} + ${b}${var1}`,
+                            steps: [
+                                {
+                                    instruction: `Kenal pasti sebutan serupa (kedua-dua ada ${var1})`,
+                                    correctAnswer: `${a}${var1}`,
+                                    hint1: `Lihat pembolehubah - kedua-duanya ${var1}`,
+                                    hint2: `Sebutan pertama ialah ${a}${var1}`,
+                                    hint3: `Cuba semak semula ungkapan asal`
+                                },
+                                {
+                                    instruction: `Tambah pekali: ${a} + ${b} = ?`,
+                                    correctAnswer: (a + b).toString(),
+                                    hint1: `Kira ${a} + ${b}`,
+                                    hint2: `Ingat, kita tambah nombor di depan ${var1}`,
+                                    hint3: `${a} + ${b} = ${a + b}`
+                                },
+                                {
+                                    instruction: `Tulis jawapan akhir (nombor + pembolehubah)`,
+                                    correctAnswer: `${a + b}${var1}`,
+                                    hint1: `Gabungkan jawapan tadi dengan pembolehubah ${var1}`,
+                                    hint2: `Format: (pekali)(pembolehubah)`,
+                                    hint3: `Jawapannya ${a + b}${var1}`
+                                }
+                            ],
+                            finalAnswer: `${a + b}${var1}`
+                        };
+                    }
+                },
+                {
+                    type: 'subtract',
+                    generate: () => {
+                        const a = getRandomInt(5, 10);
+                        const b = getRandomInt(1, 4);
+                        const var1 = randomChoice(['x', 'y', 'a', 'b']);
+                        return {
+                            expression: `${a}${var1} - ${b}${var1}`,
+                            steps: [
+                                {
+                                    instruction: `Tolak pekali: ${a} - ${b} = ?`,
+                                    correctAnswer: (a - b).toString(),
+                                    hint1: `Kira ${a} - ${b}`,
+                                    hint2: `Cuba tolak nombor sahaja dulu`,
+                                    hint3: `${a} - ${b} = ${a - b}`
+                                },
+                                {
+                                    instruction: `Tulis jawapan dengan pembolehubah ${var1}`,
+                                    correctAnswer: `${a - b}${var1}`,
+                                    hint1: `Letak jawapan tadi depan ${var1}`,
+                                    hint2: `Format: (hasil tolak)${var1}`,
+                                    hint3: `Jawapannya ${a - b}${var1}`
+                                }
+                            ],
+                            finalAnswer: `${a - b}${var1}`
+                        };
+                    }
+                }
+            ],
+            
+            sederhana: [
+                {
+                    type: 'twoVariables',
+                    generate: () => {
+                        const a = getRandomInt(2, 6);
+                        const b = getRandomInt(2, 6);
+                        const c = getRandomInt(1, 4);
+                        const d = getRandomInt(1, 4);
+                        return {
+                            expression: `${a}x + ${b}y + ${c}x + ${d}y`,
+                            steps: [
+                                {
+                                    instruction: `Kumpulkan sebutan x: ${a}x + ${c}x = ?`,
+                                    correctAnswer: `${a + c}x`,
+                                    hint1: `Tambah pekali x: ${a} + ${c}`,
+                                    hint2: `${a} + ${c} = ${a + c}`,
+                                    hint3: `Jadi ${a + c}x`
+                                },
+                                {
+                                    instruction: `Kumpulkan sebutan y: ${b}y + ${d}y = ?`,
+                                    correctAnswer: `${b + d}y`,
+                                    hint1: `Tambah pekali y: ${b} + ${d}`,
+                                    hint2: `${b} + ${d} = ${b + d}`,
+                                    hint3: `Jadi ${b + d}y`
+                                },
+                                {
+                                    instruction: `Tulis jawapan akhir (gabung kedua-duanya)`,
+                                    correctAnswer: `${a + c}x + ${b + d}y`,
+                                    hint1: `Tulis sebutan x, kemudian sebutan y`,
+                                    hint2: `Format: (x terms) + (y terms)`,
+                                    hint3: `${a + c}x + ${b + d}y`
+                                }
+                            ],
+                            finalAnswer: `${a + c}x + ${b + d}y`
+                        };
+                    }
+                },
+                {
+                    type: 'subtraction',
+                    generate: () => {
+                        const a = getRandomInt(3, 8);
+                        const b = getRandomInt(5, 10);
+                        const c = getRandomInt(1, 3);
+                        return {
+                            expression: `${a}x + ${b}y - ${c}x`,
+                            steps: [
+                                {
+                                    instruction: `Kumpulkan sebutan x: ${a}x - ${c}x = ?`,
+                                    correctAnswer: `${a - c}x`,
+                                    hint1: `Tolak pekali: ${a} - ${c}`,
+                                    hint2: `Ingat tanda tolak!`,
+                                    hint3: `${a} - ${c} = ${a - c}, jadi ${a - c}x`
+                                },
+                                {
+                                    instruction: `Sebutan y kekal tak berubah. Apa nilainya?`,
+                                    correctAnswer: `${b}y`,
+                                    hint1: `Tiada sebutan y lain untuk digabung`,
+                                    hint2: `Sebutan y tetap ${b}y`,
+                                    hint3: `Jawapannya ${b}y`
+                                },
+                                {
+                                    instruction: `Tulis jawapan akhir lengkap`,
+                                    correctAnswer: `${a - c}x + ${b}y`,
+                                    hint1: `Gabungkan hasil x dan y`,
+                                    hint2: `Susun: x terms dahulu, kemudian y`,
+                                    hint3: `${a - c}x + ${b}y`
+                                }
+                            ],
+                            finalAnswer: `${a - c}x + ${b}y`
+                        };
+                    }
+                }
+            ],
+            
+            susah: [
+                {
+                    type: 'complex',
+                    generate: () => {
+                        const a = getRandomInt(2, 5);
+                        const b = getRandomInt(3, 7);
+                        const c = getRandomInt(1, 4);
+                        const d = getRandomInt(2, 6);
+                        const e = getRandomInt(1, 3);
+                        const f = getRandomInt(1, 4);
+                        return {
+                            expression: `${a}R + ${b}R - ${c}I - ${d}I + ${e}R - ${f}I`,
+                            steps: [
+                                {
+                                    instruction: `Kumpulkan SEMUA sebutan R: ${a}R + ${b}R + ${e}R = ?`,
+                                    correctAnswer: `${a + b + e}R`,
+                                    hint1: `Tambah semua pekali R: ${a} + ${b} + ${e}`,
+                                    hint2: `${a} + ${b} + ${e} = ${a + b + e}`,
+                                    hint3: `Jadi ${a + b + e}R`
+                                },
+                                {
+                                    instruction: `Kumpulkan SEMUA sebutan I: -${c}I - ${d}I - ${f}I = ?`,
+                                    correctAnswer: `-${c + d + f}I`,
+                                    hint1: `Semua I ada tanda tolak (negatif)`,
+                                    hint2: `Tolak semua: -(${c} + ${d} + ${f})`,
+                                    hint3: `= -${c + d + f}I`
+                                },
+                                {
+                                    instruction: `Tulis jawapan akhir (R dahulu, kemudian I)`,
+                                    correctAnswer: `${a + b + e}R - ${c + d + f}I`,
+                                    hint1: `Gabung hasil R dan hasil I`,
+                                    hint2: `Format: (R terms) - (I terms)`,
+                                    hint3: `${a + b + e}R - ${c + d + f}I`
+                                }
+                            ],
+                            finalAnswer: `${a + b + e}R - ${c + d + f}I`
+                        };
+                    }
+                },
+                {
+                    type: 'multiplication',
+                    generate: () => {
+                        const a = randomChoice(['a', 'p', 'm']);
+                        const b = getRandomInt(2, 5);
+                        const c = randomChoice(['b', 'q', 'n']);
+                        return {
+                            expression: `${a} × ${b}${c}`,
+                            steps: [
+                                {
+                                    instruction: `Tulis dalam bentuk tanpa tanda ×`,
+                                    correctAnswer: `${a}${b}${c}`,
+                                    hint1: `Dalam algebra, × tak perlu tulis`,
+                                    hint2: `Susun: pembolehubah, nombor, pembolehubah`,
+                                    hint3: `${a} × ${b} × ${c} = ${a}${b}${c}`
+                                },
+                                {
+                                    instruction: `Susun: nombor dahulu, kemudian huruf mengikut abjad`,
+                                    correctAnswer: `${b}${a}${c}`,
+                                    hint1: `Nombor ${b} patut di depan sekali`,
+                                    hint2: `Kemudian susun ${a} dan ${c} ikut abjad`,
+                                    hint3: `Jawapan: ${b}${a}${c}`
+                                }
+                            ],
+                            finalAnswer: `${b}${a}${c}`
+                        };
+                    }
+                }
+            ]
+        };
+        
+        /* ========================================
+           UTILITY FUNCTIONS
+           ======================================== */
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        
+        function randomChoice(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+        
+        function normalizeAnswer(answer) {
+            return answer.toString()
+                .replace(/\s+/g, '')
+                .toLowerCase()
+                .replace(/\*/g, '')
+                .replace(/×/g, '');
+        }
+        
+        function areEquivalent(userInput, correctAnswer) {
+            const normalized1 = normalizeAnswer(userInput);
+            const normalized2 = normalizeAnswer(correctAnswer);
+            
+            // Direct match
+            if (normalized1 === normalized2) return true;
+            
+            // Check alternative forms (e.g., 1x = x)
+            if (normalized1 === '1' + normalized2 || normalized2 === '1' + normalized1) return true;
+            
+            // Check reordered (e.g., 3ab = 3ba for some cases)
+            // This is simplified - in production, you'd want more robust checking
+            
+            return false;
+        }
+        
+        /* ========================================
+           VISUAL DEMONSTRATIONS
+           ======================================== */
+        let currentVisualStep = 0;
+        
+        function showConcretDemo() {
+            // Show first visual step
+            showVisualStep(1);
+            // Scroll to visual section
+            document.getElementById('section-visual').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function showVisualStep(step) {
+            currentVisualStep = step;
+            const canvas = document.getElementById('visualCanvas');
+            
+            // Update button states
+            document.querySelectorAll('.step-btn').forEach((btn, index) => {
+                btn.classList.toggle('active', index + 1 === step);
+            });
+            
+            let content = '';
+            
+            switch(step) {
+                case 1:
+                    content = `
+                        <div style="text-align: center;">
+                            <h3 style="color: var(--primary); margin-bottom: 1.5rem;">Langkah 1: Bahan-bahan Chef Amin (Asal)</h3>
+                            <div style="font-size: var(--text-2xl); margin: 2rem 0;">
+                                <span class="term-x">3x</span>
+                                <span style="font-size: 2rem;"> + </span>
+                                <span class="term-y">5y</span>
+                                <span style="font-size: 2rem;"> + </span>
+                                <span class="term-x">2x</span>
+                                <span style="font-size: 2rem;"> + </span>
+                                <span class="term-y">3y</span>
+                            </div>
+                            <p style="color: var(--text-secondary); font-size: var(--text-lg);">
+                                Ni lah keadaan dapur Chef Amin - berselerak!<br>
+                                Epal (x) dan Oren (y) bercampur-campur.
+                            </p>
+                        </div>
+                    `;
+                    break;
+                    
+                case 2:
+                    content = `
+                        <div style="text-align: center;">
+                            <h3 style="color: var(--primary); margin-bottom: 1.5rem;">Langkah 2: Kumpulkan Yang Sama Jenis</h3>
+                            <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 2rem; margin: 2rem 0;">
+                                <div style="background: #dbeafe; padding: 2rem; border-radius: 1rem; flex: 1; min-width: 200px;">
+                                    <h4 style="color: var(--variable-x); margin-bottom: 1rem;">🍎 Epal (x)</h4>
+                                    <div style="font-size: var(--text-2xl);">
+                                        <span class="term-x">3x</span>
+                                        <br>
+                                        <span class="term-x">2x</span>
+                                    </div>
+                                </div>
+                                <div style="background: #d1fae5; padding: 2rem; border-radius: 1rem; flex: 1; min-width: 200px;">
+                                    <h4 style="color: var(--variable-y); margin-bottom: 1rem;">🍊 Oren (y)</h4>
+                                    <div style="font-size: var(--text-2xl);">
+                                        <span class="term-y">5y</span>
+                                        <br>
+                                        <span class="term-y">3y</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p style="color: var(--text-secondary); font-size: var(--text-lg);">
+                                Kumpulkan epal dengan epal, oren dengan oren!
+                            </p>
+                        </div>
+                    `;
+                    break;
+                    
+                case 3:
+                    content = `
+                        <div style="text-align: center;">
+                            <h3 style="color: var(--primary); margin-bottom: 1.5rem;">Langkah 3: Kira Berapa Banyak</h3>
+                            <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 2rem; margin: 2rem 0;">
+                                <div style="background: #dbeafe; padding: 2rem; border-radius: 1rem; flex: 1; min-width: 200px;">
+                                    <h4 style="color: var(--variable-x); margin-bottom: 1rem;">🍎 Epal (x)</h4>
+                                    <div style="font-size: var(--text-xl); margin: 1rem 0;">
+                                        3x + 2x
+                                    </div>
+                                    <div style="font-size: var(--text-lg); margin: 0.5rem 0;">
+                                        = (3 + 2)x
+                                    </div>
+                                    <div style="font-size: var(--text-3xl); font-weight: 700; color: var(--variable-x);">
+                                        = 5x
+                                    </div>
+                                </div>
+                                <div style="background: #d1fae5; padding: 2rem; border-radius: 1rem; flex: 1; min-width: 200px;">
+                                    <h4 style="color: var(--variable-y); margin-bottom: 1rem;">🍊 Oren (y)</h4>
+                                    <div style="font-size: var(--text-xl); margin: 1rem 0;">
+                                        5y + 3y
+                                    </div>
+                                    <div style="font-size: var(--text-lg); margin: 0.5rem 0;">
+                                        = (5 + 3)y
+                                    </div>
+                                    <div style="font-size: var(--text-3xl); font-weight: 700; color: var(--variable-y);">
+                                        = 8y
+                                    </div>
+                                </div>
+                            </div>
+                            <p style="color: var(--text-secondary); font-size: var(--text-lg);">
+                                Tambah pekali (nombor di depan) untuk setiap jenis!
+                            </p>
+                        </div>
+                    `;
+                    break;
+                    
+                case 4:
+                    content = `
+                        <div style="text-align: center;">
+                            <h3 style="color: var(--success); margin-bottom: 1.5rem;">Langkah 4: Jawapan Akhir - Kemas & Teratur!</h3>
+                            <div style="background: #dcfce7; padding: 3rem 2rem; border-radius: 1rem; margin: 2rem auto; max-width: 500px; border: 3px solid var(--success);">
+                                <div style="font-size: var(--text-xl); color: var(--text-secondary); margin-bottom: 1rem;">
+                                    3x + 5y + 2x + 3y
+                                </div>
+                                <div style="font-size: 2.5rem; margin: 1rem 0;">
+                                    ↓
+                                </div>
+                                <div style="font-size: var(--text-4xl); font-weight: 700; font-family: 'Times New Roman', serif;">
+                                    <span style="color: var(--variable-x);">5x</span> + <span style="color: var(--variable-y);">8y</span>
+                                </div>
+                            </div>
+                            <div style="background: #fef3c7; padding: 1.5rem; border-radius: 0.75rem; margin-top: 2rem; border-left: 4px solid var(--warning);">
+                                <p style="color: #92400e; font-size: var(--text-lg); font-weight: 600;">
+                                    ✨ Perfect! Dapur Chef Amin dah kemas!<br>
+                                    5 epal dan 8 oren, tersusun dengan rapi!
+                                </p>
+                            </div>
+                        </div>
+                    `;
+                    // Celebrate!
+                    createConfetti();
+                    break;
+            }
+            
+            canvas.innerHTML = content;
+        }
+        
+        /* ========================================
+           PROBLEM GENERATION & MANAGEMENT
+           ======================================== */
+        function setDifficulty(level) {
+            state.currentDifficulty = level;
+            
+            // Update button states
+            document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Generate new problem
+            generateNewProblem();
+        }
+        
+        function generateNewProblem() {
+            // Reset state
+            state.currentStep = 0;
+            state.attempts = 0;
+            state.hintsUsedThisProblem = 0;
+            
+            // Get problem template
+            const templates = problemTemplates[state.currentDifficulty];
+            const template = randomChoice(templates);
+            state.currentProblem = template.generate();
+            
+            // Display problem
+            displayProblem();
+            
+            // Reset hints
+            resetHints();
+            
+            // Clear feedback
+            document.getElementById('feedbackArea').innerHTML = '';
+        }
+        
+        function displayProblem() {
+            const problem = state.currentProblem;
+            
+            document.getElementById('problemText').innerHTML = `
+                <div style="font-family: 'Times New Roman', serif;">
+                    Simplify: <strong>${problem.expression}</strong>
+                </div>
+            `;
+            
+            // Create step solver
+            const stepSolver = document.getElementById('stepSolver');
+            stepSolver.style.display = 'block';
+            stepSolver.innerHTML = '';
+            
+            problem.steps.forEach((step, index) => {
+                const stepDiv = document.createElement('div');
+                stepDiv.className = 'solver-step';
+                stepDiv.id = `step${index}`;
+                if (index > 0) {
+                    stepDiv.classList.add('locked');
+                }
+                
+                stepDiv.innerHTML = `
+                    <div class="step-instruction">
+                        <strong>Langkah ${index + 1}:</strong> ${step.instruction}
+                    </div>
+                    <div class="input-group">
+                        <input 
+                            type="text" 
+                            class="input-field" 
+                            id="input${index}"
+                            placeholder="Jawapan anda"
+                            ${index > 0 ? 'disabled' : ''}
+                        >
+                        <button 
+                            class="btn-check" 
+                            onclick="checkStep(${index})"
+                            id="checkBtn${index}"
+                            ${index > 0 ? 'disabled' : ''}
+                        >
+                            Semak
+                        </button>
+                    </div>
+                    <div id="stepFeedback${index}"></div>
+                `;
+                
+                stepSolver.appendChild(stepDiv);
+            });
+            
+            // Show hint system
+            document.getElementById('hintSystem').style.display = 'block';
+        }
+        
+        function checkStep(stepIndex) {
+            const step = state.currentProblem.steps[stepIndex];
+            const input = document.getElementById(`input${stepIndex}`);
+            const userAnswer = input.value.trim();
+            
+            if (!userAnswer) {
+                showFeedback(stepIndex, 'error', '❌ Sila masukkan jawapan anda!');
+                return;
+            }
+            
+            // Validate answer
+            if (areEquivalent(userAnswer, step.correctAnswer)) {
+                // Correct!
+                input.classList.remove('incorrect');
+                input.classList.add('correct');
+                input.disabled = true;
+                document.getElementById(`checkBtn${stepIndex}`).disabled = true;
+                
+                showFeedback(stepIndex, 'success', '✅ BETUL! Hebat! ' + getRandomEncouragement());
+                
+                // Mark step as completed
+                document.getElementById(`step${stepIndex}`).classList.add('completed');
+                
+                // Unlock next step
+                if (stepIndex < state.currentProblem.steps.length - 1) {
+                    const nextStep = document.getElementById(`step${stepIndex + 1}`);
+                    nextStep.classList.remove('locked');
+                    document.getElementById(`input${stepIndex + 1}`).disabled = false;
+                    document.getElementById(`checkBtn${stepIndex + 1}`).disabled = false;
+                    
+                    // Focus next input
+                    setTimeout(() => {
+                        document.getElementById(`input${stepIndex + 1}`).focus();
+                    }, 500);
+                } else {
+                    // Problem completed!
+                    completeProblem();
+                }
+                
+                createConfetti(3);
+            } else {
+                // Incorrect
+                input.classList.remove('correct');
+                input.classList.add('incorrect');
+                state.attempts++;
+                
+                showFeedback(stepIndex, 'error', '❌ Cuba lagi! ' + getContextualHint());
+                
+                // Enable hints after 2 attempts
+                if (state.attempts >= 2) {
+                    enableHintButtons();
+                }
+            }
+        }
+        
+        function completeProblem() {
+            state.stats.problemsSolved++;
+            state.stats.correctAnswers++;
+            
+            updateStats();
+            updateBadges();
+            
+            // Show completion message
+            const feedbackArea = document.getElementById('feedbackArea');
+            feedbackArea.innerHTML = `
+                <div class="feedback-box feedback-success" style="font-size: var(--text-lg);">
+                    <span style="font-size: 2rem;">🎉</span>
+                    <div>
+                        <strong>TAHNIAH!</strong> Anda telah berjaya selesaikan soalan ini!<br>
+                        <span style="font-size: var(--text-sm);">Jawapan akhir: <strong>${state.currentProblem.finalAnswer}</strong></span>
+                    </div>
+                </div>
+            `;
+            
+            createConfetti(20);
+            
+            // Update progress
+            updateProgress();
+        }
+        
+        function resetProblem() {
+            if (state.currentProblem) {
+                state.attempts = 0;
+                state.hintsUsedThisProblem = 0;
+                
+                // Reset all inputs
+                state.currentProblem.steps.forEach((step, index) => {
+                    const input = document.getElementById(`input${index}`);
+                    input.value = '';
+                    input.classList.remove('correct', 'incorrect');
+                    input.disabled = index > 0;
+                    
+                    document.getElementById(`checkBtn${index}`).disabled = index > 0;
+                    document.getElementById(`step${index}`).classList.remove('completed');
+                    if (index > 0) {
+                        document.getElementById(`step${index}`).classList.add('locked');
+                    }
+                    
+                    document.getElementById(`stepFeedback${index}`).innerHTML = '';
+                });
+                
+                document.getElementById('feedbackArea').innerHTML = '';
+                resetHints();
+            }
+        }
+        
+        /* ========================================
+           FEEDBACK & HINTS
+           ======================================== */
+        function showFeedback(stepIndex, type, message) {
+            const feedbackDiv = document.getElementById(`stepFeedback${stepIndex}`);
+            const className = type === 'success' ? 'feedback-success' : 
+                            type === 'error' ? 'feedback-error' : 'feedback-hint';
+            
+            feedbackDiv.innerHTML = `
+                <div class="feedback-box ${className}">
+                    ${message}
+                </div>
+            `;
+        }
+        
+        function getRandomEncouragement() {
+            const encouragements = [
+                'Anda memang hebat!',
+                'Teruskan usaha yang baik!',
+                'Bagus sekali!',
+                'Anda dah faham!',
+                'Perfect!',
+                'Cemerlang!',
+                'Mantap!',
+                'Syabas!'
+            ];
+            return randomChoice(encouragements);
+        }
+        
+        function getContextualHint() {
+            const hints = [
+                'Jangan putus asa!',
+                'Cuba periksa semula.',
+                'Hampir betul tu!',
+                'Teruskan cuba!',
+                'Anda boleh buat ni!'
+            ];
+            return randomChoice(hints);
+        }
+        
+        function resetHints() {
+            document.getElementById('hint1Btn').disabled = false;
+            document.getElementById('hint2Btn').disabled = true;
+            document.getElementById('hint3Btn').disabled = true;
+            document.getElementById('hintDisplay').innerHTML = '';
+        }
+        
+        function enableHintButtons() {
+            document.getElementById('hint1Btn').disabled = false;
+        }
+        
+        function showHint(level) {
+            const currentStepIndex = findCurrentStep();
+            if (currentStepIndex === -1) return;
+            
+            const step = state.currentProblem.steps[currentStepIndex];
+            let hintText = '';
+            
+            switch(level) {
+                case 1:
+                    hintText = step.hint1;
+                    document.getElementById('hint2Btn').disabled = false;
+                    break;
+                case 2:
+                    hintText = step.hint2;
+                    document.getElementById('hint3Btn').disabled = false;
+                    break;
+                case 3:
+                    hintText = step.hint3;
+                    break;
+            }
+            
+            document.getElementById('hintDisplay').innerHTML = `
+                <div class="feedback-box feedback-hint">
+                    <strong>💡 Petunjuk ${level}:</strong> ${hintText}
+                </div>
+            `;
+            
+            state.hintsUsedThisProblem++;
+            state.stats.totalHintsUsed++;
+            updateStats();
+        }
+        
+        function findCurrentStep() {
+            for (let i = 0; i < state.currentProblem.steps.length; i++) {
+                const stepDiv = document.getElementById(`step${i}`);
+                if (!stepDiv.classList.contains('completed')) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+        
+        /* ========================================
+           STATS & PROGRESS TRACKING
+           ======================================== */
+        function updateStats() {
+            document.getElementById('problemsSolved').textContent = state.stats.problemsSolved;
+            document.getElementById('correctAnswers').textContent = state.stats.correctAnswers;
+            document.getElementById('hintsUsed').textContent = state.stats.totalHintsUsed;
+            
+            const successRate = state.stats.problemsSolved > 0 
+                ? Math.round((state.stats.correctAnswers / state.stats.problemsSolved) * 100)
+                : 0;
+            document.getElementById('successRate').textContent = successRate + '%';
+            
+            // Update final stats
+            document.getElementById('finalProblems').textContent = state.stats.problemsSolved;
+            document.getElementById('finalCorrect').textContent = state.stats.correctAnswers;
+            document.getElementById('finalRate').textContent = successRate + '%';
+            
+            // Calculate time
+            const minutes = Math.floor((Date.now() - state.stats.startTime) / 60000);
+            document.getElementById('totalTime').textContent = minutes;
+        }
+        
+        function updateProgress() {
+            state.currentStep = Math.min(state.currentStep + 1, state.totalSteps);
+            
+            const percentage = (state.currentStep / state.totalSteps) * 100;
+            document.getElementById('mainProgress').style.width = percentage + '%';
+            document.getElementById('currentStep').textContent = state.currentStep;
+        }
+        
+        function updateBadges() {
+            const solved = state.stats.problemsSolved;
+            const successRate = state.stats.problemsSolved > 0 
+                ? Math.round((state.stats.correctAnswers / state.stats.problemsSolved) * 100)
+                : 0;
+            
+            // Badge 2: 5 problems
+            if (solved >= 5) {
+                const badge2 = document.getElementById('badge2');
+                badge2.classList.remove('locked');
+                badge2.innerHTML = '<span>⭐</span> Separuh Jalan';
+            }
+            
+            // Badge 3: 10 problems
+            if (solved >= 10) {
+                const badge3 = document.getElementById('badge3');
+                badge3.classList.remove('locked');
+                badge3.innerHTML = '<span>🌟</span> Konsisten';
+            }
+            
+            // Badge 4: 100% success rate (min 5 problems)
+            if (solved >= 5 && successRate === 100) {
+                const badge4 = document.getElementById('badge4');
+                badge4.classList.remove('locked');
+                badge4.innerHTML = '<span>💎</span> Perfeksionis';
+            }
+            
+            // Badge 5: 20 problems
+            if (solved >= 20) {
+                const badge5 = document.getElementById('badge5');
+                badge5.classList.remove('locked');
+                badge5.innerHTML = '<span>👑</span> Master Algebra';
+            }
+        }
+        
+        /* ========================================
+           VISUAL EFFECTS
+           ======================================== */
+        function createConfetti(count = 10) {
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.background = randomChoice(['#f59e0b', '#3b82f6', '#10b981', '#ef4444', '#8b5cf6']);
+                    confetti.style.animationDelay = Math.random() * 0.3 + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 50);
+            }
+        }
+        
+        /* ========================================
+           INITIALIZATION
+           ======================================== */
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize first problem
+            generateNewProblem();
+            
+            // Set up keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    const currentStepIndex = findCurrentStep();
+                    if (currentStepIndex !== -1) {
+                        const input = document.getElementById(`input${currentStepIndex}`);
+                        if (document.activeElement === input) {
+                            checkStep(currentStepIndex);
+                        }
+                    }
+                }
+            });
+            
+            // Track progress through sections
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Section is visible, could update progress
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            document.querySelectorAll('.section').forEach(section => {
+                observer.observe(section);
+            });
+            
+            console.log('🎓 Modul Pembelajaran Algebra - Siap untuk digunakan!');
+        });
+    </script>
+</body>
+    <a href="index.html" style="display:inline-block; margin:16px; padding:10px 16px; background:#4f46e5; color:white; border-radius:8px; text-decoration:none;">
+        Home
+    </a>
+
+    <header class="hero-section">
+</html>
