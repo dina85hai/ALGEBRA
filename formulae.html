@@ -1,0 +1,2120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Interactive learning app for transposition of formulae" />
+  <title>Formula Transposition Lab</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --warning: #f59e0b;
+      --ink: #111827;
+      --muted: #64748b;
+      --line: #dbe3ef;
+      --soft: #f5f8fc;
+      --panel: #ffffff;
+      --blue-soft: #eaf2ff;
+      --green-soft: #eaf8ef;
+      --red-soft: #fff1f2;
+      --shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, 0.12), transparent 32rem),
+        linear-gradient(180deg, #f8fbff 0%, #eef4fb 100%);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .app-shell {
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 22px 0 40px;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      align-items: end;
+      margin-bottom: 18px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .home-button {
+      min-height: 100%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #bfdbfe;
+      border-radius: var(--radius);
+      padding: 10px 13px;
+      color: var(--primary);
+      background: rgba(255, 255, 255, 0.86);
+      font-weight: 850;
+      text-decoration: none;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
+    }
+
+    .home-button:hover {
+      background: var(--blue-soft);
+    }
+
+    .eyebrow {
+      color: var(--primary);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin: 0 0 4px;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: 0.98;
+      margin: 0;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      margin: 10px 0 0;
+      max-width: 760px;
+      font-size: 1.05rem;
+    }
+
+    .status-pill {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      background: rgba(255, 255, 255, 0.82);
+      min-width: 190px;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
+    }
+
+    .status-pill strong {
+      display: block;
+      color: var(--primary);
+      font-size: 1.25rem;
+    }
+
+    .tabs {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 8px;
+      padding: 10px;
+      margin: 18px 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.07);
+    }
+
+    .tab-button {
+      min-height: 44px;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      color: #334155;
+      background: transparent;
+      font-weight: 800;
+      cursor: pointer;
+      transition: 160ms ease;
+      white-space: nowrap;
+    }
+
+    .tab-button:hover {
+      background: var(--blue-soft);
+      border-color: #bfdbfe;
+    }
+
+    .tab-button.active {
+      color: white;
+      background: var(--primary);
+      box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.16);
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+      animation: riseIn 240ms ease;
+    }
+
+    @keyframes riseIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .section {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: var(--shadow);
+      padding: clamp(18px, 3vw, 30px);
+      margin-bottom: 18px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: start;
+      margin-bottom: 18px;
+    }
+
+    .section h2 {
+      margin: 0;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .section p {
+      color: var(--muted);
+    }
+
+    .grid-2,
+    .grid-3 {
+      display: grid;
+      gap: 16px;
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .mini-card,
+    .story-card,
+    .exercise-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      padding: 16px;
+    }
+
+    .story-card {
+      min-height: 145px;
+      border-left: 5px solid var(--primary);
+    }
+
+    .story-card strong,
+    .mini-card strong {
+      color: var(--ink);
+    }
+
+    .canvas-wrap {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: #f8fbff;
+      margin-top: 16px;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      min-height: 310px;
+    }
+
+    .math {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.18em;
+      min-height: 34px;
+      padding: 4px 9px;
+      border-radius: 6px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      color: #0f172a;
+      font-family: "Cambria Math", "Times New Roman", serif;
+      font-size: 1.15rem;
+      white-space: nowrap;
+    }
+
+    .math sup {
+      font-size: 0.72em;
+      line-height: 0;
+    }
+
+    .fraction {
+      display: inline-grid;
+      grid-template-rows: auto auto;
+      align-items: center;
+      justify-items: center;
+      line-height: 1;
+      margin: 0 0.12em;
+      vertical-align: middle;
+    }
+
+    .fraction .num {
+      display: block;
+      min-width: 100%;
+      padding: 0 0.18em 0.12em;
+      border-bottom: 1.7px solid currentColor;
+      text-align: center;
+    }
+
+    .fraction .den {
+      display: block;
+      padding: 0.12em 0.18em 0;
+      text-align: center;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      align-items: stretch;
+      margin: 18px 0;
+    }
+
+    .flow-step {
+      min-height: 106px;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      gap: 7px;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfdff;
+      padding: 12px;
+    }
+
+    .flow-step .label {
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .operator {
+      color: white;
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .operator .label,
+    .operator .math {
+      color: white;
+    }
+
+    .operator .math {
+      background: rgba(255, 255, 255, 0.16);
+      border-color: rgba(255, 255, 255, 0.24);
+    }
+
+    .box-method {
+      display: grid;
+      grid-template-columns: 1fr 54px 1fr;
+      gap: 10px;
+      align-items: center;
+      margin: 18px 0;
+    }
+
+    .box-side {
+      min-height: 132px;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      gap: 12px;
+      border: 2px solid #cbd5e1;
+      border-radius: var(--radius);
+      background: #fbfdff;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .box-side.target {
+      border-color: var(--primary);
+      background: var(--blue-soft);
+    }
+
+    .equals {
+      text-align: center;
+      color: var(--primary);
+      font-size: 2rem;
+      font-weight: 900;
+    }
+
+    .input-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    label {
+      display: grid;
+      gap: 6px;
+      color: #334155;
+      font-size: 0.9rem;
+      font-weight: 750;
+    }
+
+    .math-input,
+    .small-input {
+      width: 100%;
+      min-height: 44px;
+      border: 2px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 8px 10px;
+      background: white;
+      color: var(--ink);
+      transition: 160ms ease;
+    }
+
+    .math-input:focus,
+    .small-input:focus {
+      outline: 3px solid rgba(37, 99, 235, 0.18);
+      border-color: var(--primary);
+    }
+
+    .math-input.correct,
+    .small-input.correct {
+      border-color: var(--success);
+      background: var(--green-soft);
+    }
+
+    .math-input.incorrect,
+    .small-input.incorrect {
+      border-color: var(--danger);
+      background: var(--red-soft);
+    }
+
+    .validation-note {
+      min-height: 22px;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .validation-note.good {
+      color: var(--success);
+    }
+
+    .validation-note.bad {
+      color: var(--danger);
+    }
+
+    .step-table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: white;
+    }
+
+    .step-table th,
+    .step-table td {
+      border-bottom: 1px solid var(--line);
+      padding: 11px;
+      vertical-align: middle;
+      text-align: left;
+    }
+
+    .step-table th {
+      background: #eff6ff;
+      color: #1e3a8a;
+      font-size: 0.83rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .step-table tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-top: 16px;
+    }
+
+    .btn {
+      min-height: 42px;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      padding: 9px 13px;
+      font-weight: 850;
+      cursor: pointer;
+      transition: 160ms ease;
+    }
+
+    .btn-primary {
+      color: white;
+      background: var(--primary);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-success {
+      color: white;
+      background: var(--success);
+    }
+
+    .btn-danger {
+      color: white;
+      background: var(--danger);
+    }
+
+    .btn-ghost {
+      color: var(--primary);
+      background: white;
+      border-color: #bfdbfe;
+    }
+
+    .btn-ghost:hover {
+      background: var(--blue-soft);
+    }
+
+    .difficulty-bar {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin: 14px 0;
+    }
+
+    .difficulty-btn {
+      min-height: 64px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: white;
+      cursor: pointer;
+      text-align: left;
+      padding: 10px 12px;
+      font-weight: 850;
+      transition: 160ms ease;
+    }
+
+    .difficulty-btn span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 650;
+    }
+
+    .difficulty-btn.active {
+      border-color: var(--primary);
+      background: var(--blue-soft);
+      color: #1e40af;
+    }
+
+    .problem-banner {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #f8fbff;
+      padding: 16px;
+      margin: 14px 0;
+    }
+
+    .problem-banner h3 {
+      margin: 0 0 8px;
+      font-size: 1.16rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .stat {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: white;
+      padding: 12px;
+    }
+
+    .stat strong {
+      display: block;
+      color: var(--primary);
+      font-size: 1.55rem;
+      line-height: 1;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    .solution-box {
+      display: none;
+      border: 1px solid #bbf7d0;
+      border-radius: var(--radius);
+      background: #f0fdf4;
+      padding: 14px;
+      margin-top: 14px;
+    }
+
+    .solution-box.show {
+      display: block;
+    }
+
+    .solution-box ol {
+      margin: 8px 0 0 22px;
+      padding: 0;
+    }
+
+    .solution-box li {
+      margin: 7px 0;
+    }
+
+    .feedback {
+      min-height: 30px;
+      margin-top: 12px;
+      font-weight: 800;
+    }
+
+    .feedback.good {
+      color: var(--success);
+    }
+
+    .feedback.bad {
+      color: var(--danger);
+    }
+
+    .tips-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .tip {
+      border-left: 5px solid var(--primary);
+      border-radius: var(--radius);
+      background: white;
+      padding: 14px;
+    }
+
+    .mistake {
+      border-left-color: var(--danger);
+    }
+
+    .kbd {
+      display: inline-block;
+      border: 1px solid #cbd5e1;
+      border-bottom-width: 2px;
+      border-radius: 5px;
+      background: white;
+      padding: 1px 6px;
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: 0.88em;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 900px) {
+      .topbar,
+      .grid-2,
+      .grid-3,
+      .input-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .header-actions {
+        flex-direction: column;
+      }
+
+      .tabs {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        position: static;
+      }
+
+      .flow {
+        grid-template-columns: 1fr;
+      }
+
+      .box-method {
+        grid-template-columns: 1fr;
+      }
+
+      .equals {
+        transform: rotate(90deg);
+      }
+
+      .difficulty-bar,
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .step-table,
+      .step-table tbody,
+      .step-table tr,
+      .step-table td {
+        display: block;
+        width: 100%;
+      }
+
+      .step-table thead {
+        display: none;
+      }
+
+      .step-table td {
+        border-bottom: 0;
+      }
+
+      .step-table tr {
+        border-bottom: 1px solid var(--line);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Interactive Mathematics Lab</p>
+        <h1>Formula Transposition</h1>
+        <p class="subtitle">
+          Learn how to change the subject of a formula using daily-life stories, workbook-style
+          questions, visual boxes, live checking, and unlimited generated practice.
+        </p>
+      </div>
+      <div class="header-actions">
+        <a class="home-button" href="index.html" aria-label="Go back to Algebra index">Home</a>
+        <aside class="status-pill" aria-label="Practice progress">
+          <span>Practice accuracy</span>
+          <strong id="headerAccuracy">0%</strong>
+        </aside>
+      </div>
+    </header>
+
+    <nav class="tabs" aria-label="Main sections">
+      <button class="tab-button active" data-tab="intro">🏠 Intro</button>
+      <button class="tab-button" data-tab="concept1">📘 Concept 1</button>
+      <button class="tab-button" data-tab="concept2">📗 Concept 2</button>
+      <button class="tab-button" data-tab="advanced">➗ Advanced</button>
+      <button class="tab-button" data-tab="practice">🎮 Practice</button>
+      <button class="tab-button" data-tab="tips">💡 Tips</button>
+    </nav>
+
+    <main>
+      <section class="tab-panel active" id="intro">
+        <div class="section">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Why this matters</p>
+              <h2>Every formula is a machine you can run backward.</h2>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <article class="story-card">
+              <strong>Scenario 1: Topping up phone credit</strong>
+              <p>
+                Your final balance is <span class="math">g = 3 + h</span> after a RM3 bonus.
+                If you know the final balance, transposition finds your original balance:
+                <span class="math">h = g - 3</span>.
+              </p>
+            </article>
+            <article class="story-card">
+              <strong>Scenario 2: Sharing a class-event cost</strong>
+              <p>
+                A class fund uses <span class="math">(R - C) / N = P</span>, where P is each
+                student's share. If you know P, N, and C, transposition finds the total
+                collected amount: <span class="math">R = PN + C</span>.
+              </p>
+            </article>
+          </div>
+
+          <div class="canvas-wrap" aria-label="Animated formula stories">
+            <canvas id="storyCanvas" width="1100" height="360"></canvas>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="grid-3">
+            <div class="mini-card">
+              <strong>1. Locate the subject</strong>
+              <p>The subject is the variable you want alone, usually on the left.</p>
+            </div>
+            <div class="mini-card">
+              <strong>2. Undo in reverse order</strong>
+              <p>Use inverse operations: add ↔ subtract, multiply ↔ divide, square ↔ square root.</p>
+            </div>
+            <div class="mini-card">
+              <strong>3. Keep both sides balanced</strong>
+              <p>Whatever you do to one side of the equation, do to the other side too.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">From your workbook</p>
+              <h2>The subtopics in this lesson.</h2>
+              <p>These are the exact exercise types from your Formulae workbook, rewritten as visual skills.</p>
+            </div>
+          </div>
+          <div class="grid-3">
+            <div class="mini-card">
+              <strong>Basic subject change</strong>
+              <p><span class="math">g = 3 + h [h]</span>, <span class="math">P = IRT [T]</span></p>
+              <p>Use one inverse operation: subtract, divide, or multiply.</p>
+            </div>
+            <div class="mini-card">
+              <strong>Two-step and fraction formulae</strong>
+              <p><span class="math">4g - 2h = 7 [g]</span>, <span class="math">(x + y) / 3 = 5 [x]</span></p>
+              <p>Clear the outside operation first, then isolate the target.</p>
+            </div>
+            <div class="mini-card">
+              <strong>Substitute values after rearranging</strong>
+              <p><span class="math">A = r / (2L)</span>, <span class="math">(R - C) / N = P</span></p>
+              <p>Make the variable the subject, then put in the given numbers.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="concept1">
+        <div class="section">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Concept 1</p>
+              <h2>Inverse operations: undo the last action first.</h2>
+              <p>Think of the target variable as being trapped inside operations. In the workbook, <span class="math">g = 3 + h [h]</span> means h is hidden behind a +3 bonus.</p>
+            </div>
+          </div>
+
+          <div class="flow" aria-label="Step by step flow">
+            <div class="flow-step">
+              <span class="label">Start</span>
+              <span class="math">g = 3 + h</span>
+            </div>
+            <div class="flow-step operator">
+              <span class="label">Undo +3</span>
+              <span class="math">− 3</span>
+            </div>
+            <div class="flow-step">
+              <span class="label">Balanced move</span>
+              <span class="math">g - 3 = 3 + h - 3</span>
+            </div>
+            <div class="flow-step operator">
+              <span class="label">Simplify</span>
+              <span class="math">3 - 3 = 0</span>
+            </div>
+            <div class="flow-step">
+              <span class="label">Subject alone</span>
+              <span class="math">h = g - 3</span>
+            </div>
+          </div>
+
+          <div class="exercise-card">
+            <h3>Daily-life check: balance and electricity</h3>
+            <p>Fill the two boxes. The app accepts equivalent expressions, so <span class="kbd">g-3</span> and <span class="kbd">-3+g</span> both work.</p>
+            <div class="input-grid">
+              <label>
+                Phone credit: for <span class="math">g = 3 + h</span>, make h the subject.
+                <input class="math-input" data-answer="g - 3" data-vars="g" placeholder="Example: g - 3" />
+                <span class="validation-note"></span>
+              </label>
+              <label>
+                Electricity formula: for <span class="math">P = IRT</span>, make T the subject.
+                <input class="math-input" data-answer="P / (I * R)" data-vars="P,I,R" placeholder="Example: P / (I R)" />
+                <span class="validation-note"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="concept2">
+        <div class="section">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Concept 2</p>
+              <h2>The box method for two-step formulae.</h2>
+              <p>Use this for workbook questions like <span class="math">4g - 2h = 7 [g]</span>. Keep the g-term in a box, then remove what is outside it.</p>
+            </div>
+          </div>
+
+          <div class="box-method" aria-label="Box method diagram">
+            <div class="box-side target">
+              <span class="label">Target side</span>
+              <span class="math">4g - 2h</span>
+              <span>Box: <strong>4g</strong>. Outside: <strong>-2h</strong>.</span>
+            </div>
+            <div class="equals">=</div>
+            <div class="box-side">
+              <span class="label">Other side</span>
+              <span class="math">7</span>
+              <span>The same moves happen here.</span>
+            </div>
+          </div>
+
+          <table class="step-table">
+            <thead>
+              <tr>
+                <th>Step</th>
+                <th>Visual action</th>
+                <th>Your expression</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Undo <span class="math">-2h</span> by adding 2h to both sides: <span class="math">4g = ?</span></td>
+                <td>
+                  <input class="math-input" data-answer="7 + 2 * h" data-vars="h" placeholder="Right side" />
+                  <span class="validation-note"></span>
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Undo <span class="math">×4</span> by dividing by 4: <span class="math">g = ?</span></td>
+                <td>
+                  <input class="math-input" data-answer="(7 + 2 * h) / 4" data-vars="h" placeholder="Final answer" />
+                  <span class="validation-note"></span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="advanced">
+        <div class="section">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Advanced</p>
+              <h2>When the subject is inside fractions, brackets, or powers.</h2>
+              <p>Use the same logic, but reveal one layer at a time. These examples mirror the harder workbook questions.</p>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="exercise-card">
+              <h3>Fraction flow: isolate x</h3>
+              <p>Daily-life idea: average score. If <span class="math">(x + y) / 3 = 5</span>, three equal shares average to 5. Find the missing score x.</p>
+              <table class="step-table">
+                <thead>
+                  <tr>
+                    <th>Step</th>
+                    <th>Action</th>
+                    <th>Your result</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Multiply both sides by 3: <span class="math">x + y = ?</span></td>
+                    <td>
+                      <input class="math-input" data-answer="15" data-vars="x,y" placeholder="15" />
+                      <span class="validation-note"></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>Subtract y: <span class="math">x = ?</span></td>
+                    <td>
+                      <input class="math-input" data-answer="15 - y" data-vars="y" placeholder="15 - y" />
+                      <span class="validation-note"></span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="exercise-card">
+              <h3>Power flow: isolate z</h3>
+              <p>Daily-life idea: packaging volume. If <span class="math">x = yz^3 / 6</span>, z is a cube-length hidden inside a power.</p>
+              <table class="step-table">
+                <thead>
+                  <tr>
+                    <th>Step</th>
+                    <th>Action</th>
+                    <th>Your result</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Multiply by 6: <span class="math">6x = ?</span></td>
+                    <td>
+                      <input class="math-input" data-answer="y * z^3" data-vars="y,z" placeholder="y z^3" />
+                      <span class="validation-note"></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>Divide by y: <span class="math">z^3 = ?</span></td>
+                    <td>
+                      <input class="math-input" data-answer="6 * x / y" data-vars="x,y" placeholder="6x / y" />
+                      <span class="validation-note"></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>Take the cube root: <span class="math">z = ?</span></td>
+                    <td>
+                      <input class="math-input" data-answer="cbrt((6 * x) / y)" data-vars="x,y" placeholder="cbrt((6x) / y)" />
+                      <span class="validation-note"></span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="practice">
+        <div class="section">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Practice mode</p>
+              <h2>Generated exercises with live validation.</h2>
+              <p>Choose a level. Fill the intermediate steps first, then enter the final transposed formula.</p>
+            </div>
+          </div>
+
+          <div class="difficulty-bar" role="group" aria-label="Difficulty">
+            <button class="difficulty-btn active" data-difficulty="easy">Easy (Basics)<span>One inverse operation</span></button>
+            <button class="difficulty-btn" data-difficulty="medium">Medium (Intermediate)<span>Two-step box method</span></button>
+            <button class="difficulty-btn" data-difficulty="hard">Hard (Challenge)<span>Fractions, brackets, roots</span></button>
+          </div>
+
+          <div class="problem-banner" id="problemBanner">
+            <h3 id="problemTitle">Ready?</h3>
+            <p id="problemPrompt">Click New Problem to generate your first exercise.</p>
+            <div id="problemFormula" class="math">Formula appears here</div>
+          </div>
+
+          <div id="practiceGrid"></div>
+
+          <label style="margin-top: 14px;">
+            Final answer for the target variable
+            <input id="finalAnswer" class="math-input" placeholder="Example: (y - 3) / 4" />
+            <span class="validation-note"></span>
+          </label>
+
+          <div class="button-row">
+            <button class="btn btn-primary" id="newProblemBtn">New Problem</button>
+            <button class="btn btn-success" id="checkProblemBtn">Check</button>
+            <button class="btn btn-ghost" id="showSolutionBtn">Show Solution</button>
+          </div>
+
+          <div class="feedback" id="practiceFeedback" aria-live="polite"></div>
+          <div class="solution-box" id="solutionBox"></div>
+
+          <div class="stats-grid">
+            <div class="stat"><strong id="attemptedCount">0</strong><span>Attempted</span></div>
+            <div class="stat"><strong id="correctCount">0</strong><span>Correct</span></div>
+            <div class="stat"><strong id="accuracyCount">0%</strong><span>Accuracy</span></div>
+            <div class="stat"><strong id="streakCount">0</strong><span>Streak</span></div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Workbook drill</p>
+              <h2>Same style as FORMULAE.docx.</h2>
+              <p>Use these as a checklist: first make the variable the subject, then substitute values when numbers are given.</p>
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="exercise-card">
+              <h3>A. Change the subject</h3>
+              <p><span class="math">g = 3 + h [h]</span></p>
+              <p><span class="math">2s + t = -8q [q]</span></p>
+              <p><span class="math">P = IRT [T]</span></p>
+              <p><span class="math">a = my^2 [y]</span></p>
+              <p><span class="math">(x + y) / 3 = 5 [x]</span></p>
+              <p><span class="math">x = yz^3 / 6 [z]</span></p>
+            </div>
+            <div class="exercise-card">
+              <h3>B. Rearrange, then calculate</h3>
+              <p><span class="math">A = r / (2L)</span>, find r when <span class="math">A = 4, L = 3</span>.</p>
+              <p><span class="math">(R - C) / N = P</span>, find R when <span class="math">P = -1, N = 2, C = 6</span>.</p>
+              <p><span class="math">k = (2 / 3)mn - p^2</span>, find m when <span class="math">k = 1, n = -3, p = 2</span>.</p>
+              <p><span class="math">p = 3q - 2r^2</span>, find q when <span class="math">p = 9, r = 3</span>.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="tips">
+        <div class="section">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Tips and checks</p>
+              <h2>Reliable habits for error-free transposition.</h2>
+            </div>
+          </div>
+
+          <div class="tips-list">
+            <div class="tip">
+              <strong>Work outside to inside.</strong>
+              <p>If the formula is <span class="math">y = 3x + 8</span>, remove +8 before removing ×3.</p>
+            </div>
+            <div class="tip">
+              <strong>Use inverse operations.</strong>
+              <p>Addition is undone by subtraction. Multiplication is undone by division. Squaring is undone by square root.</p>
+            </div>
+            <div class="tip">
+              <strong>Protect brackets.</strong>
+              <p>Write <span class="kbd">(y - 5) / 3</span>, not <span class="kbd">y - 5 / 3</span>. Those are different expressions.</p>
+            </div>
+            <div class="tip mistake">
+              <strong>Common mistake: changing only one side.</strong>
+              <p>From <span class="math">x + 6 = y</span>, the correct move is <span class="math">x = y − 6</span>, because the −6 happens to both sides.</p>
+            </div>
+            <div class="tip mistake">
+              <strong>Common mistake: treating multiplication like addition.</strong>
+              <p>From <span class="math">5x = y</span>, write <span class="math">x = y / 5</span>, not <span class="math">x = y − 5</span>.</p>
+            </div>
+            <div class="tip">
+              <strong>Edge cases to remember.</strong>
+              <p>Never divide by zero. If a coefficient is 0, that variable cannot be isolated by division. If a square root appears, the real-number answer needs a non-negative radicand.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const state = {
+      difficulty: "easy",
+      currentProblem: null,
+      attempted: 0,
+      correct: 0,
+      streak: 0,
+      checkedCurrent: false,
+      solvedCurrent: false,
+      canvasTick: 0
+    };
+
+    const problemTemplates = {
+      easy: [makeEasyAddProblem, makeEasyMultiplyProblem, makeWorkbookPhoneBalanceProblem, makeWorkbookElectricTimeProblem],
+      medium: [makeMediumLinearProblem, makeMediumFractionProblem, makeWorkbookQSubjectProblem, makeWorkbookGSubjectProblem, makeWorkbookAverageSubjectProblem, makeWorkbookYSubjectProblem],
+      hard: [makeHardReciprocalProblem, makeHardSquareProblem, makeWorkbookCubeSubjectProblem, makeWorkbookRadiusValueProblem, makeWorkbookFundValueProblem, makeWorkbookMValueProblem, makeWorkbookQValueProblem]
+    };
+
+    document.addEventListener("DOMContentLoaded", () => {
+      setupTabs();
+      setupValidation();
+      setupPractice();
+      startStoryCanvas();
+      formatMathElements(document);
+      generateProblem();
+    });
+
+    function setupTabs() {
+      document.querySelectorAll(".tab-button").forEach((button) => {
+        button.addEventListener("click", () => {
+          const targetId = button.dataset.tab;
+          document.querySelectorAll(".tab-button").forEach((tab) => tab.classList.toggle("active", tab === button));
+          document.querySelectorAll(".tab-panel").forEach((panel) => panel.classList.toggle("active", panel.id === targetId));
+        });
+      });
+    }
+
+    function setupValidation() {
+      document.addEventListener("input", (event) => {
+        if (event.target.matches(".math-input[data-answer]")) {
+          validateExpressionInput(event.target);
+        }
+      });
+    }
+
+    function setupPractice() {
+      document.querySelectorAll(".difficulty-btn").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.difficulty = button.dataset.difficulty;
+          document.querySelectorAll(".difficulty-btn").forEach((item) => item.classList.toggle("active", item === button));
+          generateProblem();
+        });
+      });
+
+      document.getElementById("newProblemBtn").addEventListener("click", generateProblem);
+      document.getElementById("checkProblemBtn").addEventListener("click", checkPracticeProblem);
+      document.getElementById("showSolutionBtn").addEventListener("click", showSolution);
+      document.getElementById("finalAnswer").addEventListener("input", () => {
+        if (!state.currentProblem) return;
+        const finalInput = document.getElementById("finalAnswer");
+        finalInput.dataset.answer = state.currentProblem.finalAnswer;
+        finalInput.dataset.vars = state.currentProblem.vars.join(",");
+        validateExpressionInput(finalInput);
+      });
+    }
+
+    function startStoryCanvas() {
+      const canvas = document.getElementById("storyCanvas");
+      const ctx = canvas.getContext("2d");
+
+      function resizeCanvas() {
+        const ratio = window.devicePixelRatio || 1;
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = Math.max(760, Math.floor(rect.width * ratio));
+        canvas.height = Math.floor(360 * ratio);
+        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      }
+
+      function draw() {
+        const rect = canvas.getBoundingClientRect();
+        const width = rect.width;
+        const height = 360;
+        state.canvasTick += 0.018;
+
+        ctx.clearRect(0, 0, width, height);
+        drawPanel(ctx, 16, 18, width / 2 - 24, height - 36, "Game formula: d = s × t");
+        drawPanel(ctx, width / 2 + 8, 18, width / 2 - 24, height - 36, "Business formula: P = R − C");
+
+        drawRaceStory(ctx, 16, 18, width / 2 - 24, height - 36, state.canvasTick);
+        drawBusinessStory(ctx, width / 2 + 8, 18, width / 2 - 24, height - 36, state.canvasTick);
+        requestAnimationFrame(draw);
+      }
+
+      resizeCanvas();
+      window.addEventListener("resize", resizeCanvas);
+      draw();
+    }
+
+    function drawPanel(ctx, x, y, w, h, title) {
+      ctx.fillStyle = "#ffffff";
+      ctx.strokeStyle = "#dbe3ef";
+      roundRect(ctx, x, y, w, h, 8);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = "#1e40af";
+      ctx.font = "700 16px system-ui, sans-serif";
+      ctx.fillText(title, x + 18, y + 30);
+    }
+
+    function drawRaceStory(ctx, x, y, w, h, tick) {
+      const trackX = x + 28;
+      const trackY = y + h * 0.55;
+      const trackW = w - 56;
+      const carX = trackX + ((Math.sin(tick) + 1) / 2) * trackW;
+
+      ctx.strokeStyle = "#94a3b8";
+      ctx.lineWidth = 8;
+      ctx.beginPath();
+      ctx.moveTo(trackX, trackY);
+      ctx.lineTo(trackX + trackW, trackY);
+      ctx.stroke();
+
+      for (let i = 0; i <= 6; i++) {
+        const px = trackX + (trackW / 6) * i;
+        ctx.strokeStyle = i % 2 === 0 ? "#2563eb" : "#16a34a";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(px, trackY - 16);
+        ctx.lineTo(px, trackY + 16);
+        ctx.stroke();
+      }
+
+      ctx.fillStyle = "#2563eb";
+      roundRect(ctx, carX - 22, trackY - 30, 44, 24, 6);
+      ctx.fill();
+      ctx.fillStyle = "#0f172a";
+      ctx.beginPath();
+      ctx.arc(carX - 12, trackY - 4, 5, 0, Math.PI * 2);
+      ctx.arc(carX + 12, trackY - 4, 5, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#475569";
+      ctx.font = "14px system-ui, sans-serif";
+      ctx.fillText("Known: distance and time", x + 18, y + 76);
+      ctx.fillText("Find speed: s = d / t", x + 18, y + 102);
+
+      const speed = 40 + Math.round(((Math.sin(tick) + 1) / 2) * 60);
+      ctx.fillStyle = "#16a34a";
+      ctx.font = "800 24px system-ui, sans-serif";
+      ctx.fillText(`${speed} km/h`, x + 18, y + h - 38);
+    }
+
+    function drawBusinessStory(ctx, x, y, w, h, tick) {
+      const baseY = y + h - 64;
+      const barW = Math.min(72, (w - 90) / 3);
+      const revenue = 130 + Math.sin(tick * 1.2) * 18;
+      const cost = 82 + Math.cos(tick * 1.4) * 14;
+      const profit = revenue - cost;
+
+      drawBar(ctx, x + 34, baseY, barW, revenue, "#2563eb", "Revenue");
+      drawBar(ctx, x + 34 + barW + 28, baseY, barW, cost, "#dc2626", "Cost");
+      drawBar(ctx, x + 34 + (barW + 28) * 2, baseY, barW, profit, "#16a34a", "Profit");
+
+      ctx.fillStyle = "#475569";
+      ctx.font = "14px system-ui, sans-serif";
+      ctx.fillText("Known: target profit and cost", x + 18, y + 76);
+      ctx.fillText("Find revenue: R = P + C", x + 18, y + 102);
+      ctx.fillStyle = "#16a34a";
+      ctx.font = "800 24px system-ui, sans-serif";
+      ctx.fillText(`R = ${Math.round(profit)} + ${Math.round(cost)}`, x + 18, y + h - 20);
+    }
+
+    function drawBar(ctx, x, baseY, w, value, color, label) {
+      const height = Math.max(34, value * 1.25);
+      ctx.fillStyle = color;
+      roundRect(ctx, x, baseY - height, w, height, 6);
+      ctx.fill();
+      ctx.fillStyle = "#475569";
+      ctx.font = "12px system-ui, sans-serif";
+      ctx.fillText(label, x, baseY + 20);
+    }
+
+    function roundRect(ctx, x, y, width, height, radius) {
+      const r = Math.min(radius, width / 2, height / 2);
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + width, y, x + width, y + height, r);
+      ctx.arcTo(x + width, y + height, x, y + height, r);
+      ctx.arcTo(x, y + height, x, y, r);
+      ctx.arcTo(x, y, x + width, y, r);
+      ctx.closePath();
+    }
+
+    function generateProblem() {
+      const makers = problemTemplates[state.difficulty];
+      const maker = makers[randomInt(0, makers.length - 1)];
+      state.currentProblem = maker();
+      state.checkedCurrent = false;
+      state.solvedCurrent = false;
+
+      document.getElementById("problemTitle").textContent = `${capitalize(state.difficulty)} challenge`;
+      document.getElementById("problemPrompt").textContent = state.currentProblem.prompt;
+      document.getElementById("problemFormula").innerHTML = formatMathHtml(state.currentProblem.formula);
+      document.getElementById("practiceFeedback").textContent = "";
+      document.getElementById("practiceFeedback").className = "feedback";
+      document.getElementById("solutionBox").classList.remove("show");
+      document.getElementById("solutionBox").innerHTML = "";
+
+      const finalInput = document.getElementById("finalAnswer");
+      finalInput.value = "";
+      finalInput.dataset.answer = state.currentProblem.finalAnswer;
+      finalInput.dataset.vars = state.currentProblem.vars.join(",");
+      resetInputState(finalInput);
+
+      renderPracticeGrid(state.currentProblem);
+    }
+
+    function renderPracticeGrid(problem) {
+      const container = document.getElementById("practiceGrid");
+      const rows = problem.steps.map((step, index) => `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${escapeHtml(step.action)}</td>
+          <td><span class="math">${formatMathHtml(step.target)}</span></td>
+          <td>
+            <input class="math-input practice-step" data-answer="${escapeHtml(step.answer)}" data-vars="${problem.vars.join(",")}" placeholder="${escapeHtml(step.placeholder || "Type expression")}" />
+            <span class="validation-note"></span>
+          </td>
+        </tr>
+      `).join("");
+
+      container.innerHTML = `
+        <table class="step-table">
+          <thead>
+            <tr>
+              <th>Step</th>
+              <th>Undo action</th>
+              <th>Goal</th>
+              <th>Your intermediate result</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+      formatMathElements(container);
+    }
+
+    function checkPracticeProblem() {
+      if (!state.currentProblem) return;
+
+      const inputs = [...document.querySelectorAll("#practiceGrid .math-input"), document.getElementById("finalAnswer")];
+      const allCorrect = inputs.every((input) => validateExpressionInput(input, true));
+
+      if (!state.checkedCurrent) {
+        state.attempted += 1;
+        state.checkedCurrent = true;
+      }
+
+      const feedback = document.getElementById("practiceFeedback");
+      if (allCorrect) {
+        if (!state.solvedCurrent) {
+          state.correct += 1;
+          state.streak += 1;
+          state.solvedCurrent = true;
+        }
+        feedback.textContent = "Correct. Every operation kept the formula balanced.";
+        feedback.className = "feedback good";
+      } else {
+        state.streak = 0;
+        feedback.textContent = "Some boxes still need attention. Check signs, brackets, and division.";
+        feedback.className = "feedback bad";
+      }
+
+      updateStats();
+    }
+
+    function showSolution() {
+      if (!state.currentProblem) return;
+      const solution = document.getElementById("solutionBox");
+      const items = state.currentProblem.steps
+        .map((step) => `<li>${escapeHtml(step.explanation)} <span class="math">${formatMathHtml(`${step.target} ${step.answer}`)}</span></li>`)
+        .join("");
+      solution.innerHTML = `
+        <strong>Step-by-step solution</strong>
+        <ol>${items}<li>Final answer: <span class="math">${formatMathHtml(`${state.currentProblem.target} = ${state.currentProblem.finalAnswer}`)}</span></li></ol>
+      `;
+      solution.classList.add("show");
+    }
+
+    function updateStats() {
+      const accuracy = state.attempted === 0 ? 0 : Math.round((state.correct / state.attempted) * 100);
+      document.getElementById("attemptedCount").textContent = state.attempted;
+      document.getElementById("correctCount").textContent = state.correct;
+      document.getElementById("accuracyCount").textContent = `${accuracy}%`;
+      document.getElementById("headerAccuracy").textContent = `${accuracy}%`;
+      document.getElementById("streakCount").textContent = state.streak;
+    }
+
+    function formatMathElements(root) {
+      root.querySelectorAll(".math").forEach((element) => {
+        if (element.dataset.mathFormatted === "true") return;
+        element.innerHTML = formatMathHtml(element.textContent);
+        element.dataset.mathFormatted = "true";
+      });
+    }
+
+    function formatMathHtml(expression) {
+      let output = escapeHtml(expression)
+        .replace(/[−–—]/g, "-")
+        .replace(/sqrt\s*\(/g, "√(")
+        .replace(/cbrt\s*\(/g, "∛(");
+
+      output = renderFractions(output);
+      output = output
+        .replace(/\*/g, " ⋅ ")
+        .replace(/([A-Za-z0-9)\]])\^(-?\d+)/g, "$1<sup>$2</sup>")
+        .replace(/(^|[\s=(])-/g, "$1−");
+
+      return output;
+    }
+
+    function renderFractions(expression) {
+      const fraction = (numerator, denominator) =>
+        `<span class="fraction"><span class="num">${numerator.trim()}</span><span class="den">${denominator.trim()}</span></span>`;
+
+      let output = expression;
+      output = output.replace(/\(([^()<>]+)\)\s*\/\s*\(([^()<>]+)\)/g, (_, numerator, denominator) => fraction(numerator, denominator));
+      output = output.replace(/\(([^()<>]+)\)\s*\/\s*([A-Za-z0-9^]+)/g, (_, numerator, denominator) => fraction(numerator, denominator));
+      output = output.replace(/([A-Za-z0-9^]+)\s*\/\s*\(([^()<>]+)\)/g, (_, numerator, denominator) => fraction(numerator, denominator));
+      output = output.replace(/([A-Za-z0-9^]+)\s*\/\s*([A-Za-z0-9^]+)/g, (_, numerator, denominator) => fraction(numerator, denominator));
+      return output;
+    }
+
+    function validateExpressionInput(input, force = false) {
+      const value = input.value.trim();
+      const note = input.parentElement.querySelector(".validation-note");
+      if (!value) {
+        resetInputState(input);
+        if (force && note) {
+          note.textContent = "Enter an expression.";
+          note.className = "validation-note bad";
+          input.classList.add("incorrect");
+        }
+        return false;
+      }
+
+      const vars = (input.dataset.vars || "y").split(",").map((item) => item.trim()).filter(Boolean);
+      const answer = input.dataset.answer;
+      const isCorrect = expressionsEquivalent(value, answer, vars);
+      input.classList.toggle("correct", isCorrect);
+      input.classList.toggle("incorrect", !isCorrect);
+
+      if (note) {
+        note.textContent = isCorrect ? "Correct" : "Not equivalent yet";
+        note.className = `validation-note ${isCorrect ? "good" : "bad"}`;
+      }
+      return isCorrect;
+    }
+
+    function resetInputState(input) {
+      input.classList.remove("correct", "incorrect");
+      const note = input.parentElement.querySelector(".validation-note");
+      if (note) {
+        note.textContent = "";
+        note.className = "validation-note";
+      }
+    }
+
+    function expressionsEquivalent(userExpression, expectedExpression, variableNames) {
+      try {
+        const samples = buildSamples(variableNames);
+        return samples.every((values) => {
+          const userValue = evaluateExpression(userExpression, values);
+          const expectedValue = evaluateExpression(expectedExpression, values);
+          if (!Number.isFinite(userValue) || !Number.isFinite(expectedValue)) return false;
+          return Math.abs(userValue - expectedValue) <= 1e-7 * Math.max(1, Math.abs(expectedValue));
+        });
+      } catch (error) {
+        return false;
+      }
+    }
+
+    function evaluateExpression(expression, values) {
+      const prepared = prepareExpression(expression);
+      if (!/^[0-9A-Za-z_+\-*/().,\s^]+$/.test(prepared)) {
+        throw new Error("Unsupported characters");
+      }
+      const enrichedValues = addImplicitProductVariables(values);
+      const names = Object.keys(enrichedValues);
+      const args = names.map((name) => enrichedValues[name]);
+      const evaluator = Function(...names, `"use strict"; const sqrt = Math.sqrt; const cbrt = Math.cbrt; const abs = Math.abs; const pi = Math.PI; return (${prepared});`);
+      return evaluator(...args);
+    }
+
+    function addImplicitProductVariables(values) {
+      const enriched = { ...values };
+      const singleLetterNames = Object.keys(values).filter((name) => /^[A-Za-z]$/.test(name));
+
+      singleLetterNames.forEach((first) => {
+        singleLetterNames.forEach((second) => {
+          if (first !== second) enriched[first + second] = values[first] * values[second];
+          singleLetterNames.forEach((third) => {
+            if (first !== second && second !== third && first !== third) {
+              enriched[first + second + third] = values[first] * values[second] * values[third];
+            }
+          });
+        });
+      });
+
+      return enriched;
+    }
+
+    function prepareExpression(expression) {
+      let output = expression
+        .replace(/[−–—]/g, "-")
+        .replace(/[×·]/g, "*")
+        .replace(/[÷]/g, "/")
+        .replace(/\^/g, "**")
+        .replace(/\s+/g, "");
+
+      output = output.replace(/(\d|\))(?=\()/g, "$1*");
+      output = output.replace(/(\d)(?=[A-Za-z_])/g, "$1*");
+      output = output.replace(/\)(?=\d|[A-Za-z_])/g, ")*");
+      return output;
+    }
+
+    function buildSamples(variableNames) {
+      const base = [
+        { y: 18, x: 4, P: 40, L: 7, W: 13, g: 20, h: 5, I: 2, R: 10, T: 3, s: 6, t: -4, q: 2, A: 4, N: 2, C: 6, k: 1, m: -2, n: -3, p: 9, r: 3, a: 50, z: 2 },
+        { y: 27, x: -3, P: 64, L: 12, W: 20, g: -8, h: 9, I: 4, R: 6, T: 5, s: -5, t: 11, q: -4, A: 6, N: 5, C: -2, k: 8, m: 7, n: 4, p: -1, r: 5, a: 96, z: 3 },
+        { y: 9, x: 8, P: 22, L: -5, W: 16, g: 14, h: -7, I: 3, R: 8, T: -2, s: 3, t: 5, q: 6, A: -2, N: 7, C: 10, k: -4, m: 6, n: -8, p: 5, r: -2, a: 24, z: 4 },
+        { y: 35, x: 2, P: 81, L: 9, W: 31, g: 3, h: 12, I: 5, R: 11, T: 7, s: 10, t: -9, q: 1, A: 3, N: -4, C: 8, k: 2, m: -5, n: 6, p: 14, r: 4, a: 75, z: 5 }
+      ];
+
+      return base.map((row, sampleIndex) => {
+        const values = {};
+        variableNames.forEach((name, index) => {
+          values[name] = row[name] ?? (sampleIndex + 2) * (index + 3);
+          if (name.toLowerCase() === "y" && values[name] === 0) values[name] = 5;
+        });
+        return values;
+      });
+    }
+
+    function makeEasyAddProblem() {
+      const b = randomNonZero(-12, 12);
+      const action = b >= 0 ? `Subtract ${b}` : `Add ${Math.abs(b)}`;
+      const answer = inverseAddExpression("y", b);
+      return {
+        prompt: "Change the subject to x.",
+        formula: `x ${formatSigned(b)} = y`,
+        target: "x",
+        vars: ["y"],
+        finalAnswer: answer,
+        steps: [
+          {
+            action,
+            target: "x =",
+            answer,
+            placeholder: "Right side",
+            explanation: `${action} on both sides to remove ${formatSignedTerm(b)} from x.`
+          }
+        ]
+      };
+    }
+
+    function makeEasyMultiplyProblem() {
+      const a = randomNonZero(-9, 9);
+      return {
+        prompt: "Change the subject to x.",
+        formula: `${formatCoefficient(a)}x = y`,
+        target: "x",
+        vars: ["y"],
+        finalAnswer: `y / ${a}`,
+        steps: [
+          {
+            action: `Divide both sides by ${a}`,
+            target: "x =",
+            answer: `y / ${a}`,
+            placeholder: "y / coefficient",
+            explanation: `The coefficient ${a} is multiplying x, so divide both sides by ${a}.`
+          }
+        ]
+      };
+    }
+
+    function makeMediumLinearProblem() {
+      const a = randomNonZero(-9, 9);
+      const b = randomInt(-12, 12);
+      const first = inverseAddExpression("y", b);
+      const final = `(${first}) / ${a}`;
+      return {
+        prompt: "Use the box method to isolate x.",
+        formula: `${formatCoefficient(a)}x ${formatSigned(b)} = y`,
+        target: "x",
+        vars: ["y"],
+        finalAnswer: final,
+        steps: [
+          {
+            action: b >= 0 ? `Subtract ${b}` : `Add ${Math.abs(b)}`,
+            target: `${formatCoefficient(a)}x =`,
+            answer: first,
+            placeholder: "Right side after moving constant",
+            explanation: `Remove the outside constant ${formatSignedTerm(b)} first.`
+          },
+          {
+            action: `Divide by ${a}`,
+            target: "x =",
+            answer: final,
+            placeholder: "Final expression",
+            explanation: `The remaining coefficient ${a} is attached to x, so divide the whole right side by ${a}.`
+          }
+        ]
+      };
+    }
+
+    function makeMediumFractionProblem() {
+      const d = randomNonZero(2, 9);
+      const b = randomInt(-10, 10);
+      const first = inverseAddExpression("y", b);
+      const final = `${d} * (${first})`;
+      return {
+        prompt: "Change the subject to x. Watch the fraction carefully.",
+        formula: `x / ${d} ${formatSigned(b)} = y`,
+        target: "x",
+        vars: ["y"],
+        finalAnswer: final,
+        steps: [
+          {
+            action: b >= 0 ? `Subtract ${b}` : `Add ${Math.abs(b)}`,
+            target: `x / ${d} =`,
+            answer: first,
+            placeholder: "Right side after moving constant",
+            explanation: `Move the outside constant before clearing the denominator.`
+          },
+          {
+            action: `Multiply by ${d}`,
+            target: "x =",
+            answer: final,
+            placeholder: "Final expression",
+            explanation: `Because x is divided by ${d}, multiply the entire other side by ${d}.`
+          }
+        ]
+      };
+    }
+
+    function makeHardReciprocalProblem() {
+      const a = randomNonZero(4, 18);
+      const b = randomInt(-8, 8);
+      const middle = `${a} / y`;
+      const final = inverseAddExpression(middle, b);
+      return {
+        prompt: "The subject is inside a denominator. Isolate x.",
+        formula: `y = ${a} / (x ${formatSigned(b)})`,
+        target: "x",
+        vars: ["y"],
+        finalAnswer: final,
+        steps: [
+          {
+            action: `Multiply both sides by (x ${formatSigned(b)})`,
+            target: `y(x ${formatSigned(b)}) =`,
+            answer: `${a}`,
+            placeholder: `${a}`,
+            explanation: `Multiplying by the denominator removes the fraction.`
+          },
+          {
+            action: "Divide by y",
+            target: `x ${formatSigned(b)} =`,
+            answer: middle,
+            placeholder: `${a} / y`,
+            explanation: `Divide by y so the bracket containing x is alone.`
+          },
+          {
+            action: b >= 0 ? `Subtract ${b}` : `Add ${Math.abs(b)}`,
+            target: "x =",
+            answer: final,
+            placeholder: "Final expression",
+            explanation: `Undo the constant inside the bracket to leave x alone.`
+          }
+        ]
+      };
+    }
+
+    function makeHardSquareProblem() {
+      const a = randomNonZero(2, 7);
+      const b = randomInt(-9, 9);
+      const first = inverseAddExpression("y", b);
+      const second = `(${first}) / ${a}`;
+      const final = `sqrt(${second})`;
+      return {
+        prompt: "Assume x is non-negative. Change the subject to x.",
+        formula: `${formatCoefficient(a)}x^2 ${formatSigned(b)} = y`,
+        target: "x",
+        vars: ["y"],
+        finalAnswer: final,
+        steps: [
+          {
+            action: b >= 0 ? `Subtract ${b}` : `Add ${Math.abs(b)}`,
+            target: `${formatCoefficient(a)}x^2 =`,
+            answer: first,
+            placeholder: "Right side",
+            explanation: `Remove the outside constant first.`
+          },
+          {
+            action: `Divide by ${a}`,
+            target: "x^2 =",
+            answer: second,
+            placeholder: "Expression under the root",
+            explanation: `Divide by the coefficient of x^2.`
+          },
+          {
+            action: "Take the square root",
+            target: "x =",
+            answer: final,
+            placeholder: "sqrt(...)",
+            explanation: `The inverse of squaring is square root. This exercise uses the non-negative root.`
+          }
+        ]
+      };
+    }
+
+    function makeWorkbookPhoneBalanceProblem() {
+      return {
+        prompt: "Daily life: after a RM3 phone-credit bonus, final balance is g. Make h the original balance.",
+        formula: "g = 3 + h",
+        target: "h",
+        vars: ["g"],
+        finalAnswer: "g - 3",
+        steps: [
+          {
+            action: "Subtract 3 from both sides",
+            target: "h =",
+            answer: "g - 3",
+            placeholder: "g - 3",
+            explanation: "The RM3 bonus is added to h, so subtract 3 to recover the starting balance."
+          }
+        ]
+      };
+    }
+
+    function makeWorkbookElectricTimeProblem() {
+      return {
+        prompt: "Daily life: an electrical formula uses P = IRT. Make T the subject so you can find time.",
+        formula: "P = IRT",
+        target: "T",
+        vars: ["P", "I", "R", "T"],
+        finalAnswer: "P / (I * R)",
+        steps: [
+          {
+            action: "Divide both sides by I",
+            target: "P / I =",
+            answer: "R * T",
+            placeholder: "R * T",
+            explanation: "I is multiplying R and T, so divide by I first."
+          },
+          {
+            action: "Divide both sides by R",
+            target: "T =",
+            answer: "P / (I * R)",
+            placeholder: "P / (I * R)",
+            explanation: "R is still multiplying T, so divide by R too."
+          }
+        ]
+      };
+    }
+
+    function makeWorkbookQSubjectProblem() {
+      return {
+        prompt: "Workbook style: change the subject to q.",
+        formula: "2s + t = -8q",
+        target: "q",
+        vars: ["s", "t"],
+        finalAnswer: "(2 * s + t) / -8",
+        steps: [
+          {
+            action: "Swap sides so the q-term is on the left",
+            target: "-8q =",
+            answer: "2 * s + t",
+            placeholder: "2s + t",
+            explanation: "Changing left and right sides does not change equality."
+          },
+          {
+            action: "Divide by -8",
+            target: "q =",
+            answer: "(2 * s + t) / -8",
+            placeholder: "(2s + t) / -8",
+            explanation: "-8 is multiplying q, so divide the whole other side by -8."
+          }
+        ]
+      };
+    }
+
+    function makeWorkbookGSubjectProblem() {
+      return {
+        prompt: "Daily life: 4 items cost g each, with a 2h discount, and the final total is 7. Make g the subject.",
+        formula: "4g - 2h = 7",
+        target: "g",
+        vars: ["h"],
+        finalAnswer: "(7 + 2 * h) / 4",
+        steps: [
+          {
+            action: "Add 2h to both sides",
+            target: "4g =",
+            answer: "7 + 2 * h",
+            placeholder: "7 + 2h",
+            explanation: "The -2h is outside the g box, so add 2h to remove it."
+          },
+          {
+            action: "Divide by 4",
+            target: "g =",
+            answer: "(7 + 2 * h) / 4",
+            placeholder: "(7 + 2h) / 4",
+            explanation: "The 4 is multiplying g, so divide the whole right side by 4."
+          }
+        ]
+      };
+    }
+
+    function makeWorkbookAverageSubjectProblem() {
+      return {
+        prompt: "Daily life: three scores have average 5. If one known score is y, make x the missing score.",
+        formula: "(x + y) / 3 = 5",
+        target: "x",
+        vars: ["y"],
+        finalAnswer: "15 - y",
+        steps: [
+          {
+            action: "Multiply both sides by 3",
+            target: "x + y =",
+            answer: "15",
+            placeholder: "15",
+            explanation: "A fraction divided by 3 is undone by multiplying by 3."
+          },
+          {
+            action: "Subtract y",
+            target: "x =",
+            answer: "15 - y",
+            placeholder: "15 - y",
+            explanation: "Remove the known score y to leave the missing score x."
+          }
+        ]
+      };
+    }
+
+    function makeWorkbookYSubjectProblem() {
+      return {
+        prompt: "Workbook style: change the subject to y.",
+        formula: "12x - 4y = 20",
+        target: "y",
+        vars: ["x"],
+        finalAnswer: "(20 - 12 * x) / -4",
+        steps: [
+          {
+            action: "Subtract 12x from both sides",
+            target: "-4y =",
+            answer: "20 - 12 * x",
+            placeholder: "20 - 12x",
+            explanation: "Move the 12x term away from the y-term first."
+          },
+          {
+            action: "Divide by -4",
+            target: "y =",
+            answer: "(20 - 12 * x) / -4",
+            placeholder: "(20 - 12x) / -4",
+            explanation: "-4 is multiplying y, so divide the whole right side by -4."
+          }
+        ]
+      };
+    }
+
+    function makeWorkbookCubeSubjectProblem() {
+      return {
+        prompt: "Daily life: a packaging formula hides z inside a cube. Make z the subject.",
+        formula: "x = yz^3 / 6",
+        target: "z",
+        vars: ["x", "y", "z"],
+        finalAnswer: "cbrt((6 * x) / y)",
+        steps: [
+          {
+            action: "Multiply both sides by 6",
+            target: "6x =",
+            answer: "y * z^3",
+            placeholder: "y * z^3",
+            explanation: "Multiplying by 6 clears the denominator."
+          },
+          {
+            action: "Divide by y",
+            target: "z^3 =",
+            answer: "6 * x / y",
+            placeholder: "6x / y",
+            explanation: "Divide by y so only z^3 remains."
+          },
+          {
+            action: "Take the cube root",
+            target: "z =",
+            answer: "cbrt((6 * x) / y)",
+            placeholder: "cbrt((6x) / y)",
+            explanation: "The inverse of cubing is cube root."
+          }
+        ]
+      };
+    }
+
+    function makeWorkbookRadiusValueProblem() {
+      return {
+        prompt: "Daily life: A is area-like sharing over 2L. Make r the subject, then find r when A = 4 and L = 3.",
+        formula: "A = r / (2L)",
+        target: "r",
+        vars: ["A", "L"],
+        finalAnswer: "24",
+        steps: [
+          {
+            action: "Multiply both sides by 2L",
+            target: "r =",
+            answer: "2 * L * A",
+            placeholder: "2 * L * A",
+            explanation: "r is divided by 2L, so multiply by 2L."
+          },
+          {
+            action: "Substitute A = 4 and L = 3",
+            target: "r =",
+            answer: "24",
+            placeholder: "24",
+            explanation: "2 x 3 x 4 = 24."
+          }
+        ]
+      };
+    }
+
+    function makeWorkbookFundValueProblem() {
+      return {
+        prompt: "Daily life: each student's share is P. Make R the subject, then find R when P = -1, N = 2, and C = 6.",
+        formula: "(R - C) / N = P",
+        target: "R",
+        vars: ["P", "N", "C"],
+        finalAnswer: "4",
+        steps: [
+          {
+            action: "Multiply both sides by N",
+            target: "R - C =",
+            answer: "P * N",
+            placeholder: "P * N",
+            explanation: "The expression R - C is divided by N, so multiply by N."
+          },
+          {
+            action: "Add C",
+            target: "R =",
+            answer: "P * N + C",
+            placeholder: "P * N + C",
+            explanation: "Add C to leave R alone."
+          },
+          {
+            action: "Substitute P = -1, N = 2, C = 6",
+            target: "R =",
+            answer: "4",
+            placeholder: "4",
+            explanation: "(-1)(2) + 6 = 4."
+          }
+        ]
+      };
+    }
+
+    function makeWorkbookMValueProblem() {
+      return {
+        prompt: "Workbook style: make m the subject, then find m when k = 1, n = -3, and p = 2.",
+        formula: "k = (2 / 3)mn - p^2",
+        target: "m",
+        vars: ["k", "m", "n", "p"],
+        finalAnswer: "-2.5",
+        steps: [
+          {
+            action: "Add p^2",
+            target: "k + p^2 =",
+            answer: "(2 / 3) * m * n",
+            placeholder: "(2 / 3)mn",
+            explanation: "The -p^2 is outside the m-term, so add p^2 first."
+          },
+          {
+            action: "Multiply by 3",
+            target: "3(k + p^2) =",
+            answer: "2 * m * n",
+            placeholder: "2mn",
+            explanation: "This clears the denominator 3."
+          },
+          {
+            action: "Divide by 2n",
+            target: "m =",
+            answer: "3 * (k + p^2) / (2 * n)",
+            placeholder: "3(k + p^2) / (2n)",
+            explanation: "2n is multiplying m."
+          },
+          {
+            action: "Substitute k = 1, n = -3, p = 2",
+            target: "m =",
+            answer: "-2.5",
+            placeholder: "-2.5",
+            explanation: "3(1 + 4) / (2 x -3) = 15 / -6 = -2.5."
+          }
+        ]
+      };
+    }
+
+    function makeWorkbookQValueProblem() {
+      return {
+        prompt: "Workbook style: make q the subject, then find q when p = 9 and r = 3.",
+        formula: "p = 3q - 2r^2",
+        target: "q",
+        vars: ["p", "q", "r"],
+        finalAnswer: "9",
+        steps: [
+          {
+            action: "Add 2r^2",
+            target: "p + 2r^2 =",
+            answer: "3 * q",
+            placeholder: "3q",
+            explanation: "The -2r^2 is outside the q-term, so add 2r^2."
+          },
+          {
+            action: "Divide by 3",
+            target: "q =",
+            answer: "(p + 2 * r^2) / 3",
+            placeholder: "(p + 2r^2) / 3",
+            explanation: "3 is multiplying q, so divide by 3."
+          },
+          {
+            action: "Substitute p = 9 and r = 3",
+            target: "q =",
+            answer: "9",
+            placeholder: "9",
+            explanation: "(9 + 2 x 3^2) / 3 = 27 / 3 = 9."
+          }
+        ]
+      };
+    }
+
+    function inverseAddExpression(base, constant) {
+      if (constant === 0) return base;
+      return constant > 0 ? `${base} - ${constant}` : `${base} + ${Math.abs(constant)}`;
+    }
+
+    function formatSigned(value) {
+      if (value === 0) return "+ 0";
+      return value > 0 ? `+ ${value}` : `− ${Math.abs(value)}`;
+    }
+
+    function formatSignedTerm(value) {
+      if (value === 0) return "0";
+      return value > 0 ? `+${value}` : `-${Math.abs(value)}`;
+    }
+
+    function formatCoefficient(value) {
+      if (value === 1) return "";
+      if (value === -1) return "−";
+      return String(value).replace("-", "−");
+    }
+
+    function randomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function randomNonZero(min, max) {
+      let value = 0;
+      while (value === 0 || value === 1 || value === -1) {
+        value = randomInt(min, max);
+      }
+      return value;
+    }
+
+    function capitalize(text) {
+      return text.charAt(0).toUpperCase() + text.slice(1);
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+  </script>
+</body>
+</html>

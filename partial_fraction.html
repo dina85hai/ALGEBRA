@@ -1,0 +1,1947 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Platform pembelajaran interaktif pecahan separa - Comparison & Substitution Methods">
+    <meta name="keywords" content="pecahan separa, matematik, pembelajaran interaktif, comparison method, substitution method">
+    <meta name="author" content="Premium Educational Solutions">
+    <title>Pecahan Separa - Interactive Learning | Comparison & Substitution Methods</title>
+    
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%233b82f6;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%238b5cf6;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='45' fill='url(%23grad)'/%3E%3Ctext x='50' y='65' font-family='Arial' font-size='50' fill='white' text-anchor='middle' font-weight='bold'%3EA%3C/text%3E%3C/svg%3E">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --brand-primary: #3b82f6;
+            --brand-primary-light: #60a5fa;
+            --brand-primary-dark: #2563eb;
+            --brand-secondary: #10b981;
+            --brand-secondary-light: #34d399;
+            --brand-accent: #8b5cf6;
+            --brand-accent-light: #a78bfa;
+            --brand-warning: #f59e0b;
+            --brand-danger: #ef4444;
+            --brand-info: #06b6d4;
+            
+            --color-comparison: #dc2626;
+            --color-substitution: #16a34a;
+            
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-tertiary: #f3f4f6;
+            
+            --text-primary: #111827;
+            --text-secondary: #4b5563;
+            --text-tertiary: #9ca3af;
+            --text-inverse: #ffffff;
+            
+            --border-light: #e5e7eb;
+            --border-medium: #d1d5db;
+            
+            --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            
+            --gradient-brand: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-accent) 100%);
+            --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --gradient-comparison: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            --gradient-substitution: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+            
+            --space-xs: 0.25rem;
+            --space-sm: 0.5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            --space-2xl: 3rem;
+            --space-3xl: 4rem;
+            
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+            --radius-full: 9999px;
+            
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+            
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-mono: 'SF Mono', Monaco, Consolas, monospace;
+            --font-math: 'Latin Modern Math', 'STIX Two Math', 'Cambria Math', serif;
+            
+            --z-base: 1;
+            --z-elevated: 10;
+            --z-modal: 1000;
+        }
+        
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        body {
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--gradient-brand);
+            min-height: 100vh;
+            padding: var(--space-lg);
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-2xl);
+            box-shadow: var(--shadow-2xl);
+            padding: var(--space-2xl);
+            position: relative;
+            z-index: var(--z-elevated);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: var(--space-2xl);
+            padding: var(--space-xl);
+            background: var(--gradient-brand);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-inverse);
+            margin-bottom: var(--space-sm);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 0.4rem 1rem;
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-inverse);
+            margin-top: var(--space-sm);
+        }
+        
+        .tabs {
+            display: flex;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-xl);
+            background: var(--bg-secondary);
+            padding: var(--space-sm);
+            border-radius: var(--radius-xl);
+            overflow-x: auto;
+        }
+        
+        .tab-btn {
+            flex: 1;
+            min-width: 150px;
+            padding: 1rem 1.5rem;
+            background: transparent;
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+        }
+        
+        .tab-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .tab-btn.active {
+            background: var(--bg-primary);
+            color: var(--brand-primary);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn var(--transition-smooth);
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .card {
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-light);
+            margin-bottom: var(--space-xl);
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--brand-primary);
+            margin-bottom: var(--space-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+        
+        .story-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-xl);
+            margin-bottom: var(--space-2xl);
+        }
+        
+        .story-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            color: var(--text-inverse);
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .story-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: var(--space-md);
+        }
+        
+        .story-card p {
+            line-height: 1.8;
+            opacity: 0.95;
+        }
+        
+        .story-highlight {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-left: 4px solid rgba(255, 255, 255, 0.5);
+            padding: var(--space-lg);
+            margin: var(--space-lg) 0;
+            border-radius: var(--radius-md);
+        }
+        
+        .methods-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: var(--space-xl);
+            margin: var(--space-xl) 0;
+        }
+        
+        .method-card {
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-lg);
+            border: 2px solid transparent;
+        }
+        
+        .method-card.comparison {
+            border-color: var(--color-comparison);
+        }
+        
+        .method-card.substitution {
+            border-color: var(--color-substitution);
+        }
+        
+        .method-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+            padding: var(--space-md);
+            border-radius: var(--radius-lg);
+        }
+        
+        .method-header.comparison {
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.1) 0%, rgba(153, 27, 27, 0.1) 100%);
+        }
+        
+        .method-header.substitution {
+            background: linear-gradient(135deg, rgba(22, 163, 74, 0.1) 0%, rgba(21, 128, 61, 0.1) 100%);
+        }
+        
+        .method-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .method-icon.comparison {
+            background: var(--gradient-comparison);
+        }
+        
+        .method-icon.substitution {
+            background: var(--gradient-substitution);
+        }
+        
+        .solver-container {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            margin: var(--space-xl) 0;
+        }
+        
+        .problem-display {
+            background: white;
+            padding: var(--space-xl);
+            border-radius: var(--radius-lg);
+            text-align: center;
+            margin-bottom: var(--space-xl);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .fraction {
+            font-size: 1.6rem;
+            font-family: var(--font-math);
+        }
+        
+        .fraction .numerator {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+        
+        .fraction .line {
+            border-top: 4px solid var(--brand-primary);
+            margin: 10px auto;
+            width: 80%;
+        }
+        
+        .fraction .denominator {
+            font-size: 1.5em;
+            padding-top: 10px;
+        }
+        
+        .progress-bar {
+            background: var(--bg-tertiary);
+            height: 8px;
+            border-radius: var(--radius-full);
+            margin: var(--space-xl) 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-brand);
+            border-radius: var(--radius-full);
+            transition: width var(--transition-smooth);
+        }
+        
+        .progress-text {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-top: var(--space-sm);
+        }
+        
+        .step-container {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            margin: var(--space-lg) 0;
+            box-shadow: var(--shadow-md);
+            opacity: 0.5;
+            pointer-events: none;
+            transition: all var(--transition-smooth);
+        }
+        
+        .step-container.active {
+            opacity: 1;
+            pointer-events: auto;
+            border: 2px solid var(--brand-primary);
+        }
+        
+        .step-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-lg);
+            padding-bottom: var(--space-md);
+            border-bottom: 2px solid var(--border-light);
+        }
+        
+        .step-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--brand-primary);
+        }
+        
+        .step-number-badge {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-brand);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+        
+        .step-instruction {
+            background: var(--bg-secondary);
+            padding: var(--space-lg);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-lg);
+            border-left: 4px solid var(--brand-info);
+        }
+        
+        .step-work {
+            font-family: var(--font-math);
+            font-size: 1.2rem;
+            padding: var(--space-md);
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-md);
+            margin: var(--space-md) 0;
+        }
+        
+        .input-group {
+            margin: var(--space-lg) 0;
+        }
+        
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: var(--space-sm);
+            color: var(--text-primary);
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: var(--space-md);
+            border: 2px solid var(--border-medium);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-family: var(--font-math);
+            transition: all var(--transition-base);
+        }
+        
+        .input-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-md);
+            margin: var(--space-md) 0;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--brand-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .input-group input.correct {
+            border-color: var(--brand-secondary);
+            background: rgba(16, 185, 129, 0.05);
+        }
+        
+        .input-group input.incorrect {
+            border-color: var(--brand-danger);
+            background: rgba(239, 68, 68, 0.05);
+            animation: shake 0.5s;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .button-group {
+            display: flex;
+            gap: var(--space-md);
+            margin-top: var(--space-lg);
+        }
+        
+        .btn {
+            flex: 1;
+            padding: var(--space-md) var(--space-xl);
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+        }
+        
+        .btn-primary {
+            background: var(--gradient-brand);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 2px solid var(--border-medium);
+        }
+        
+        .btn-warning {
+            background: var(--gradient-warning);
+            color: white;
+        }
+        
+        .feedback {
+            display: none;
+            padding: var(--space-lg);
+            border-radius: var(--radius-lg);
+            margin-top: var(--space-lg);
+            font-weight: 600;
+            align-items: center;
+            gap: var(--space-md);
+            animation: slideIn var(--transition-smooth);
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .feedback.success {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border: 2px solid var(--brand-secondary);
+            color: #065f46;
+        }
+        
+        .feedback.error {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border: 2px solid var(--brand-danger);
+            color: #991b1b;
+        }
+        
+        .feedback-icon {
+            font-size: 1.5rem;
+        }
+        
+        .hint-box {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border: 2px solid var(--brand-warning);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            margin-top: var(--space-lg);
+            display: none;
+        }
+        
+        .hint-box.show {
+            display: block;
+        }
+        
+        .difficulty-selector {
+            display: flex;
+            gap: var(--space-md);
+            margin: var(--space-xl) 0;
+        }
+        
+        .difficulty-btn {
+            flex: 1;
+            padding: var(--space-lg);
+            background: white;
+            border: 2px solid var(--border-medium);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            text-align: center;
+        }
+        
+        .difficulty-btn.active {
+            background: var(--gradient-brand);
+            color: white;
+            border-color: var(--brand-primary);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-lg);
+            margin: var(--space-xl) 0;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: var(--space-xl);
+            border-radius: var(--radius-lg);
+            text-align: center;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-brand);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-top: var(--space-xs);
+        }
+        
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-xl);
+        }
+        
+        .tip-card {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-md);
+            border-left: 4px solid var(--brand-primary);
+        }
+        
+        .tip-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-brand);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: var(--space-md);
+        }
+        
+        .celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: var(--z-modal);
+        }
+        
+        .celebration.show {
+            display: flex;
+        }
+        
+        .celebration-content {
+            background: white;
+            border-radius: var(--radius-2xl);
+            padding: var(--space-3xl);
+            text-align: center;
+            max-width: 500px;
+            box-shadow: var(--shadow-2xl);
+        }
+        
+        .celebration-icon {
+            font-size: 5rem;
+            margin-bottom: var(--space-lg);
+        }
+        
+        @media (max-width: 768px) {
+            body { padding: var(--space-md); }
+            .container { padding: var(--space-lg); }
+            .header h1 { font-size: 1.8rem; }
+            .methods-comparison { grid-template-columns: 1fr; }
+            .input-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 Pecahan Separa (Partial Fractions)</h1>
+            <p>Interactive Step-by-Step Learning Platform</p>
+            <span class="badge">✨ Comparison & Substitution Methods</span>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('intro')">
+                <span>🏠 Pengenalan</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab('methods')">
+                <span>🔧 Kaedah (Methods)</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab('practice')">
+                <span>🎮 Practice</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab('tips')">
+                <span>💡 Tips</span>
+            </button>
+        </div>
+        
+        <!-- TAB 1: PENGENALAN -->
+        <div id="intro" class="tab-content active">
+            <div class="card">
+                <h2 class="card-title">📚 Objektif Pembelajaran</h2>
+                <ul style="list-style: none; padding-left: 0;">
+                    <li style="padding: 0.5rem 0; padding-left: 1.5rem; position: relative;">
+                        <span style="position: absolute; left: 0; color: var(--brand-secondary); font-weight: 700;">✓</span>
+                        Memahami konsep pecahan separa untuk non-repeated linear factors
+                    </li>
+                    <li style="padding: 0.5rem 0; padding-left: 1.5rem; position: relative;">
+                        <span style="position: absolute; left: 0; color: var(--brand-secondary); font-weight: 700;">✓</span>
+                        Menguasai <strong>Comparison Method</strong> (Kaedah Perbandingan)
+                    </li>
+                    <li style="padding: 0.5rem 0; padding-left: 1.5rem; position: relative;">
+                        <span style="position: absolute; left: 0; color: var(--brand-secondary); font-weight: 700;">✓</span>
+                        Menguasai <strong>Substitution Method</strong> (Kaedah Penggantian)
+                    </li>
+                    <li style="padding: 0.5rem 0; padding-left: 1.5rem; position: relative;">
+                        <span style="position: absolute; left: 0; color: var(--brand-secondary); font-weight: 700;">✓</span>
+                        Memilih kaedah yang paling sesuai dan cepat
+                    </li>
+                </ul>
+            </div>
+            
+            <h2 style="margin: 2rem 0 1rem 0; color: var(--brand-primary);">🌟 Real-World Applications</h2>
+            
+            <div class="story-grid">
+                <div class="story-card">
+                    <h3>🎮 Gaming: Speed Calculation</h3>
+                    <p>
+                        Amir sedang develop racing game. Formula speed kereta terlalu complex untuk real-time calculation!
+                    </p>
+                    
+                    <div class="story-highlight">
+                        <strong>🤔 Masalah:</strong><br>
+                        Formula: (5x + 7) / ((x+1)(x+2))<br>
+                        Terlalu complex! Perlu simplify.
+                    </div>
+                    
+                    <p style="margin-top: 1rem;">
+                        <strong>💡 Penyelesaian:</strong> Partial Fractions!<br>
+                        Break jadi: A/(x+1) + B/(x+2)
+                    </p>
+                    
+                    <ul style="margin-top: 1rem;">
+                        <li>✓ Calculation lebih cepat</li>
+                        <li>✓ Code lebih simple</li>
+                        <li>✓ Game runs smoother!</li>
+                    </ul>
+                </div>
+                
+                <div class="story-card">
+                    <h3>🌐 Social Media: Load Distribution</h3>
+                    <p>
+                        Siti kena distribute server load supaya app tidak slow. Kena bahagi equally!
+                    </p>
+                    
+                    <div class="story-highlight">
+                        <strong>🤔 Masalah:</strong><br>
+                        Total load: (3x + 5) requests<br>
+                        Servers: (x+1) dan (x+3)<br>
+                        Macam mana nak bahagi?
+                    </div>
+                    
+                    <p style="margin-top: 1rem;">
+                        <strong>💡 Penyelesaian:</strong> Partial Fractions!<br>
+                        Split formula untuk each server.
+                    </p>
+                    
+                    <ul style="margin-top: 1rem;">
+                        <li>✓ Balanced server load</li>
+                        <li>✓ App faster</li>
+                        <li>✓ Less crashes!</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card" style="background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);">
+                <h3 style="color: var(--brand-info); margin-bottom: 1rem;">🎯 Dua Kaedah Utama</h3>
+                
+                <div class="methods-comparison">
+                    <div class="method-card comparison">
+                        <div class="method-header comparison">
+                            <div class="method-icon comparison">C</div>
+                            <div>
+                                <h3>Comparison Method</h3>
+                                <p>Bandingkan coefficients</p>
+                            </div>
+                        </div>
+                        <div style="background: white; padding: 1rem; border-radius: 0.5rem;">
+                            <strong>📋 Steps:</strong>
+                            <ol style="margin-top: 0.5rem; line-height: 2;">
+                                <li>Setup partial fractions</li>
+                                <li>Multiply dengan denominator</li>
+                                <li>Expand A(x+q)</li>
+                                <li>Expand B(x+p)</li>
+                                <li><strong style="color: var(--color-comparison);">Compare coefficients</strong></li>
+                                <li>Solve simultaneous equations</li>
+                            </ol>
+                        </div>
+                    </div>
+                    
+                    <div class="method-card substitution">
+                        <div class="method-header substitution">
+                            <div class="method-icon substitution">S</div>
+                            <div>
+                                <h3>Substitution Method</h3>
+                                <p>Gantikan nilai x strategik</p>
+                            </div>
+                        </div>
+                        <div style="background: white; padding: 1rem; border-radius: 0.5rem;">
+                            <strong>📋 Steps:</strong>
+                            <ol style="margin-top: 0.5rem; line-height: 2;">
+                                <li>Setup partial fractions</li>
+                                <li>Multiply dengan denominator</li>
+                                <li><strong style="color: var(--color-substitution);">Let x+p=0, x=-p</strong></li>
+                                <li>Substitute untuk cari A</li>
+                                <li><strong style="color: var(--color-substitution);">Let x+q=0, x=-q</strong></li>
+                                <li>Substitute untuk cari B</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- TAB 2: METHODS (INTERACTIVE) -->
+        <div id="methods" class="tab-content">
+            <div class="card">
+                <h2 class="card-title">🎯 Interactive Method Practice</h2>
+                <p style="margin-bottom: 2rem; color: var(--text-secondary);">
+                    Pilih method dan practice step-by-step dengan DETAILED input boxes!
+                </p>
+                
+                <div style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+                    <button class="btn btn-primary" onclick="showMethodSolver('comparison')" style="flex: 1;">
+                        <span>📊 Try Comparison Method</span>
+                    </button>
+                    <button class="btn btn-primary" onclick="showMethodSolver('substitution')" style="flex: 1;">
+                        <span>🔄 Try Substitution Method</span>
+                    </button>
+                </div>
+                
+                <!-- COMPARISON METHOD SOLVER -->
+                <div id="comparisonSolver" class="solver-container" style="display: none;">
+                    <div class="method-header comparison">
+                        <div class="method-icon comparison">C</div>
+                        <div>
+                            <h3>Comparison Method - Step-by-Step Interactive Solver</h3>
+                            <p>Fill in EVERY step untuk master this method!</p>
+                        </div>
+                    </div>
+                    
+                    <div class="problem-display">
+                        <h3 style="margin-bottom: 1rem; color: var(--text-secondary);">Solve menggunakan Comparison Method:</h3>
+                        <div class="fraction" id="comparisonProblem"></div>
+                    </div>
+                    
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="comparisonProgress" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-text" id="comparisonProgressText">Step 0 of 6</div>
+                    
+                    <!-- Step 1: Setup -->
+                    <div class="step-container active" id="comp-step1">
+                        <div class="step-header">
+                            <div class="step-title">Step 1: Setup Partial Fractions Form</div>
+                            <div class="step-number-badge">1</div>
+                        </div>
+                        <div class="step-instruction">
+                            Express pecahan dalam bentuk A/(x+p) + B/(x+q)
+                        </div>
+                        <div class="step-work" id="comp-step1-formula"></div>
+                        <button class="btn btn-primary" onclick="completeCompStep(1)">
+                            ✓ Faham! Next Step
+                        </button>
+                    </div>
+                    
+                    <!-- Step 2: Multiply -->
+                    <div class="step-container" id="comp-step2">
+                        <div class="step-header">
+                            <div class="step-title">Step 2: Multiply Both Sides</div>
+                            <div class="step-number-badge">2</div>
+                        </div>
+                        <div class="step-instruction">
+                            Multiply dengan denominator (x+p)(x+q) untuk buang fraction
+                        </div>
+                        <div class="step-work" id="comp-step2-formula"></div>
+                        <button class="btn btn-primary" onclick="completeCompStep(2)">
+                            ✓ Faham! Next Step
+                        </button>
+                    </div>
+                    
+                    <!-- Step 3: Expand A term -->
+                    <div class="step-container" id="comp-step3">
+                        <div class="step-header">
+                            <div class="step-title">Step 3: Expand A(x+q)</div>
+                            <div class="step-number-badge">3</div>
+                        </div>
+                        <div class="step-instruction">
+                            Expand A(x+<span id="comp-q-val"></span>) = ?
+                        </div>
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label>Coefficient of x:</label>
+                                <input type="text" id="comp-step3-coeff" placeholder="A">
+                            </div>
+                            <div class="input-group">
+                                <label>Constant term:</label>
+                                <input type="text" id="comp-step3-const" placeholder="e.g., 2A">
+                            </div>
+                        </div>
+                        <div class="button-group">
+                            <button class="btn btn-primary" onclick="checkCompStep3()">✓ Check</button>
+                            <button class="btn btn-warning" onclick="showCompHint(3)">💡 Hint</button>
+                        </div>
+                        <div class="feedback" id="comp-feedback3"></div>
+                        <div class="hint-box" id="comp-hint3"></div>
+                    </div>
+                    
+                    <!-- Step 4: Expand B term -->
+                    <div class="step-container" id="comp-step4">
+                        <div class="step-header">
+                            <div class="step-title">Step 4: Expand B(x+p)</div>
+                            <div class="step-number-badge">4</div>
+                        </div>
+                        <div class="step-instruction">
+                            Expand B(x+<span id="comp-p-val"></span>) = ?
+                        </div>
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label>Coefficient of x:</label>
+                                <input type="text" id="comp-step4-coeff" placeholder="B">
+                            </div>
+                            <div class="input-group">
+                                <label>Constant term:</label>
+                                <input type="text" id="comp-step4-const" placeholder="e.g., 3B">
+                            </div>
+                        </div>
+                        <div class="button-group">
+                            <button class="btn btn-primary" onclick="checkCompStep4()">✓ Check</button>
+                            <button class="btn btn-warning" onclick="showCompHint(4)">💡 Hint</button>
+                        </div>
+                        <div class="feedback" id="comp-feedback4"></div>
+                        <div class="hint-box" id="comp-hint4"></div>
+                    </div>
+                    
+                    <!-- Step 5: Compare Coefficients -->
+                    <div class="step-container" id="comp-step5">
+                        <div class="step-header">
+                            <div class="step-title">Step 5: Compare Coefficients (KEY STEP!)</div>
+                            <div class="step-number-badge">5</div>
+                        </div>
+                        <div class="step-instruction" style="background: rgba(220, 38, 38, 0.1); border-color: var(--color-comparison);">
+                            <strong>🔑 COMPARISON METHOD:</strong> Bandingkan coefficient of x dan constant terms!
+                        </div>
+                        <div class="step-work" id="comp-step5-original"></div>
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label>Equation 1 (Coefficient of x):</label>
+                                <input type="text" id="comp-step5-eq1" placeholder="e.g., A+B=5">
+                            </div>
+                            <div class="input-group">
+                                <label>Equation 2 (Constant term):</label>
+                                <input type="text" id="comp-step5-eq2" placeholder="e.g., 2A+3B=7">
+                            </div>
+                        </div>
+                        <div class="button-group">
+                            <button class="btn btn-primary" onclick="checkCompStep5()">✓ Check</button>
+                            <button class="btn btn-warning" onclick="showCompHint(5)">💡 Hint</button>
+                        </div>
+                        <div class="feedback" id="comp-feedback5"></div>
+                        <div class="hint-box" id="comp-hint5"></div>
+                    </div>
+                    
+                    <!-- Step 6: Solve -->
+                    <div class="step-container" id="comp-step6">
+                        <div class="step-header">
+                            <div class="step-title">Step 6: Solve Simultaneous Equations</div>
+                            <div class="step-number-badge">6</div>
+                        </div>
+                        <div class="step-instruction">
+                            Solve equations untuk cari nilai A dan B
+                        </div>
+                        <div class="step-work" id="comp-step6-equations"></div>
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label>A = </label>
+                                <input type="number" id="comp-step6-A" placeholder="?" step="0.01">
+                            </div>
+                            <div class="input-group">
+                                <label>B = </label>
+                                <input type="number" id="comp-step6-B" placeholder="?" step="0.01">
+                            </div>
+                        </div>
+                        <div class="button-group">
+                            <button class="btn btn-primary" onclick="checkCompStep6()">✓ Check Final Answer</button>
+                            <button class="btn btn-warning" onclick="showCompHint(6)">💡 Hint</button>
+                        </div>
+                        <div class="feedback" id="comp-feedback6"></div>
+                        <div class="hint-box" id="comp-hint6"></div>
+                    </div>
+                    
+                    <div class="button-group" style="margin-top: 2rem;">
+                        <button class="btn btn-secondary" onclick="generateComparisonProblem()">
+                            🔄 New Problem
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- SUBSTITUTION METHOD SOLVER -->
+                <div id="substitutionSolver" class="solver-container" style="display: none;">
+                    <div class="method-header substitution">
+                        <div class="method-icon substitution">S</div>
+                        <div>
+                            <h3>Substitution Method - Step-by-Step Interactive Solver</h3>
+                            <p>Fill in EVERY step untuk master this method!</p>
+                        </div>
+                    </div>
+                    
+                    <div class="problem-display">
+                        <h3 style="margin-bottom: 1rem; color: var(--text-secondary);">Solve menggunakan Substitution Method:</h3>
+                        <div class="fraction" id="substitutionProblem"></div>
+                    </div>
+                    
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="substitutionProgress" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-text" id="substitutionProgressText">Step 0 of 6</div>
+                    
+                    <!-- Step 1: Setup -->
+                    <div class="step-container active" id="sub-step1">
+                        <div class="step-header">
+                            <div class="step-title">Step 1: Setup Partial Fractions Form</div>
+                            <div class="step-number-badge">1</div>
+                        </div>
+                        <div class="step-instruction">
+                            Express pecahan dalam bentuk A/(x+p) + B/(x+q)
+                        </div>
+                        <div class="step-work" id="sub-step1-formula"></div>
+                        <button class="btn btn-primary" onclick="completeSubStep(1)">
+                            ✓ Faham! Next Step
+                        </button>
+                    </div>
+                    
+                    <!-- Step 2: Multiply -->
+                    <div class="step-container" id="sub-step2">
+                        <div class="step-header">
+                            <div class="step-title">Step 2: Multiply Both Sides</div>
+                            <div class="step-number-badge">2</div>
+                        </div>
+                        <div class="step-instruction">
+                            Multiply dengan denominator untuk buang fraction
+                        </div>
+                        <div class="step-work" id="sub-step2-formula"></div>
+                        <button class="btn btn-primary" onclick="completeSubStep(2)">
+                            ✓ Faham! Next Step
+                        </button>
+                    </div>
+                    
+                    <!-- Step 3: Let x+p=0 -->
+                    <div class="step-container" id="sub-step3">
+                        <div class="step-header">
+                            <div class="step-title">Step 3: Let x+p = 0 (KEY STEP!)</div>
+                            <div class="step-number-badge">3</div>
+                        </div>
+                        <div class="step-instruction" style="background: rgba(22, 163, 74, 0.1); border-color: var(--color-substitution);">
+                            <strong>🔑 SUBSTITUTION METHOD:</strong> Buat x+<span class="sub-p-val"></span> = 0 untuk eliminate B term!
+                        </div>
+                        <div class="input-group">
+                            <label>If x+<span class="sub-p-val2"></span> = 0, maka x = ?</label>
+                            <input type="number" id="sub-step3-x" placeholder="Enter x value">
+                        </div>
+                        <div class="button-group">
+                            <button class="btn btn-primary" onclick="checkSubStep3()">✓ Check</button>
+                            <button class="btn btn-warning" onclick="showSubHint(3)">💡 Hint</button>
+                        </div>
+                        <div class="feedback" id="sub-feedback3"></div>
+                        <div class="hint-box" id="sub-hint3"></div>
+                    </div>
+                    
+                    <!-- Step 4: Substitute to find A -->
+                    <div class="step-container" id="sub-step4">
+                        <div class="step-header">
+                            <div class="step-title">Step 4: Substitute to Find A</div>
+                            <div class="step-number-badge">4</div>
+                        </div>
+                        <div class="step-instruction">
+                            Substitute x = <span id="sub-step4-xval"></span> into equation untuk cari A
+                        </div>
+                        <div class="step-work" id="sub-step4-work"></div>
+                        <div class="input-group">
+                            <label>A = </label>
+                            <input type="number" id="sub-step4-A" placeholder="?" step="0.01">
+                        </div>
+                        <div class="button-group">
+                            <button class="btn btn-primary" onclick="checkSubStep4()">✓ Check</button>
+                            <button class="btn btn-warning" onclick="showSubHint(4)">💡 Hint</button>
+                        </div>
+                        <div class="feedback" id="sub-feedback4"></div>
+                        <div class="hint-box" id="sub-hint4"></div>
+                    </div>
+                    
+                    <!-- Step 5: Let x+q=0 -->
+                    <div class="step-container" id="sub-step5">
+                        <div class="step-header">
+                            <div class="step-title">Step 5: Let x+q = 0 (KEY STEP!)</div>
+                            <div class="step-number-badge">5</div>
+                        </div>
+                        <div class="step-instruction" style="background: rgba(22, 163, 74, 0.1); border-color: var(--color-substitution);">
+                            <strong>🔑 SUBSTITUTION METHOD:</strong> Buat x+<span class="sub-q-val"></span> = 0 untuk eliminate A term!
+                        </div>
+                        <div class="input-group">
+                            <label>If x+<span class="sub-q-val2"></span> = 0, maka x = ?</label>
+                            <input type="number" id="sub-step5-x" placeholder="Enter x value">
+                        </div>
+                        <div class="button-group">
+                            <button class="btn btn-primary" onclick="checkSubStep5()">✓ Check</button>
+                            <button class="btn btn-warning" onclick="showSubHint(5)">💡 Hint</button>
+                        </div>
+                        <div class="feedback" id="sub-feedback5"></div>
+                        <div class="hint-box" id="sub-hint5"></div>
+                    </div>
+                    
+                    <!-- Step 6: Substitute to find B -->
+                    <div class="step-container" id="sub-step6">
+                        <div class="step-header">
+                            <div class="step-title">Step 6: Substitute to Find B</div>
+                            <div class="step-number-badge">6</div>
+                        </div>
+                        <div class="step-instruction">
+                            Substitute x = <span id="sub-step6-xval"></span> into equation untuk cari B
+                        </div>
+                        <div class="step-work" id="sub-step6-work"></div>
+                        <div class="input-group">
+                            <label>B = </label>
+                            <input type="number" id="sub-step6-B" placeholder="?" step="0.01">
+                        </div>
+                        <div class="button-group">
+                            <button class="btn btn-primary" onclick="checkSubStep6()">✓ Check Final Answer</button>
+                            <button class="btn btn-warning" onclick="showSubHint(6)">💡 Hint</button>
+                        </div>
+                        <div class="feedback" id="sub-feedback6"></div>
+                        <div class="hint-box" id="sub-hint6"></div>
+                    </div>
+                    
+                    <div class="button-group" style="margin-top: 2rem;">
+                        <button class="btn btn-secondary" onclick="generateSubstitutionProblem()">
+                            🔄 New Problem
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- TAB 3: PRACTICE -->
+        <div id="practice" class="tab-content">
+            <div class="card">
+                <h2 class="card-title">🎮 Practice Arena</h2>
+                
+                <div class="difficulty-selector">
+                    <div class="difficulty-btn active" onclick="setPracticeDifficulty('easy')">
+                        <div>⭐ Asas</div>
+                        <small>Simple numbers</small>
+                    </div>
+                    <div class="difficulty-btn" onclick="setPracticeDifficulty('medium')">
+                        <div>⭐⭐ Sederhana</div>
+                        <small>Medium numbers</small>
+                    </div>
+                    <div class="difficulty-btn" onclick="setPracticeDifficulty('hard')">
+                        <div>⭐⭐⭐ Mencabar</div>
+                        <small>Complex numbers</small>
+                    </div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="practiceCorrect">0</div>
+                        <div class="stat-label">Correct</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="practiceTotal">0</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="practiceAccuracy">0%</div>
+                        <div class="stat-label">Accuracy</div>
+                    </div>
+                </div>
+                
+                <div class="problem-display">
+                    <h3 style="margin-bottom: 1rem;">Solve this partial fraction:</h3>
+                    <div class="fraction" id="practiceProblem"></div>
+                </div>
+                
+                <div class="input-group">
+                    <label>Your answer (format: A/(x+p) + B/(x+q)):</label>
+                    <input type="text" id="practiceInput" placeholder="e.g., 2/(x+1) + 3/(x+2)">
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="checkPracticeAnswer()">✓ Check</button>
+                    <button class="btn btn-warning" onclick="showPracticeSolution()">💡 Solution</button>
+                    <button class="btn btn-secondary" onclick="generatePracticeProblem()">🔄 New</button>
+                </div>
+                
+                <div class="feedback" id="practiceFeedback"></div>
+                
+                <div class="card" id="practiceSolution" style="display: none; margin-top: 2rem;">
+                    <h3>📋 Solution:</h3>
+                    <div id="practiceSolutionSteps"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- TAB 4: TIPS -->
+        <div id="tips" class="tab-content">
+            <div class="card">
+                <h2 class="card-title">💡 Tips & Common Mistakes</h2>
+                
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <div class="tip-icon">⚠️</div>
+                        <h3>Common Mistakes</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="padding: 0.5rem 0;">❌ Lupa multiply dengan denominator</li>
+                            <li style="padding: 0.5rem 0;">❌ Salah expand brackets</li>
+                            <li style="padding: 0.5rem 0;">❌ Wrong x value in substitution</li>
+                            <li style="padding: 0.5rem 0;">❌ Tidak simplify answer</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tip-card">
+                        <div class="tip-icon">🎯</div>
+                        <h3>Which Method to Use?</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="padding: 0.5rem 0;"><strong>Comparison:</strong> Systematic, good for learning</li>
+                            <li style="padding: 0.5rem 0;"><strong>Substitution:</strong> Faster! Best for exams</li>
+                            <li style="padding: 0.5rem 0;">✓ Both give same answer</li>
+                            <li style="padding: 0.5rem 0;">✓ Practice both methods</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tip-card">
+                        <div class="tip-icon">⚡</div>
+                        <h3>Quick Tips</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="padding: 0.5rem 0;">✓ Check degree: numerator < denominator</li>
+                            <li style="padding: 0.5rem 0;">✓ Substitution: x+p=0 → x=-p</li>
+                            <li style="padding: 0.5rem 0;">✓ Verify by multiplying back</li>
+                            <li style="padding: 0.5rem 0;">✓ Double-check signs!</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tip-card">
+                        <div class="tip-icon">📚</div>
+                        <h3>Study Strategy</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="padding: 0.5rem 0;">1️⃣ Master setup first</li>
+                            <li style="padding: 0.5rem 0;">2️⃣ Practice substitution (faster)</li>
+                            <li style="padding: 0.5rem 0;">3️⃣ Understand comparison (why)</li>
+                            <li style="padding: 0.5rem 0;">4️⃣ Do 20+ problems</li>
+                            <li style="padding: 0.5rem 0;">5️⃣ Time yourself!</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="celebration" id="celebration">
+            <div class="celebration-content">
+                <div class="celebration-icon">🎉</div>
+                <h2>Excellent Work!</h2>
+                <p>Kamu dah master step ini! Keep going! 🚀</p>
+                <button class="btn btn-primary" onclick="hideCelebration()">Continue</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // ===== GLOBAL STATE =====
+        let comparisonState = {
+            currentStep: 1,
+            totalSteps: 6,
+            p: 0, q: 0, a: 0, b: 0, A: 0, B: 0,
+            hintLevel: [0,0,0,0,0,0,0]
+        };
+        
+        let substitutionState = {
+            currentStep: 1,
+            totalSteps: 6,
+            p: 0, q: 0, a: 0, b: 0, A: 0, B: 0,
+            hintLevel: [0,0,0,0,0,0,0]
+        };
+        
+        let practiceState = {
+            difficulty: 'easy',
+            correct: 0,
+            total: 0,
+            currentAnswer: null,
+            currentSteps: null
+        };
+        
+        // ===== HELPER FUNCTIONS =====
+        function normalizeInput(str) {
+            return str.toLowerCase().replace(/\s+/g, '').replace(/[×*]/g, '');
+        }
+        
+        function checkEquation(userInput, correctCoeff, correctConst, a, b, p, q, isPorQ) {
+            const normalized = normalizeInput(userInput);
+            
+            // Multiple valid formats
+            const validFormats = [
+                `a+b=${correctCoeff}`,
+                `b+a=${correctCoeff}`,
+                `${correctConst}a+${correctConst}b=${a}`,
+                `${correctConst}b+${correctConst}a=${a}`
+            ];
+            
+            if (isPorQ === 'coeff') {
+                return normalized === `a+b=${correctCoeff}` || normalized === `b+a=${correctCoeff}`;
+            } else {
+                const qaPb = `${q}a+${p}b=${b}`;
+                const pBqa = `${p}b+${q}a=${b}`;
+                return normalized === qaPb || normalized === pBqa;
+            }
+        }
+        
+        // ===== TAB SWITCHING =====
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.closest('.tab-btn').classList.add('active');
+        }
+        
+        // ===== METHOD SELECTOR =====
+        function showMethodSolver(method) {
+            const comp = document.getElementById('comparisonSolver');
+            const sub = document.getElementById('substitutionSolver');
+            
+            if (method === 'comparison') {
+                comp.style.display = 'block';
+                sub.style.display = 'none';
+                generateComparisonProblem();
+            } else {
+                comp.style.display = 'none';
+                sub.style.display = 'block';
+                generateSubstitutionProblem();
+            }
+        }
+        
+        // ===== COMPARISON METHOD =====
+        function generateComparisonProblem() {
+            comparisonState.currentStep = 1;
+            comparisonState.hintLevel = [0,0,0,0,0,0,0];
+            
+            comparisonState.a = Math.floor(Math.random() * 7) + 2;
+            comparisonState.b = Math.floor(Math.random() * 10) + 1;
+            comparisonState.p = Math.floor(Math.random() * 4) + 1;
+            comparisonState.q = Math.floor(Math.random() * 4) + 1;
+            while (comparisonState.p === comparisonState.q) {
+                comparisonState.q = Math.floor(Math.random() * 4) + 1;
+            }
+            
+            const {a, b, p, q} = comparisonState;
+            
+            // Calculate correct answers using substitution method
+            // When x = -p: a(-p) + b = A(q-p)
+            comparisonState.A = (-a * p + b) / (q - p);
+            // When x = -q: a(-q) + b = B(p-q)
+            comparisonState.B = (-a * q + b) / (p - q);
+            
+            document.getElementById('comparisonProblem').innerHTML = `
+                <div class="numerator">${a}x + ${b}</div>
+                <div class="line"></div>
+                <div class="denominator">(x + ${p})(x + ${q})</div>
+            `;
+            
+            document.getElementById('comp-step1-formula').innerHTML = `
+                <div style="text-align: center; font-size: 1.3rem;">
+                    ${a}x + ${b} / ((x+${p})(x+${q})) = A/(x+${p}) + B/(x+${q})
+                </div>
+            `;
+            
+            document.getElementById('comp-step2-formula').innerHTML = `
+                <div style="text-align: center; font-size: 1.3rem;">
+                    ${a}x + ${b} = A(x+${q}) + B(x+${p})
+                </div>
+            `;
+            
+            document.getElementById('comp-q-val').textContent = q;
+            document.getElementById('comp-p-val').textContent = p;
+            
+            document.getElementById('comp-step5-original').innerHTML = `
+                <div style="font-size: 1.1rem;">
+                    Left side: ${a}x + ${b}<br>
+                    Right side: (A + B)x + (${q}A + ${p}B)
+                </div>
+            `;
+            
+            // Reset steps
+            for (let i = 1; i <= 6; i++) {
+                const step = document.getElementById(`comp-step${i}`);
+                step.classList.remove('active');
+                step.style.opacity = '0.5';
+                step.style.pointerEvents = 'none';
+                
+                const inputs = step.querySelectorAll('input');
+                inputs.forEach(inp => {
+                    inp.value = '';
+                    inp.classList.remove('correct', 'incorrect');
+                });
+                
+                const feedback = document.getElementById(`comp-feedback${i}`);
+                if (feedback) feedback.style.display = 'none';
+                const hint = document.getElementById(`comp-hint${i}`);
+                if (hint) hint.style.display = 'none';
+            }
+            
+            document.getElementById('comp-step1').classList.add('active');
+            document.getElementById('comp-step1').style.opacity = '1';
+            document.getElementById('comp-step1').style.pointerEvents = 'auto';
+            
+            updateCompProgress();
+        }
+        
+        function completeCompStep(step) {
+            comparisonState.currentStep = step + 1;
+            document.getElementById(`comp-step${step}`).classList.remove('active');
+            
+            if (step < 6) {
+                const next = document.getElementById(`comp-step${step + 1}`);
+                next.classList.add('active');
+                next.style.opacity = '1';
+                next.style.pointerEvents = 'auto';
+                
+                if (step === 5) {
+                    const {a, b, p, q} = comparisonState;
+                    document.getElementById('comp-step6-equations').innerHTML = `
+                        <div style="background: var(--bg-secondary); padding: 1rem; border-radius: 0.5rem; margin: 1rem 0;">
+                            <div>Equation 1: A + B = ${a}</div>
+                            <div>Equation 2: ${q}A + ${p}B = ${b}</div>
+                        </div>
+                    `;
+                }
+            }
+            
+            updateCompProgress();
+        }
+        
+        function checkCompStep3() {
+            const userCoeff = normalizeInput(document.getElementById('comp-step3-coeff').value);
+            const userConst = normalizeInput(document.getElementById('comp-step3-const').value);
+            
+            const {q} = comparisonState;
+            const validCoeff = ['a'];
+            const validConst = [`${q}a`, `a${q}`];
+            
+            const feedback = document.getElementById('comp-feedback3');
+            
+            if (validCoeff.includes(userCoeff) && validConst.includes(userConst)) {
+                feedback.className = 'feedback success';
+                feedback.innerHTML = `<span class="feedback-icon">✓</span><span>Perfect! A(x+${q}) = Ax + ${q}A</span>`;
+                feedback.style.display = 'flex';
+                
+                document.getElementById('comp-step3-coeff').classList.add('correct');
+                document.getElementById('comp-step3-const').classList.add('correct');
+                
+                setTimeout(() => completeCompStep(3), 1500);
+            } else {
+                feedback.className = 'feedback error';
+                feedback.innerHTML = `<span class="feedback-icon">✗</span><span>Cuba lagi! Expand A(x+${q})</span>`;
+                feedback.style.display = 'flex';
+                
+                document.getElementById('comp-step3-coeff').classList.add('incorrect');
+                document.getElementById('comp-step3-const').classList.add('incorrect');
+            }
+        }
+        
+        function checkCompStep4() {
+            const userCoeff = normalizeInput(document.getElementById('comp-step4-coeff').value);
+            const userConst = normalizeInput(document.getElementById('comp-step4-const').value);
+            
+            const {p} = comparisonState;
+            const validCoeff = ['b'];
+            const validConst = [`${p}b`, `b${p}`];
+            
+            const feedback = document.getElementById('comp-feedback4');
+            
+            if (validCoeff.includes(userCoeff) && validConst.includes(userConst)) {
+                feedback.className = 'feedback success';
+                feedback.innerHTML = `<span class="feedback-icon">✓</span><span>Perfect! B(x+${p}) = Bx + ${p}B</span>`;
+                feedback.style.display = 'flex';
+                
+                document.getElementById('comp-step4-coeff').classList.add('correct');
+                document.getElementById('comp-step4-const').classList.add('correct');
+                
+                setTimeout(() => completeCompStep(4), 1500);
+            } else {
+                feedback.className = 'feedback error';
+                feedback.innerHTML = `<span class="feedback-icon">✗</span><span>Cuba lagi! Expand B(x+${p})</span>`;
+                feedback.style.display = 'flex';
+                
+                document.getElementById('comp-step4-coeff').classList.add('incorrect');
+                document.getElementById('comp-step4-const').classList.add('incorrect');
+            }
+        }
+        
+        function checkCompStep5() {
+            const {a, b, p, q} = comparisonState;
+            const userEq1 = normalizeInput(document.getElementById('comp-step5-eq1').value);
+            const userEq2 = normalizeInput(document.getElementById('comp-step5-eq2').value);
+            
+            const validEq1 = [`a+b=${a}`, `b+a=${a}`];
+            const validEq2 = [`${q}a+${p}b=${b}`, `${p}b+${q}a=${b}`];
+            
+            const feedback = document.getElementById('comp-feedback5');
+            
+            if (validEq1.includes(userEq1) && validEq2.includes(userEq2)) {
+                feedback.className = 'feedback success';
+                feedback.innerHTML = `<span class="feedback-icon">✓</span><span>Correct! Now solve these equations!</span>`;
+                feedback.style.display = 'flex';
+                
+                document.getElementById('comp-step5-eq1').classList.add('correct');
+                document.getElementById('comp-step5-eq2').classList.add('correct');
+                
+                setTimeout(() => completeCompStep(5), 1500);
+            } else {
+                feedback.className = 'feedback error';
+                feedback.innerHTML = `<span class="feedback-icon">✗</span><span>Cuba lagi! Compare coefficient of x dan constant</span>`;
+                feedback.style.display = 'flex';
+            }
+        }
+        
+        function checkCompStep6() {
+            const userA = parseFloat(document.getElementById('comp-step6-A').value);
+            const userB = parseFloat(document.getElementById('comp-step6-B').value);
+            const {A, B, p, q} = comparisonState;
+            
+            const feedback = document.getElementById('comp-feedback6');
+            
+            if (Math.abs(userA - A) < 0.01 && Math.abs(userB - B) < 0.01) {
+                feedback.className = 'feedback success';
+                feedback.innerHTML = `<span class="feedback-icon">✓</span><span><strong>PERFECT!</strong> Answer: ${A.toFixed(2)}/(x+${p}) + ${B.toFixed(2)}/(x+${q}) 🎉</span>`;
+                feedback.style.display = 'flex';
+                
+                document.getElementById('comp-step6-A').classList.add('correct');
+                document.getElementById('comp-step6-B').classList.add('correct');
+                
+                setTimeout(() => showCelebration(), 1000);
+            } else {
+                feedback.className = 'feedback error';
+                feedback.innerHTML = `<span class="feedback-icon">✗</span><span>Cuba lagi! Check calculation</span>`;
+                feedback.style.display = 'flex';
+            }
+        }
+        
+        function showCompHint(step) {
+            const {a, b, p, q, A, B} = comparisonState;
+            const hints = {
+                3: [`A(x+${q}) = A×x + A×${q} = Ax + ${q}A`],
+                4: [`B(x+${p}) = B×x + B×${p} = Bx + ${p}B`],
+                5: [`Left: ${a}x + ${b}, Right: (A+B)x + (${q}A+${p}B). So: A+B=${a}, ${q}A+${p}B=${b}`],
+                6: [`From eq1: B = ${a} - A. Substitute: ${q}A + ${p}(${a}-A) = ${b}. Solve to get A = ${A.toFixed(2)}, B = ${B.toFixed(2)}`]
+            };
+            
+            const hintBox = document.getElementById(`comp-hint${step}`);
+            hintBox.innerHTML = `<div style="padding: 1rem;">${hints[step][0]}</div>`;
+            hintBox.style.display = 'block';
+        }
+        
+        function updateCompProgress() {
+            const pct = ((comparisonState.currentStep - 1) / 6) * 100;
+            document.getElementById('comparisonProgress').style.width = pct + '%';
+            document.getElementById('comparisonProgressText').textContent = `Step ${comparisonState.currentStep - 1} of 6`;
+        }
+        
+        // ===== SUBSTITUTION METHOD =====
+        function generateSubstitutionProblem() {
+            substitutionState.currentStep = 1;
+            substitutionState.hintLevel = [0,0,0,0,0,0,0];
+            
+            substitutionState.a = Math.floor(Math.random() * 7) + 2;
+            substitutionState.b = Math.floor(Math.random() * 10) + 1;
+            substitutionState.p = Math.floor(Math.random() * 4) + 1;
+            substitutionState.q = Math.floor(Math.random() * 4) + 1;
+            while (substitutionState.p === substitutionState.q) {
+                substitutionState.q = Math.floor(Math.random() * 4) + 1;
+            }
+            
+            const {a, b, p, q} = substitutionState;
+            
+            // Calculate correct answers
+            substitutionState.A = (-a * p + b) / (q - p);
+            substitutionState.B = (-a * q + b) / (p - q);
+            
+            document.getElementById('substitutionProblem').innerHTML = `
+                <div class="numerator">${a}x + ${b}</div>
+                <div class="line"></div>
+                <div class="denominator">(x + ${p})(x + ${q})</div>
+            `;
+            
+            document.getElementById('sub-step1-formula').innerHTML = `
+                <div style="text-align: center; font-size: 1.3rem;">
+                    ${a}x + ${b} / ((x+${p})(x+${q})) = A/(x+${p}) + B/(x+${q})
+                </div>
+            `;
+            
+            document.getElementById('sub-step2-formula').innerHTML = `
+                <div style="text-align: center; font-size: 1.3rem;">
+                    ${a}x + ${b} = A(x+${q}) + B(x+${p})
+                </div>
+            `;
+            
+            document.querySelectorAll('.sub-p-val').forEach(el => el.textContent = p);
+            document.querySelectorAll('.sub-p-val2').forEach(el => el.textContent = p);
+            document.querySelectorAll('.sub-q-val').forEach(el => el.textContent = q);
+            document.querySelectorAll('.sub-q-val2').forEach(el => el.textContent = q);
+            
+            // Step 4 work
+            const xValA = -p;
+            const leftA = a * xValA + b;
+            const rightFactorA = q - p;
+            document.getElementById('sub-step4-xval').textContent = xValA;
+            document.getElementById('sub-step4-work').innerHTML = `
+                <div style="background: var(--bg-secondary); padding: 1rem; border-radius: 0.5rem;">
+                    ${a}(${xValA}) + ${b} = A(${xValA}+${q}) + B(${xValA}+${p})<br>
+                    ${leftA} = A(${q-p}) + B(0)<br>
+                    ${leftA} = ${rightFactorA}A<br>
+                    A = ${leftA} / ${rightFactorA}
+                </div>
+            `;
+            
+            // Step 6 work
+            const xValB = -q;
+            const leftB = a * xValB + b;
+            const rightFactorB = p - q;
+            document.getElementById('sub-step6-xval').textContent = xValB;
+            document.getElementById('sub-step6-work').innerHTML = `
+                <div style="background: var(--bg-secondary); padding: 1rem; border-radius: 0.5rem;">
+                    ${a}(${xValB}) + ${b} = A(${xValB}+${q}) + B(${xValB}+${p})<br>
+                    ${leftB} = A(0) + B(${p-q})<br>
+                    ${leftB} = ${rightFactorB}B<br>
+                    B = ${leftB} / ${rightFactorB}
+                </div>
+            `;
+            
+            // Reset
+            for (let i = 1; i <= 6; i++) {
+                const step = document.getElementById(`sub-step${i}`);
+                step.classList.remove('active');
+                step.style.opacity = '0.5';
+                step.style.pointerEvents = 'none';
+                
+                const inputs = step.querySelectorAll('input');
+                inputs.forEach(inp => {
+                    inp.value = '';
+                    inp.classList.remove('correct', 'incorrect');
+                });
+                
+                const feedback = document.getElementById(`sub-feedback${i}`);
+                if (feedback) feedback.style.display = 'none';
+                const hint = document.getElementById(`sub-hint${i}`);
+                if (hint) hint.style.display = 'none';
+            }
+            
+            document.getElementById('sub-step1').classList.add('active');
+            document.getElementById('sub-step1').style.opacity = '1';
+            document.getElementById('sub-step1').style.pointerEvents = 'auto';
+            
+            updateSubProgress();
+        }
+        
+        function completeSubStep(step) {
+            substitutionState.currentStep = step + 1;
+            document.getElementById(`sub-step${step}`).classList.remove('active');
+            
+            if (step < 6) {
+                const next = document.getElementById(`sub-step${step + 1}`);
+                next.classList.add('active');
+                next.style.opacity = '1';
+                next.style.pointerEvents = 'auto';
+            }
+            
+            updateSubProgress();
+        }
+        
+        function checkSubStep3() {
+            const userX = parseFloat(document.getElementById('sub-step3-x').value);
+            const {p} = substitutionState;
+            const correctX = -p;
+            
+            const feedback = document.getElementById('sub-feedback3');
+            
+            if (Math.abs(userX - correctX) < 0.01) {
+                feedback.className = 'feedback success';
+                feedback.innerHTML = `<span class="feedback-icon">✓</span><span>Betul! x+${p}=0, so x=${correctX}</span>`;
+                feedback.style.display = 'flex';
+                document.getElementById('sub-step3-x').classList.add('correct');
+                setTimeout(() => completeSubStep(3), 1500);
+            } else {
+                feedback.className = 'feedback error';
+                feedback.innerHTML = `<span class="feedback-icon">✗</span><span>Cuba lagi! If x+${p}=0, what is x?</span>`;
+                feedback.style.display = 'flex';
+                document.getElementById('sub-step3-x').classList.add('incorrect');
+            }
+        }
+        
+        function checkSubStep4() {
+            const userA = parseFloat(document.getElementById('sub-step4-A').value);
+            const {A} = substitutionState;
+            
+            const feedback = document.getElementById('sub-feedback4');
+            
+            if (Math.abs(userA - A) < 0.01) {
+                feedback.className = 'feedback success';
+                feedback.innerHTML = `<span class="feedback-icon">✓</span><span>Great! A = ${A.toFixed(2)}</span>`;
+                feedback.style.display = 'flex';
+                document.getElementById('sub-step4-A').classList.add('correct');
+                setTimeout(() => completeSubStep(4), 1500);
+            } else {
+                feedback.className = 'feedback error';
+                feedback.innerHTML = `<span class="feedback-icon">✗</span><span>Check calculation</span>`;
+                feedback.style.display = 'flex';
+                document.getElementById('sub-step4-A').classList.add('incorrect');
+            }
+        }
+        
+        function checkSubStep5() {
+            const userX = parseFloat(document.getElementById('sub-step5-x').value);
+            const {q} = substitutionState;
+            const correctX = -q;
+            
+            const feedback = document.getElementById('sub-feedback5');
+            
+            if (Math.abs(userX - correctX) < 0.01) {
+                feedback.className = 'feedback success';
+                feedback.innerHTML = `<span class="feedback-icon">✓</span><span>Betul! x+${q}=0, so x=${correctX}</span>`;
+                feedback.style.display = 'flex';
+                document.getElementById('sub-step5-x').classList.add('correct');
+                setTimeout(() => completeSubStep(5), 1500);
+            } else {
+                feedback.className = 'feedback error';
+                feedback.innerHTML = `<span class="feedback-icon">✗</span><span>Cuba lagi! If x+${q}=0, what is x?</span>`;
+                feedback.style.display = 'flex';
+                document.getElementById('sub-step5-x').classList.add('incorrect');
+            }
+        }
+        
+        function checkSubStep6() {
+            const userB = parseFloat(document.getElementById('sub-step6-B').value);
+            const {A, B, p, q} = substitutionState;
+            
+            const feedback = document.getElementById('sub-feedback6');
+            
+            if (Math.abs(userB - B) < 0.01) {
+                feedback.className = 'feedback success';
+                feedback.innerHTML = `<span class="feedback-icon">✓</span><span><strong>EXCELLENT!</strong> Answer: ${A.toFixed(2)}/(x+${p}) + ${B.toFixed(2)}/(x+${q}) 🎉</span>`;
+                feedback.style.display = 'flex';
+                document.getElementById('sub-step6-B').classList.add('correct');
+                setTimeout(() => showCelebration(), 1000);
+            } else {
+                feedback.className = 'feedback error';
+                feedback.innerHTML = `<span class="feedback-icon">✗</span><span>Check calculation</span>`;
+                feedback.style.display = 'flex';
+                document.getElementById('sub-step6-B').classList.add('incorrect');
+            }
+        }
+        
+        function showSubHint(step) {
+            const {p, q, A, B, a, b} = substitutionState;
+            const hints = {
+                3: [`Jika x+${p}=0, maka x=-${p}`],
+                4: [`Substitute x=-${p}: ${a}(-${p})+${b} = A(-${p}+${q}). Calculate to get A=${A.toFixed(2)}`],
+                5: [`Jika x+${q}=0, maka x=-${q}`],
+                6: [`Substitute x=-${q}: ${a}(-${q})+${b} = B(-${q}+${p}). Calculate to get B=${B.toFixed(2)}`]
+            };
+            
+            const hintBox = document.getElementById(`sub-hint${step}`);
+            hintBox.innerHTML = `<div style="padding: 1rem;">${hints[step][0]}</div>`;
+            hintBox.style.display = 'block';
+        }
+        
+        function updateSubProgress() {
+            const pct = ((substitutionState.currentStep - 1) / 6) * 100;
+            document.getElementById('substitutionProgress').style.width = pct + '%';
+            document.getElementById('substitutionProgressText').textContent = `Step ${substitutionState.currentStep - 1} of 6`;
+        }
+        
+        // ===== PRACTICE =====
+        function setPracticeDifficulty(level) {
+            practiceState.difficulty = level;
+            document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('active'));
+            event.target.closest('.difficulty-btn').classList.add('active');
+            generatePracticeProblem();
+        }
+        
+        function generatePracticeProblem() {
+            const level = practiceState.difficulty;
+            let a, b, p, q;
+            
+            if (level === 'easy') {
+                a = Math.floor(Math.random() * 5) + 2;
+                b = Math.floor(Math.random() * 8) + 1;
+                p = Math.floor(Math.random() * 3) + 1;
+                q = Math.floor(Math.random() * 3) + 1;
+            } else if (level === 'medium') {
+                a = Math.floor(Math.random() * 8) + 3;
+                b = Math.floor(Math.random() * 12) + 2;
+                p = Math.floor(Math.random() * 5) + 1;
+                q = Math.floor(Math.random() * 5) + 1;
+            } else {
+                a = Math.floor(Math.random() * 10) + 4;
+                b = Math.floor(Math.random() * 15) + 3;
+                p = Math.floor(Math.random() * 7) + 1;
+                q = Math.floor(Math.random() * 7) + 1;
+            }
+            
+            while (p === q) q = Math.floor(Math.random() * 7) + 1;
+            
+            const A = (-a * p + b) / (q - p);
+            const B = (-a * q + b) / (p - q);
+            
+            practiceState.currentAnswer = {A, B, p, q};
+            practiceState.currentSteps = [
+                `Setup: ${a}x + ${b} / ((x+${p})(x+${q})) = A/(x+${p}) + B/(x+${q})`,
+                `Multiply: ${a}x + ${b} = A(x+${q}) + B(x+${p})`,
+                `Let x+${p}=0, x=-${p}: ${a}(-${p})+${b} = A(${q-p}) → A=${A.toFixed(2)}`,
+                `Let x+${q}=0, x=-${q}: ${a}(-${q})+${b} = B(${p-q}) → B=${B.toFixed(2)}`,
+                `<strong>Answer: ${A.toFixed(2)}/(x+${p}) + ${B.toFixed(2)}/(x+${q})</strong>`
+            ];
+            
+            document.getElementById('practiceProblem').innerHTML = `
+                <div class="numerator">${a}x + ${b}</div>
+                <div class="line"></div>
+                <div class="denominator">(x + ${p})(x + ${q})</div>
+            `;
+            
+            document.getElementById('practiceInput').value = '';
+            document.getElementById('practiceFeedback').style.display = 'none';
+            document.getElementById('practiceSolution').style.display = 'none';
+        }
+        
+        function checkPracticeAnswer() {
+            const input = normalizeInput(document.getElementById('practiceInput').value);
+            const {A, B, p, q} = practiceState.currentAnswer;
+            
+            // Accept multiple formats
+            const A_int = Math.round(A);
+            const A_1dec = A.toFixed(1);
+            const A_2dec = A.toFixed(2);
+            const B_int = Math.round(B);
+            const B_1dec = B.toFixed(1);
+            const B_2dec = B.toFixed(2);
+            
+            const validFormats = [
+                // Integer
+                `${A_int}/(x+${p})+${B_int}/(x+${q})`,
+                `${B_int}/(x+${q})+${A_int}/(x+${p})`,
+                // 1 decimal
+                `${A_1dec}/(x+${p})+${B_1dec}/(x+${q})`,
+                `${B_1dec}/(x+${q})+${A_1dec}/(x+${p})`,
+                // 2 decimals
+                `${A_2dec}/(x+${p})+${B_2dec}/(x+${q})`,
+                `${B_2dec}/(x+${q})+${A_2dec}/(x+${p})`
+            ];
+            
+            practiceState.total++;
+            const feedback = document.getElementById('practiceFeedback');
+            
+            let isCorrect = false;
+            for (const format of validFormats) {
+                if (input.includes(normalizeInput(format))) {
+                    isCorrect = true;
+                    break;
+                }
+            }
+            
+            if (isCorrect) {
+                practiceState.correct++;
+                feedback.className = 'feedback success';
+                feedback.innerHTML = `<span class="feedback-icon">✓</span><span>Perfect! 🎉</span>`;
+            } else {
+                feedback.className = 'feedback error';
+                feedback.innerHTML = `<span class="feedback-icon">✗</span><span>Try again!</span>`;
+            }
+            
+            feedback.style.display = 'flex';
+            updatePracticeStats();
+        }
+        
+        function showPracticeSolution() {
+            const div = document.getElementById('practiceSolution');
+            const stepsDiv = document.getElementById('practiceSolutionSteps');
+            
+            let html = '';
+            practiceState.currentSteps.forEach((step, i) => {
+                html += `<div style="padding: 0.75rem; margin: 0.5rem 0; background: var(--bg-secondary); border-radius: 0.5rem; border-left: 3px solid var(--brand-primary);">
+                    <strong>${i+1}.</strong> ${step}
+                </div>`;
+            });
+            
+            stepsDiv.innerHTML = html;
+            div.style.display = 'block';
+        }
+        
+        function updatePracticeStats() {
+            const acc = practiceState.total > 0 ? 
+                ((practiceState.correct / practiceState.total) * 100).toFixed(1) : 0;
+            
+            document.getElementById('practiceCorrect').textContent = practiceState.correct;
+            document.getElementById('practiceTotal').textContent = practiceState.total;
+            document.getElementById('practiceAccuracy').textContent = acc + '%';
+        }
+        
+        // ===== CELEBRATION =====
+        function showCelebration() {
+            document.getElementById('celebration').classList.add('show');
+        }
+        
+        function hideCelebration() {
+            document.getElementById('celebration').classList.remove('show');
+        }
+        
+        // ===== INIT =====
+        window.addEventListener('DOMContentLoaded', function() {
+            console.log('✅ Partial Fractions Platform Loaded!');
+            generatePracticeProblem();
+        });
+    </script>
+</body>
+    <a href="index.html" style="display:inline-block; margin:16px; padding:10px 16px; background:#4f46e5; color:white; border-radius:8px; text-decoration:none;">
+        Home
+    </a>
+
+    <header class="hero-section">
+</html>
