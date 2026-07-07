@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="Interactive slide-deck app for Operations of Algebraic Expressions using Concrete Visual Abstract approach." />
+  <title>Operations of Algebraic Expressions | CVA Interactive Slide Deck</title>
+  <style>
+    :root{
+      --primary:#2563eb;--primary-dark:#1d4ed8;--secondary:#7c3aed;--success:#059669;--error:#dc2626;--warning:#d97706;--info:#0891b2;
+      --concrete:#fb923c;--visual:#8b5cf6;--abstract:#2563eb;--bg:#eef3fb;--card:#ffffff;--text:#111827;--muted:#64748b;--border:#dbe4f0;
+      --x:#3b82f6;--y:#10b981;--const:#a855f7;--op:#f59e0b;--coef:#ef4444;
+      --shadow:0 18px 45px rgba(15,23,42,.12);--soft:0 8px 22px rgba(15,23,42,.08);--radius:24px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    button,input,textarea{font:inherit} button{touch-action:manipulation;cursor:pointer}
+    .deck{height:100dvh;display:grid;grid-template-rows:auto 1fr;background:radial-gradient(circle at top left,#dbeafe,transparent 36%),var(--bg)}
+    .topbar{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px 18px;background:linear-gradient(135deg,#1e3a8a,#4f46e5 55%,#7c3aed);color:white;box-shadow:var(--shadow);z-index:5}
+    .brand{display:flex;align-items:center;gap:10px;min-width:0}.brand-icon{font-size:1.8rem}.brand-title{font-weight:900;white-space:nowrap}.brand-sub{font-size:.82rem;opacity:.9;white-space:nowrap}
+    .nav-center{display:grid;gap:6px;min-width:0}.slide-title{text-align:center;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.progress-track{height:10px;background:rgba(255,255,255,.23);border-radius:999px;overflow:hidden}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#34d399,#67e8f9);transition:.3s ease}
+    .toolbar{display:flex;gap:8px;align-items:center;justify-content:flex-end;flex-wrap:wrap}.toolbtn{border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.16);color:white;border-radius:999px;min-height:42px;padding:9px 13px;font-weight:900;backdrop-filter:blur(8px)}.toolbtn:hover{background:rgba(255,255,255,.25)}.toolbtn:disabled{opacity:.45;cursor:not-allowed}.counter{font-weight:900;background:rgba(0,0,0,.15);border-radius:999px;padding:9px 12px;white-space:nowrap}
+    .stage{padding:16px;height:100%;min-height:0}.slide{display:none;height:100%;min-height:0}.slide.active{display:block}.slide-shell{height:100%;min-height:0;background:rgba(255,255,255,.65);border:1px solid rgba(255,255,255,.8);border-radius:30px;box-shadow:var(--shadow);padding:14px;backdrop-filter:blur(12px)}
+    .slide-grid{height:100%;min-height:0;display:grid;grid-template-columns:43% 57%;gap:14px}.pane{min-height:0;overflow:auto;border-radius:24px;background:var(--card);border:1px solid var(--border);box-shadow:var(--soft);padding:20px;position:relative}.pane.left{background:linear-gradient(180deg,#ffffff,#f8fbff)}.pane.right{background:#fff}.pane::-webkit-scrollbar{width:10px}.pane::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:999px}.pane-kicker{display:inline-flex;align-items:center;gap:7px;border-radius:999px;padding:6px 11px;font-size:.82rem;font-weight:900;margin-bottom:10px}.k-concrete{background:#fff7ed;color:#9a3412;border:1px solid #fed7aa}.k-visual{background:#f5f3ff;color:#5b21b6;border:1px solid #ddd6fe}.k-abstract{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}.k-mixed{background:#ecfdf5;color:#065f46;border:1px solid #bbf7d0}
+    h1,h2,h3{margin:0 0 10px;line-height:1.08}h1{font-size:clamp(2rem,4.6vw,4.2rem)}h2{font-size:clamp(1.45rem,3.2vw,2.5rem)}h3{font-size:clamp(1.05rem,2vw,1.35rem)}p{margin:8px 0;color:#334155;line-height:1.5}.lead{font-size:clamp(1rem,1.8vw,1.2rem);color:#1f2937}.big{font-size:clamp(1.35rem,3.2vw,2.5rem)}.tiny{font-size:.84rem;color:var(--muted)}.eq{font-family:Cambria,Georgia,serif;font-weight:900}.formula{font-family:Cambria,Georgia,serif;font-weight:900;font-size:clamp(1.45rem,3.2vw,2.8rem)}
+    .stack{display:grid;gap:12px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.card{border:1px solid var(--border);background:#f8fafc;border-radius:18px;padding:14px}.card.white{background:white}.note{border-left:5px solid var(--primary);background:#eff6ff;padding:12px;border-radius:14px}.success{border-left:5px solid var(--success);background:#ecfdf5;padding:12px;border-radius:14px}.danger{border-left:5px solid var(--error);background:#fef2f2;padding:12px;border-radius:14px}.warning{border-left:5px solid var(--warning);background:#fff7ed;padding:12px;border-radius:14px}.badge-row{display:flex;gap:8px;flex-wrap:wrap}.badge{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:7px 11px;background:#fef3c7;color:#92400e;border:1px solid #fcd34d;font-weight:900}.pill{display:inline-block;border-radius:999px;padding:5px 10px;background:#eef2ff;color:#3730a3;border:1px solid #c7d2fe;font-weight:900;font-size:.86rem;margin:2px}
+    .btn{border:0;border-radius:15px;min-height:48px;padding:11px 15px;font-weight:900;display:inline-flex;align-items:center;justify-content:center;gap:8px}.btn-primary{background:var(--primary);color:white}.btn-primary:hover{background:var(--primary-dark)}.btn-secondary{background:#eef2ff;color:#3730a3}.btn-success{background:var(--success);color:white}.btn-warning{background:#f59e0b;color:white}.btn-ghost{background:white;border:2px solid var(--border);color:var(--text)}.button-row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}.button-row .btn{flex:0 0 auto}
+
+    /* Interactive notes with cleaner diagram and proper math notation */
+    .notes-panel{display:grid;gap:14px}
+    .memory-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .memory-card{border-radius:18px;padding:12px;background:#fff8dc;border:2px solid #f2d8a7;box-shadow:0 8px 18px rgba(15,23,42,.06)}
+    .memory-card strong{display:block;color:#92400e;margin-bottom:5px}
+    .note-toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .note-chip{border:2px solid #cbd5e1;background:white;color:#1f2937;border-radius:999px;padding:8px 12px;font-weight:900;min-height:42px}
+    .note-chip.active{background:#1d4ed8;color:white;border-color:#1d4ed8}
+    .notes-stage{display:grid;gap:14px}
+    .note-sheet{background:#f3f4f6;border-radius:26px;padding:14px}
+    .note-paper{background:#f5eac4;border-radius:26px;padding:18px;border:2px solid #ead7a0;box-shadow:inset 0 2px 0 rgba(255,255,255,.5)}
+    .note-title{font-size:clamp(1.15rem,2vw,1.6rem);font-weight:900;color:#dc2626;text-align:center;margin-bottom:12px}
+    .note-mini-title{font-size:1rem;color:#2563eb;font-weight:900;text-align:center;margin-bottom:8px}
+    .note-expression-box{position:relative;display:flex;align-items:center;justify-content:center;gap:22px;flex-wrap:wrap;padding:10px 8px 14px}
+    .note-term-box{position:relative;min-width:92px;min-height:112px;border:3px solid #4f77c7;border-radius:20px;background:rgba(255,255,255,.18);display:grid;place-items:center;padding:14px 14px 18px}
+    .note-term-box.small{min-width:110px;min-height:112px}
+    .note-term-box.big{min-width:160px;min-height:138px}
+    .term-label-top{position:absolute;left:50%;top:-34px;transform:translateX(-50%);font-size:1rem;color:#4f77c7;font-weight:900;white-space:nowrap}
+    .term-label-top::after{content:'↓';display:block;line-height:1;text-align:center;font-size:1.15rem;color:#79a3ef}
+    .note-term-content{position:relative;font-family:Cambria,Georgia,serif;font-weight:900;line-height:1;display:flex;align-items:flex-end;justify-content:center;gap:4px}
+    .note-plus,.note-minus{font-family:Cambria,Georgia,serif;font-size:3.2rem;line-height:1;color:#111}
+    .note-sign{position:relative;display:inline-flex;align-items:center;justify-content:center;min-width:54px;min-height:54px;border-radius:16px;padding:2px 8px;transition:.2s ease}
+    .n5{font-size:4.2rem;color:#0f8b8d}.nx{font-size:4.2rem;color:#dc2626}.n7{font-size:4rem;color:#8b3fe6}
+    .ny2,.ny,.n2x,.nsqrt{font-size:3.5rem;color:#111}
+    .note-spot{display:inline-flex;align-items:flex-end;justify-content:center;border-radius:12px;padding:0 .06em;transition:.2s ease;position:relative}
+    .note-term-box.active-note,.note-sign.active-note,.note-expression-box.active-note{box-shadow:0 0 0 4px rgba(37,99,235,.16),0 10px 24px rgba(37,99,235,.18);background:rgba(255,255,255,.46)}
+    .note-spot.coef.active-note{box-shadow:0 0 0 4px rgba(34,197,94,.18),0 10px 24px rgba(34,197,94,.18);background:#ecfccb}
+    .note-spot.var.active-note{box-shadow:0 0 0 4px rgba(239,68,68,.18),0 10px 24px rgba(239,68,68,.18);background:#fee2e2}
+    .note-spot.const.active-note{box-shadow:0 0 0 4px rgba(147,51,234,.18),0 10px 24px rgba(147,51,234,.18);background:#f3e8ff}
+    .note-callout{position:absolute;z-index:3;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;font-size:.9rem;font-weight:1000;line-height:1.05;white-space:nowrap;pointer-events:none;text-shadow:0 1px 0 rgba(255,255,255,.9)}
+    .note-callout .arr{display:block;font-size:1.22rem;line-height:.9;text-align:center;margin-bottom:2px}
+    .note-callout.coef{left:-28px;bottom:-38px;color:#486b2e}.note-callout.coef .arr{transform:rotate(35deg)}
+    .note-callout.var{left:50%;bottom:-40px;transform:translateX(-50%);color:#ef4444}
+    .note-callout.const{left:50%;bottom:-40px;transform:translateX(-50%);color:#7e22ce}
+    .note-callout.operator{left:50%;top:-40px;transform:translateX(-50%);color:#b45309}.note-callout.operator .arr{color:#d97706}
+    .note-tip-box{border-left:5px solid #2563eb;background:#eff6ff;border-radius:16px;padding:12px;min-height:82px}
+    .annotation-wrap{display:flex;justify-content:center;flex-wrap:wrap;gap:18px;margin-top:8px}
+    .annotation{display:flex;align-items:center;gap:8px;font-weight:900}.annotation .arrow{font-size:1.35rem}
+    .annotation.coef{color:#486b2e}.annotation.var{color:#ef4444}.annotation.const{color:#7e22ce}.annotation.op{color:#b45309}
+    .note-second-legend{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}
+    .mini-note{background:#fff;border:1px solid #dbeafe;border-radius:16px;padding:10px 12px;font-size:.92rem;color:#334155}.mini-note strong{display:block;color:#1d4ed8;margin-bottom:3px}
+    .note-memory-line{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .memory-pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:7px 10px;font-weight:900;border:1px solid #dbeafe;background:#fff}
+    .math-render{font-family:Cambria,Georgia,serif;font-weight:900}
+    .math-frac{display:inline-grid;grid-template-rows:auto 2px auto;align-items:center;justify-items:center;line-height:1;vertical-align:middle;min-width:1.2em;margin:0 .05em}.math-frac .top,.math-frac .bottom{padding:0 .12em}.math-frac .bar{width:100%;height:2px;background:currentColor;border-radius:99px}
+    .math-root{display:inline-flex;align-items:flex-start;vertical-align:middle;line-height:1}.math-root .root-sign{font-size:1.12em;line-height:1;padding-right:.02em}.math-root .radicand{border-top:2px solid currentColor;padding:.03em .08em 0 .05em;line-height:1}
+    .math-var sup,.math-render sup{font-size:.58em;vertical-align:text-top}
+
+    .demo-card{border:2px solid #dbeafe;border-radius:22px;padding:16px;background:linear-gradient(180deg,#f8fbff,#ffffff);min-height:230px}.demo-stage{min-height:170px;display:grid;place-items:stretch;text-align:left;border-radius:18px;background:#f8fafc;border:1px dashed #cbd5e1;padding:14px;overflow:auto}.demo-step{display:grid;gap:12px;justify-items:center;animation:fadeIn .4s ease}.demo-caption{font-weight:900;color:#1d4ed8}.demo-controls{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:12px}.step-dots{display:flex;gap:5px;align-items:center}.dot{width:10px;height:10px;border-radius:50%;background:#cbd5e1}.dot.active{background:var(--primary);transform:scale(1.25)}.sequence-track{width:100%;display:grid;gap:8px}.seq-row{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;border:1px solid #dbeafe;background:white;border-radius:16px;padding:9px;opacity:.55;transform:scale(.985);transition:.25s ease}.seq-row.done{opacity:.82;background:#f8fafc}.seq-row.active{opacity:1;border-color:#60a5fa;background:#eff6ff;transform:scale(1);box-shadow:0 8px 18px rgba(37,99,235,.12);animation:seqPulse .55s ease}.seq-num{width:30px;height:30px;border-radius:999px;background:#dbeafe;color:#1d4ed8;display:grid;place-items:center;font-weight:900;flex-shrink:0}.seq-row.active .seq-num{background:var(--primary);color:white}.seq-body{display:grid;gap:4px;min-width:0}.seq-cap{font-size:.83rem;font-weight:900;color:#1d4ed8}.seq-html{font-weight:900;overflow-wrap:anywhere}.seq-arrow{text-align:center;color:#94a3b8;font-weight:900;margin:-3px 0}.demo-status{font-size:.82rem;color:#475569;font-weight:800;min-width:100px;text-align:center}.sequence-track.compact .seq-row{padding:7px}.sequence-track.compact .seq-num{width:26px;height:26px;font-size:.82rem}@keyframes seqPulse{0%{box-shadow:0 0 0 0 rgba(37,99,235,.28)}100%{box-shadow:0 8px 18px rgba(37,99,235,.12)}}@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+    .object-row{font-size:clamp(1.55rem,3.1vw,2.4rem);letter-spacing:3px;line-height:1.45}.fruit-group{display:inline-flex;gap:4px;border-radius:16px;padding:8px 10px;margin:4px;border:2px solid #e2e8f0;background:white}.fruit-group.apple{border-color:#fb923c;background:#fff7ed}.fruit-group.orange{border-color:#f59e0b;background:#fffbeb}.fruit-group.coin{border-color:#a855f7;background:#faf5ff}
+    .term{display:inline-flex;align-items:center;justify-content:center;min-height:48px;min-width:60px;border:2px solid #cbd5e1;border-radius:15px;background:white;padding:10px 14px;margin:5px;font-weight:900;box-shadow:0 6px 14px rgba(15,23,42,.08);cursor:grab;user-select:none;touch-action:none;position:relative}.term:active{cursor:grabbing}.term.selected{outline:4px solid rgba(245,158,11,.35);transform:scale(1.04)}.term.x{border-color:#60a5fa;background:#dbeafe;color:#1e40af}.term.y{border-color:#34d399;background:#d1fae5;color:#065f46}.term.c{border-color:#c084fc;background:#f3e8ff;color:#6b21a8}.term.o{border-color:#fbbf24;background:#fef3c7;color:#92400e}.term.bad{border-color:#f87171;background:#fee2e2;color:#991b1b}.term.good{border-color:#34d399;background:#dcfce7;color:#166534}
+    .drop-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.dropzone{border:3px dashed #cbd5e1;background:white;border-radius:18px;min-height:130px;padding:10px;transition:.15s ease}.dropzone h4{margin:0 0 7px;color:#334155}.dropzone.hover{border-color:var(--primary);background:#eff6ff;transform:scale(1.01)}.dropzone.good{border-color:var(--success);background:#ecfdf5}.dropzone.bad{border-color:var(--error);background:#fef2f2}.termbank{min-height:76px;border:1px dashed #cbd5e1;border-radius:18px;background:#f8fafc;padding:10px;margin-bottom:12px}
+    .match-layout{display:grid;grid-template-columns:38% 62%;gap:12px}.definition{border:1px solid var(--border);border-radius:16px;padding:11px;background:#fff;margin-bottom:9px}.definition strong{display:block;color:#1d4ed8;margin-bottom:7px}.match-drop{min-height:58px;border:2px dashed #cbd5e1;border-radius:14px;background:#f8fafc;padding:5px}.match-drop.hover{border-color:var(--secondary);background:#f5f3ff}.match-drop.good{border-color:var(--success);background:#ecfdf5}.match-drop.bad{border-color:var(--error);background:#fef2f2}
+    .answer-box{background:#f8fafc;border:1px solid #e5e7eb;border-radius:20px;padding:14px}.problem{background:white;border:2px solid #dbeafe;border-radius:18px;padding:16px;text-align:center;margin-bottom:12px}.answer-row{display:grid;grid-template-columns:1fr auto;gap:9px}.answer{width:100%;border:2px solid #cbd5e1;border-radius:16px;min-height:54px;padding:11px 13px;font-size:max(16px,1.15rem);font-family:Cambria,Georgia,serif;font-weight:900}.answer:focus{border-color:var(--primary);outline:4px solid rgba(37,99,235,.14)}.answer.correct{border-color:var(--success);background:#ecfdf5}.answer.wrong{border-color:var(--error);background:#fef2f2;animation:shake .25s ease}@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}.keypad{display:grid;grid-template-columns:repeat(8,1fr);gap:7px;margin-top:10px}.keypad button{min-height:42px;border:1px solid #cbd5e1;border-radius:12px;background:white;font-weight:900}.keypad button.wide{grid-column:span 2}.feedback{min-height:28px;margin-top:10px;font-weight:900}.feedback.ok{color:var(--success)}.feedback.no{color:var(--error)}.feedback.hint{color:#92400e}.mode-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px}.mode{border:2px solid var(--border);background:white;border-radius:999px;padding:8px 11px;font-weight:900}.mode.active{background:#dbeafe;color:#1d4ed8;border-color:#60a5fa}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}.stat{text-align:center;background:white;border:1px solid var(--border);border-radius:14px;padding:9px}.stat b{display:block;color:#1d4ed8;font-size:1.35rem}.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#111827;color:white;border-radius:999px;padding:12px 16px;font-weight:900;z-index:30;opacity:0;pointer-events:none;transition:.2s}.toast.show{opacity:1}.confetti{position:fixed;top:-20px;width:10px;height:10px;border-radius:3px;z-index:29;animation:fall 1.9s linear forwards}@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+    .mobile-help{display:none}.mini-nav{display:flex;gap:6px;justify-content:center;margin-top:8px}.mini-dot{width:9px;height:9px;border-radius:50%;background:#cbd5e1}.mini-dot.active{background:var(--primary)}
+    @media(max-width:920px){.topbar{grid-template-columns:1fr;gap:8px;padding:10px}.brand{justify-content:center}.brand-title{font-size:.95rem}.brand-sub{display:none}.toolbar{justify-content:center}.slide-title{text-align:center}.stage{padding:8px}.slide-shell{border-radius:20px;padding:8px}.slide-grid{grid-template-columns:42% 58%;gap:8px}.pane{padding:12px;border-radius:18px}.grid2,.grid3{grid-template-columns:1fr}.drop-grid{grid-template-columns:1fr}.match-layout{grid-template-columns:1fr}.keypad{grid-template-columns:repeat(4,1fr)}.answer-row{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}h1{font-size:1.75rem}h2{font-size:1.25rem}.lead{font-size:.94rem}.formula{font-size:1.35rem}.object-row{font-size:1.35rem}.mobile-help{display:block}.button-row .btn{min-height:44px;padding:9px 11px}.toolbtn{min-height:38px;padding:8px 10px}.counter{padding:8px 10px}}
+    @media(max-width:560px){.brand-icon{display:none}.topbar{font-size:.88rem}.toolbar{gap:5px}.toolbtn span.txt{display:none}.counter{font-size:.82rem}.stage{padding:6px}.slide-grid{grid-template-columns:46% 54%}.pane{padding:10px}.card,.note,.success,.danger,.warning{padding:9px}.term{min-height:44px;min-width:48px;padding:8px 10px;margin:3px}.dropzone{min-height:105px;padding:7px}.demo-card{padding:10px;min-height:190px}.demo-stage{min-height:128px;padding:8px}.btn{width:100%;min-height:44px}.button-row{display:grid;grid-template-columns:1fr}.keypad button{min-height:39px}.badge,.pill{font-size:.75rem}.pane-kicker{font-size:.72rem}.tiny{font-size:.75rem}p{line-height:1.35}.stats{grid-template-columns:1fr 1fr}.stat{padding:6px}.stat b{font-size:1.05rem}}
+    @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  </style>
+</head>
+<body>
+  <div class="deck">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-icon">🎯</div>
+        <div>
+          <div class="brand-title">Operations of Algebraic Expressions</div>
+          <div class="brand-sub">Concrete → Visual → Abstract • Slide Deck Mode</div>
+        </div>
+      </div>
+      <div class="nav-center">
+        <div class="slide-title" id="slideTitle">Home</div>
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      </div>
+      <div class="toolbar">
+        <button class="toolbtn" id="homeBtn" title="Home">⌂ <span class="txt">Home</span></button>
+        <button class="toolbtn" id="prevBtn" title="Previous slide">◀ <span class="txt">Previous</span></button>
+        <span class="counter"><span id="slideNo">1</span>/<span id="slideTotal">10</span></span>
+        <button class="toolbtn" id="nextBtn" title="Next slide"><span class="txt">Next</span> ▶</button>
+      </div>
+    </header>
+
+    <main class="stage" aria-live="polite">
+      <section class="slide active" data-title="Home: CVA Algebra Journey">
+        <div class="slide-shell"><div class="slide-grid">
+          <div class="pane left">
+            <span class="pane-kicker k-mixed">🏠 Home</span>
+            <h1>CVA Algebra Slide Deck</h1>
+            <p class="lead">This version works like a PowerPoint: every screen is a left-right slide, not a long page.</p>
+            <div class="note"><strong>How students learn:</strong><br>Concrete objects → Visual cards → Abstract equation typing.</div>
+            <div class="badge-row" id="badgeRow" style="margin-top:12px"></div>
+            <p class="tiny mobile-help">Tip for Android: tap a card, then tap a basket/answer space. Dragging also works.</p>
+          </div>
+          <div class="pane right">
+            <span class="pane-kicker k-mixed">🧭 Navigation</span>
+            <h2>Lesson Path</h2>
+            <div class="stack">
+              <div class="card"><strong>1. Algebra Language</strong><p>Term, expression, variable, constant, coefficient, operator.</p></div>
+              <div class="card"><strong>2. Interactive Notes</strong><p>Clean diagram for expression, term, coefficient, variable, constant and operator.</p></div><div class="card"><strong>3. Concrete Situation</strong><p>Animated fruit/coin grouping before symbols.</p></div>
+              <div class="card"><strong>4. Visual Sort & Matching</strong><p>Drag and drop like terms; match vocabulary to meaning.</p></div>
+              <div class="card"><strong>5. Abstract Equation</strong><p>Type answers using a mobile-friendly math keypad.</p></div>
+            </div>
+          </div>
+        </div></div>
+      </section>
+
+      <section class="slide" data-title="PowerPoint Content: Algebra Language">
+        <div class="slide-shell"><div class="slide-grid">
+          <div class="pane left">
+            <span class="pane-kicker k-abstract">📚 From PowerPoint</span>
+            <h2>The Cool Language of Algebra</h2>
+            <p>Language uses symbols and words. Algebra also uses symbols and words to solve real problems using variables or unknowns.</p>
+            <div class="grid2">
+              <div class="card"><strong>Term</strong><p class="eq">2a, 3c, 5b, d, -2c</p></div>
+              <div class="card"><strong>Expression</strong><p class="eq">2a + 3a<br>3b - b<br>4g - 2g + g</p></div>
+              <div class="card"><strong>Variable</strong><p>x, y, m, a, k — values that can vary.</p></div>
+              <div class="card"><strong>Constant</strong><p>A value that does not change.</p></div>
+            </div>
+          </div>
+          <div class="pane right">
+            <span class="pane-kicker k-abstract">▶ Animated example</span>
+            <h2>Name the Parts</h2>
+            <div class="demo-card" data-demo="parts">
+              <div class="demo-stage" id="partsStage"></div>
+              <div class="demo-controls" data-controls="parts"></div>
+            </div>
+            <div class="note"><strong>Expression:</strong> <span class="eq">7x + 3y - 9</span><br>Students watch the full sequence build automatically from expression → parts → answer. They can pause, replay, or step manually.</div>
+          </div>
+        </div></div>
+      </section>
+
+      <section class="slide" data-title="Interactive Notes: Algebraic Expressions">
+        <div class="slide-shell"><div class="slide-grid">
+          <div class="pane left">
+            <span class="pane-kicker k-visual">🗒️ Interactive Notes</span>
+            <h2>Fun Notes to Remember Fast</h2>
+            <p class="lead">This slide uses a neat note-style diagram so students can remember the parts of an algebraic expression more easily.</p>
+            <div class="notes-panel">
+              <div class="note-toolbar" id="noteChipRow">
+                <button class="note-chip" data-note-step="expression">Expression</button>
+                <button class="note-chip" data-note-step="term">Term</button>
+                <button class="note-chip" data-note-step="coefficient">Coefficient</button>
+                <button class="note-chip" data-note-step="variable">Variable</button>
+                <button class="note-chip" data-note-step="constant">Constant</button>
+                <button class="note-chip" data-note-step="operator">Operator</button>
+                <button class="note-chip" data-note-step="complex">More Terms</button>
+              </div>
+              <div class="note-tip-box" id="noteMessage"><strong>Try this:</strong> Tap any label above, or press Play Tour to watch the note explain itself.</div>
+              <div class="button-row">
+                <button class="btn btn-primary" id="playNoteTourBtn">▶ Play Tour</button>
+                <button class="btn btn-secondary" id="pauseNoteTourBtn">⏸ Pause</button>
+                <button class="btn btn-secondary" id="resetNoteTourBtn">↺ Reset</button>
+              </div>
+              <div class="memory-grid">
+                <div class="memory-card"><strong>Memory Trick 1</strong><span class="eq"> Term = one chunk</span><br>Look for pieces separated by <span class="eq">+</span> or <span class="eq">−</span>.</div>
+                <div class="memory-card"><strong>Memory Trick 2</strong><span class="eq"> Coefficient comes first</span><br>The number sits in front of the variable.</div>
+                <div class="memory-card"><strong>Memory Trick 3</strong><span class="eq"> Variable = changing letter</span><br>Letters such as <span class="eq">x</span> and <span class="eq">y</span> can vary.</div>
+                <div class="memory-card"><strong>Memory Trick 4</strong><span class="eq"> Constant stands alone</span><br>A constant has no variable attached.</div>
+              </div>
+            </div>
+          </div>
+          <div class="pane right">
+            <span class="pane-kicker k-visual">👆 Tap • Watch • Remember</span>
+            <h2>Interactive Algebraic Notes</h2>
+            <div class="notes-stage" id="noteExplorer">
+              <div class="note-sheet">
+                <div class="note-title">Algebraic Expressions</div>
+                <div class="note-paper">
+                  <div class="note-expression-box" data-note-group="topexpr">
+                    <div class="note-term-box small note-target-term" data-note-target="term-box-5x">
+                      <div class="term-label-top">Term</div>
+                      <div class="note-term-content">
+                        <span class="note-spot coef n5" data-note-target="coef-main">5</span><span class="note-spot var nx" data-note-target="var-main">x</span>
+                        <span class="note-callout coef"><span class="arr">↗</span>coefficient</span>
+                        <span class="note-callout var"><span class="arr">↑</span>variable</span>
+                      </div>
+                    </div>
+                    <div class="note-sign" data-note-target="operator-main"><span class="note-callout operator"><span class="arr">↓</span>operator</span><span class="note-plus">+</span></div>
+                    <div class="note-term-box small note-target-term" data-note-target="term-box-7">
+                      <div class="term-label-top">Term</div>
+                      <div class="note-term-content"><span class="note-spot const n7" data-note-target="const-main">7</span><span class="note-callout const"><span class="arr">↑</span>constant</span></div>
+                    </div>
+                  </div>
+                  <div class="annotation-wrap">
+                    <div class="annotation coef"><span class="arrow">↗</span> coefficient</div>
+                    <div class="annotation var"><span class="arrow">↑</span> variable</div>
+                    <div class="annotation const"><span class="arrow">↑</span> constant</div>
+                    <div class="annotation op"><span class="arrow">↓</span> operator</div>
+                  </div>
+                </div>
+              </div>
+              <div class="note-sheet">
+                <div class="note-paper">
+                  <div class="note-mini-title">Three more terms with proper math notation</div>
+                  <div class="note-expression-box" data-note-group="bottomexpr">
+                    <div class="note-term-box big note-target-term" data-note-target="term-b1">
+                      <div class="term-label-top">Term</div>
+                      <div class="note-term-content"><span class="note-spot coef ny2" data-note-target="coef-frac"><span class="math-frac"><span class="top">3</span><span class="bar"></span><span class="bottom">4</span></span></span><span class="note-spot var ny2 math-var" data-note-target="var-y2">y<sup>2</sup></span></div>
+                    </div>
+                    <div class="note-sign" data-note-target="operator-minus"><span class="note-minus">−</span></div>
+                    <div class="note-term-box big note-target-term" data-note-target="term-b2">
+                      <div class="term-label-top">Term</div>
+                      <div class="note-term-content"><span class="note-spot coef nsqrt" data-note-target="coef-sqrt"><span class="math-root"><span class="root-sign">√</span><span class="radicand">6</span></span></span><span class="note-spot var ny" data-note-target="var-y">y</span></div>
+                    </div>
+                    <div class="note-sign" data-note-target="operator-plus2"><span class="note-plus">+</span></div>
+                    <div class="note-term-box big note-target-term" data-note-target="term-b3">
+                      <div class="term-label-top">Term</div>
+                      <div class="note-term-content"><span class="note-spot coef n2x" data-note-target="coef-two">2</span><span class="note-spot var n2x" data-note-target="var-x2">x</span></div>
+                    </div>
+                  </div>
+                  <div class="note-second-legend">
+                    <div class="mini-note"><strong>Fraction coefficient</strong><span class="math-render"><span class="math-frac"><span class="top">3</span><span class="bar"></span><span class="bottom">4</span></span>y<sup>2</sup></span></div>
+                    <div class="mini-note"><strong>Root coefficient</strong><span class="math-render"><span class="math-root"><span class="root-sign">√</span><span class="radicand">6</span></span>y</span></div>
+                    <div class="mini-note"><strong>Simple variable term</strong><span class="math-render">2x</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="note-memory-line" style="margin-top:10px">
+              <span class="memory-pill">🧩 Expression = collection of terms</span>
+              <span class="memory-pill">🔢 Coefficient = front number</span>
+              <span class="memory-pill">🔠 Variable = letter</span>
+              <span class="memory-pill">🪨 Constant = fixed number</span>
+              <span class="memory-pill">➕ Operator = +, −, ×, ÷</span>
+            </div>
+          </div>
+        </div></div>
+      </section>
+
+      <section class="slide" data-title="Concrete: Animated Situation">
+        <div class="slide-shell"><div class="slide-grid">
+          <div class="pane left">
+            <span class="pane-kicker k-concrete">🧺 Concrete</span>
+            <h2>Real Situation First</h2>
+            <p class="lead">A shop table has fruit and coins mixed together. We group the same type before writing algebra.</p>
+            <div class="warning"><strong>Rule:</strong> only combine the same kind. Apples with apples, oranges with oranges, constants with constants.</div>
+            <div class="card white"><strong>Bridge to algebra</strong><p class="eq">3x + 5y + 2x + 3y + 4<br>= 5x + 8y + 4</p></div>
+          </div>
+          <div class="pane right">
+            <span class="pane-kicker k-concrete">▶ Auto full sequence</span>
+            <h2>Animated Grouping</h2>
+            <div class="demo-card" data-demo="concrete">
+              <div class="demo-stage" id="concreteStage"></div>
+              <div class="demo-controls" data-controls="concrete"></div>
+            </div>
+          </div>
+        </div></div>
+      </section>
+
+      <section class="slide" data-title="Concrete Practice: Drag & Drop Like Terms">
+        <div class="slide-shell"><div class="slide-grid">
+          <div class="pane left">
+            <span class="pane-kicker k-concrete">🧺 Concrete Practice</span>
+            <h2>Sort the Terms</h2>
+            <p>Drag each term to the correct basket. On Android, tap one card, then tap the basket.</p>
+            <div class="problem"><div class="tiny">Expression</div><div class="formula" id="sortExpression">3x + 5y - 2x + 3y + 4</div></div>
+            <div class="button-row">
+              <button class="btn btn-primary" id="newSortBtn">New Sort</button>
+              <button class="btn btn-success" id="checkSortBtn">Check</button>
+              <button class="btn btn-secondary" id="showSortAnswer">Show Steps</button>
+            </div>
+            <div class="feedback" id="sortFeedback"></div>
+          </div>
+          <div class="pane right">
+            <span class="pane-kicker k-concrete">✋ Touch-friendly</span>
+            <h2>Term Bank</h2>
+            <div class="termbank" id="termBank"></div>
+            <div class="drop-grid" id="dropGrid">
+              <div class="dropzone" data-accept="x"><h4>Blue Basket: x-like terms</h4><div class="drop-content"></div></div>
+              <div class="dropzone" data-accept="y"><h4>Green Basket: y-like terms</h4><div class="drop-content"></div></div>
+              <div class="dropzone" data-accept="const"><h4>Purple Basket: constants</h4><div class="drop-content"></div></div>
+            </div>
+          </div>
+        </div></div>
+      </section>
+
+      <section class="slide" data-title="Visual: Match Algebra Vocabulary">
+        <div class="slide-shell"><div class="slide-grid">
+          <div class="pane left">
+            <span class="pane-kicker k-visual">🎨 Visual</span>
+            <h2>Matching Activity</h2>
+            <p>Match each vocabulary card to its meaning from the PowerPoint content.</p>
+            <div class="termbank" id="matchBank"></div>
+            <div class="button-row">
+              <button class="btn btn-primary" id="newMatchBtn">New Set</button>
+              <button class="btn btn-success" id="checkMatchBtn">Check Match</button>
+              <button class="btn btn-secondary" id="resetMatchBtn">Reset</button>
+            </div>
+            <div class="feedback" id="matchFeedback"></div>
+          </div>
+          <div class="pane right">
+            <span class="pane-kicker k-visual">🧩 Drop answers</span>
+            <h2>Definition Board</h2>
+            <div id="matchTargets"></div>
+          </div>
+        </div></div>
+      </section>
+
+      <section class="slide" data-title="Visual to Abstract: Like Terms Animation">
+        <div class="slide-shell"><div class="slide-grid">
+          <div class="pane left">
+            <span class="pane-kicker k-visual">🎨 Visual → Abstract</span>
+            <h2>Like Terms</h2>
+            <p>Like terms have the same variable part and the same power.</p>
+            <div class="success"><strong>Like terms:</strong><br><span class="eq">5x, -14x</span><br><span class="eq">2ab, 8.5ba</span></div>
+            <div class="danger"><strong>Unlike terms:</strong><br><span class="eq">5x, 8y</span><br><span class="eq">7.9y, 4.5yz</span></div>
+          </div>
+          <div class="pane right">
+            <span class="pane-kicker k-visual">▶ Auto explanation</span>
+            <h2>Same variable part?</h2>
+            <div class="demo-card" data-demo="like">
+              <div class="demo-stage" id="likeStage"></div>
+              <div class="demo-controls" data-controls="like"></div>
+            </div>
+          </div>
+        </div></div>
+      </section>
+
+      <section class="slide" data-title="Add & Subtract: Animated Example">
+        <div class="slide-shell"><div class="slide-grid">
+          <div class="pane left">
+            <span class="pane-kicker k-abstract">➕➖ Abstract</span>
+            <h2>Add & Subtract</h2>
+            <p>Follow the PowerPoint method: identify like terms, rearrange, then add or subtract the coefficients.</p>
+            <div class="note"><strong>Key rule:</strong><br><span class="eq">ax + bx = (a + b)x</span></div>
+            <div class="warning">Do not combine different variables: <span class="eq">3x + 5y ≠ 8xy</span></div>
+          </div>
+          <div class="pane right">
+            <span class="pane-kicker k-abstract">▶ Play/Pause</span>
+            <h2>Example: Simplify</h2>
+            <div class="demo-card" data-demo="addsub">
+              <div class="demo-stage" id="addsubStage"></div>
+              <div class="demo-controls" data-controls="addsub"></div>
+            </div>
+          </div>
+        </div></div>
+      </section>
+
+      <section class="slide" data-title="Multiply & Divide: Animated Examples">
+        <div class="slide-shell"><div class="slide-grid">
+          <div class="pane left">
+            <span class="pane-kicker k-abstract">✖️➗ Abstract</span>
+            <h2>Multiply & Divide</h2>
+            <p>Multiply: product form → group → multiply.</p>
+            <p>Divide: fraction form → split → cancel out.</p>
+            <div class="card white"><strong>PowerPoint examples</strong><p class="eq">4b × 3d = 12bd<br>3s × 8m = 24sm<br>18a²b² ÷ 3ab = 6ab</p></div>
+          </div>
+          <div class="pane right">
+            <span class="pane-kicker k-abstract">▶ Auto full sequence</span>
+            <div class="grid2">
+              <div class="demo-card" data-demo="multiply">
+                <h3>Multiply</h3>
+                <div class="demo-stage" id="multiplyStage"></div>
+                <div class="demo-controls" data-controls="multiply"></div>
+              </div>
+              <div class="demo-card" data-demo="divide">
+                <h3>Divide</h3>
+                <div class="demo-stage" id="divideStage"></div>
+                <div class="demo-controls" data-controls="divide"></div>
+              </div>
+            </div>
+          </div>
+        </div></div>
+      </section>
+
+      <section class="slide" data-title="Abstract Practice: Type Equation Answer">
+        <div class="slide-shell"><div class="slide-grid">
+          <div class="pane left">
+            <span class="pane-kicker k-abstract">⌨️ Abstract Practice</span>
+            <h2>Type the Mathematics Equation</h2>
+            <p>Use the keyboard or the on-screen keypad. The checker accepts equivalent simplified forms for many polynomial answers.</p>
+            <div class="mode-row" id="modeRow">
+              <button class="mode active" data-mode="addsub">Add/Subtract</button>
+              <button class="mode" data-mode="multiply">Multiply</button>
+              <button class="mode" data-mode="divide">Divide</button>
+              <button class="mode" data-mode="mixed">Mixed</button>
+            </div>
+            <div class="stats">
+              <div class="stat"><b id="statTried">0</b><span class="tiny">Tried</span></div>
+              <div class="stat"><b id="statCorrect">0</b><span class="tiny">Correct</span></div>
+              <div class="stat"><b id="statStreak">0</b><span class="tiny">Streak</span></div>
+              <div class="stat"><b id="statRate">0%</b><span class="tiny">Rate</span></div>
+            </div>
+          </div>
+          <div class="pane right">
+            <span class="pane-kicker k-abstract">📱 Mobile keypad</span>
+            <div class="answer-box">
+              <div class="problem"><div class="tiny" id="problemSkill">Skill</div><div class="formula" id="problemText"></div></div>
+              <div class="answer-row">
+                <input class="answer" id="answerInput" placeholder="Type answer, e.g. 4f + 12" autocomplete="off" inputmode="text" />
+                <button class="btn btn-success" id="checkAnswerBtn">Check</button>
+              </div>
+              <div class="keypad" id="keypad"></div>
+              <div class="button-row" style="margin-top:10px">
+                <button class="btn btn-primary" id="newProblemBtn">New Question</button>
+                <button class="btn btn-secondary" id="hintBtn">Hint</button>
+                <button class="btn btn-secondary" id="stepsBtn">Steps</button>
+                <button class="btn btn-ghost" id="clearAnswerBtn">Clear</button>
+              </div>
+              <div class="feedback" id="answerFeedback"></div>
+            </div>
+          </div>
+        </div></div>
+      </section>
+
+      <section class="slide" data-title="Final Challenge: Concrete → Visual → Abstract">
+        <div class="slide-shell"><div class="slide-grid">
+          <div class="pane left">
+            <span class="pane-kicker k-mixed">🏆 Final Challenge</span>
+            <h2>Complete the CVA Path</h2>
+            <p>Use the cards as the visual stage. Select the like terms, then type the final simplified answer and explain in one sentence.</p>
+            <div class="problem"><div class="tiny">Challenge Expression</div><div class="formula">7x + 3y - 9 + 2x - y + 4</div></div>
+            <div class="termbank" id="challengeTerms"></div>
+          </div>
+          <div class="pane right">
+            <span class="pane-kicker k-mixed">✅ Submit</span>
+            <h2>Your Abstract Answer</h2>
+            <div class="answer-box">
+              <input class="answer" id="challengeAnswer" placeholder="Final answer, e.g. 9x + 2y - 5" autocomplete="off" />
+              <textarea id="challengeExplain" style="margin-top:10px;width:100%;min-height:100px;border:2px solid #cbd5e1;border-radius:16px;padding:12px" placeholder="Explain: I grouped x terms, y terms and constants..."></textarea>
+              <div class="button-row" style="margin-top:10px">
+                <button class="btn btn-success" id="checkChallengeBtn">Check Challenge</button>
+                <button class="btn btn-warning" id="resetAllBtn">Reset Progress</button>
+              </div>
+              <div class="feedback" id="challengeFeedback"></div>
+            </div>
+          </div>
+        </div></div>
+      </section>
+    </main>
+  </div>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const $=(s,r=document)=>r.querySelector(s);
+    const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+    const slides=$$('.slide');
+    const state={slide:0,selected:null,completed:new Set(),badges:new Set(),mode:'addsub',currentProblem:null,stats:{tried:0,correct:0,streak:0},currentSort:null,currentMatchSet:0};
+    const storeKey='algebra_cva_slide_deck_v3_sequence';
+    const noteSteps=[
+      {key:'expression',message:'An expression is a collection of terms. Here, <span class="math-render">5x + 7</span> is one algebraic expression.',targets:['[data-note-group="topexpr"]']},
+      {key:'term',message:'A term is one whole chunk separated by <span class="math-render">+</span> or <span class="math-render">−</span>. So <span class="math-render">5x</span> is one term and <span class="math-render">7</span> is another term.',targets:['[data-note-target="term-box-5x"]','[data-note-target="term-box-7"]']},
+      {key:'coefficient',message:'The coefficient is the number in front of the variable. In <span class="math-render">5x</span>, the coefficient is <span class="math-render">5</span>. In <span class="math-render">2x</span>, the coefficient is <span class="math-render">2</span>.',targets:['[data-note-target="coef-main"]','[data-note-target="coef-two"]','[data-note-target="coef-frac"]','[data-note-target="coef-sqrt"]']},
+      {key:'variable',message:'The variable is the letter part that can change. In these notes, the variables are <span class="math-render">x</span> and <span class="math-render">y</span>.',targets:['[data-note-target="var-main"]','[data-note-target="var-y2"]','[data-note-target="var-y"]','[data-note-target="var-x2"]']},
+      {key:'constant',message:'A constant has no variable attached. It stands alone and does not change. Here, <span class="math-render">7</span> is the constant.',targets:['[data-note-target="const-main"]']},
+      {key:'operator',message:'Operators tell us what to do. <span class="math-render">+</span> means add and <span class="math-render">−</span> means subtract.',targets:['[data-note-target="operator-main"]','[data-note-target="operator-minus"]','[data-note-target="operator-plus2"]']},
+      {key:'complex',message:'In the second note, each blue box is one term: <span class="math-render"><span class="math-frac"><span class="top">3</span><span class="bar"></span><span class="bottom">4</span></span>y<sup>2</sup></span>, <span class="math-render"><span class="math-root"><span class="root-sign">√</span><span class="radicand">6</span></span>y</span>, and <span class="math-render">2x</span>.',targets:['[data-note-target="term-b1"]','[data-note-target="term-b2"]','[data-note-target="term-b3"]','[data-note-group="bottomexpr"]']}
+    ];
+    let noteTourIndex=0,noteTourPlaying=false,noteTourTimer=null;
+
+
+    const sortProblems=[
+      {expr:'3x + 5y - 2x + 3y + 4',terms:[['3x','x'],['5y','y'],['-2x','x'],['3y','y'],['4','const']],answer:'x + 8y + 4',steps:'(3x - 2x) + (5y + 3y) + 4 = x + 8y + 4'},
+      {expr:'7f + 4 - 3f + 8',terms:[['7f','x'],['4','const'],['-3f','x'],['8','const']],answer:'4f + 12',steps:'(7f - 3f) + (4 + 8) = 4f + 12'},
+      {expr:'c + d - 9 + 2 + 5c - 6d',terms:[['c','x'],['d','y'],['-9','const'],['2','const'],['5c','x'],['-6d','y']],answer:'6c - 5d - 7',steps:'(c + 5c) + (d - 6d) + (-9 + 2) = 6c - 5d - 7'},
+      {expr:'3mn + 12 + 2mn - 4 - mn',terms:[['3mn','x'],['12','const'],['2mn','x'],['-4','const'],['-mn','x']],answer:'4mn + 8',steps:'(3mn + 2mn - mn) + (12 - 4) = 4mn + 8'},
+      {expr:'9x - 4x + 6',terms:[['9x','x'],['-4x','x'],['6','const']],answer:'5x + 6',steps:'(9x - 4x) + 6 = 5x + 6'},
+      {expr:'8m - 3n - 5m + 2n',terms:[['8m','x'],['-3n','y'],['-5m','x'],['2n','y']],answer:'3m - n',steps:'(8m - 5m) + (-3n + 2n) = 3m - n'},
+      {expr:'5p + 2q - 9p + q + 6',terms:[['5p','x'],['2q','y'],['-9p','x'],['q','y'],['6','const']],answer:'-4p + 3q + 6',steps:'(5p - 9p) + (2q + q) + 6 = -4p + 3q + 6'}
+    ];
+    const matchSets=[
+      [['Term','A single item such as 2a, 3c, d or -2c.'],['Expression','A collection of terms such as 2a + 3a or 4g - 2g + g.'],['Variable','Unknown value that can vary, such as x, y, m, a, k.'],['Constant','A value that does not change.']],
+      [['Coefficient','The number in front of a variable; it can be a fraction.'],['Operator','A symbol such as +, -, × or ÷.'],['Like Terms','Terms with identical variable part and same powers.'],['Unlike Terms','Terms whose variable parts are not identical.']],
+      [['5x and -14x','Like terms because both have x.'],['2ab and 8.5ba','Like terms because ab and ba have the same variable factors.'],['5x and 8y','Unlike terms because x and y are different.'],['7.9y and 4.5yz','Unlike terms because yz has an extra variable.']]
+    ];
+    const problems={
+      addsub:[
+        {skill:'Add & Subtract • Like Terms',q:'3x + 4 - 2x - 1',a:'x+3',hint:'Group x with x and constants with constants.',steps:'3x + 4 - 2x - 1 = (3x - 2x) + (4 - 1) = x + 3'},
+        {skill:'Add & Subtract • PowerPoint style',q:'7f + 4 - 3f + 8',a:'4f+12',hint:'7f - 3f = 4f and 4 + 8 = 12.',steps:'7f + 4 - 3f + 8 = (7f - 3f) + (4 + 8) = 4f + 12'},
+        {skill:'Add & Subtract • Two variables',q:'2R + 4R - 3I - 4I',a:'6R-7I',hint:'R terms together and I terms together.',steps:'2R + 4R - 3I - 4I = 6R - 7I'},
+        {skill:'Add & Subtract • Mixed terms',q:'c + d - 9 + 2 + 5c - 6d',a:'6c-5d-7',hint:'Collect c terms, d terms and constants separately.',steps:'(c + 5c) + (d - 6d) + (-9 + 2) = 6c - 5d - 7'},
+        {skill:'Add & Subtract • Simple x terms',q:'9x - 4x + 6',a:'5x+6',hint:'Combine the x terms first, then keep the constant.',steps:'9x - 4x + 6 = 5x + 6'},
+        {skill:'Add & Subtract • With negatives',q:'8m - 3n - 5m + 2n',a:'3m-n',hint:'Collect m terms and n terms separately.',steps:'8m - 3n - 5m + 2n = (8m - 5m) + (-3n + 2n) = 3m - n'},
+        {skill:'Add & Subtract • Three groups',q:'5p + 2q - 9p + q + 6',a:'-4p+3q+6',hint:'5p - 9p gives a negative p term.',steps:'5p + 2q - 9p + q + 6 = (5p - 9p) + (2q + q) + 6 = -4p + 3q + 6'}
+      ],
+      multiply:[
+        {skill:'Multiply • Product form',q:'4b × 3d',a:'12bd',hint:'Multiply the coefficients first: 4 × 3 = 12.',steps:'4b × 3d = (4 × 3) × b × d = 12bd'},
+        {skill:'Multiply • Product form',q:'3s × 8m',a:'24sm',hint:'3 × 8 = 24; s × m = sm.',steps:'3s × 8m = (3 × 8) × s × m = 24sm'},
+        {skill:'Multiply • Powers',q:'2kv × 5k',a:'10k^2v',hint:'k × k = k². Coefficient: 2 × 5 = 10.',steps:'2kv × 5k = 10k²v'},
+        {skill:'Multiply • Fraction coefficient',q:'6j^2 × 1/3jf^2',a:'2j^3f^2',hint:'6 × 1/3 = 2; j² × j = j³.',steps:'6j² × 1/3jf² = 2j³f²'},
+        {skill:'Multiply • Two variables',q:'5a × 2b',a:'10ab',hint:'Multiply coefficients 5 × 2, then write variables together.',steps:'5a × 2b = (5 × 2) × a × b = 10ab'},
+        {skill:'Multiply • Same variable power',q:'3x × 4x',a:'12x^2',hint:'x × x = x².',steps:'3x × 4x = (3 × 4) × x × x = 12x²'},
+        {skill:'Multiply • Negative coefficient',q:'-2m × 7n',a:'-14mn',hint:'Negative × positive is negative.',steps:'-2m × 7n = (-2 × 7) × m × n = -14mn'}
+      ],
+      divide:[
+        {skill:'Divide • Fraction form',q:'18a^2b^2 ÷ 3ab',a:'6ab',hint:'18 ÷ 3 = 6, a² ÷ a = a, b² ÷ b = b.',steps:'18a²b² ÷ 3ab = (18/3)(a²/a)(b²/b) = 6ab'},
+        {skill:'Divide • Cancel common variable',q:'25ef ÷ 5f',a:'5e',hint:'f cancels out, 25 ÷ 5 = 5.',steps:'25ef ÷ 5f = 5e'},
+        {skill:'Divide • Negative coefficient',q:'54u^2w^2 ÷ (-6uw)',a:'-9uw',hint:'Positive divided by negative gives negative.',steps:'54u²w² ÷ (-6uw) = -9uw'},
+        {skill:'Divide • Fraction answer',q:'27p^2q^2 ÷ 12p',a:'9/4pq^2',hint:'27/12 simplifies to 9/4; p² ÷ p = p.',steps:'27p²q² ÷ 12p = 9/4pq²'},
+        {skill:'Divide • Simple cancel',q:'12xy ÷ 3x',a:'4y',hint:'12 ÷ 3 = 4 and x cancels out.',steps:'12xy ÷ 3x = (12/3)(x/x)y = 4y'},
+        {skill:'Divide • Powers',q:'20m^3n ÷ 5m',a:'4m^2n',hint:'m³ ÷ m = m².',steps:'20m³n ÷ 5m = (20/5)(m³/m)n = 4m²n'},
+        {skill:'Divide • Negative result',q:'-30a^2b ÷ 6a',a:'-5ab',hint:'Negative ÷ positive is negative.',steps:'-30a²b ÷ 6a = (-30/6)(a²/a)b = -5ab'}
+      ]
+    };
+    problems.mixed=[...problems.addsub,...problems.multiply,...problems.divide];
+
+    const demoDefs={
+      parts:{idx:0,playing:true,ms:2300,stage:'#partsStage',steps:[
+        {cap:'Start with one expression',html:'<div class="formula">7x + 3y - 9</div>'},
+        {cap:'Terms are separated by + or −',html:'<span class="term x">7x</span><span class="term y">+3y</span><span class="term c">-9</span>'},
+        {cap:'Coefficients are numbers in front',html:'<span class="term bad">7</span><span class="term x">x</span> <span class="term o">+</span> <span class="term bad">3</span><span class="term y">y</span> <span class="term o">−</span> <span class="term c">9</span>'},
+        {cap:'Variables are letters that vary',html:'<span class="term x">x</span><span class="term y">y</span><div class="tiny">x and y can change</div>'},
+        {cap:'Constant does not change',html:'<span class="term c">-9</span><div class="tiny">The value is fixed</div>'}
+      ]},
+      concrete:{idx:0,playing:true,ms:2400,stage:'#concreteStage',steps:[
+        {cap:'Mixed objects on the table',html:'<div class="object-row">🍎🍎🍎 🍊🍊🍊🍊🍊 🍎🍎 🍊🍊🍊 🟣🟣🟣🟣</div>'},
+        {cap:'Group same objects',html:'<div><span class="fruit-group apple">🍎🍎🍎 + 🍎🍎</span><span class="fruit-group orange">🍊🍊🍊🍊🍊 + 🍊🍊🍊</span><span class="fruit-group coin">🟣🟣🟣🟣</span></div>'},
+        {cap:'Count each group',html:'<div><span class="term x">5 apples</span><span class="term y">8 oranges</span><span class="term c">4 coins</span></div>'},
+        {cap:'Turn objects into algebra',html:'<div class="formula">3x + 5y + 2x + 3y + 4</div>'},
+        {cap:'Final simplified expression',html:'<div class="formula">5x + 8y + 4</div>'}
+      ]},
+      like:{idx:0,playing:true,ms:2300,stage:'#likeStage',steps:[
+        {cap:'Compare variable parts only',html:'<span class="term x">5x</span><span class="term x">-14x</span>'},
+        {cap:'Both have x, so they are like terms',html:'<div class="success"><span class="formula">5x and -14x ✅</span></div>'},
+        {cap:'Order does not matter in multiplication',html:'<span class="term y">2ab</span><span class="term y">8.5ba</span><div class="tiny">ab and ba have the same variable factors</div>'},
+        {cap:'Different variables cannot combine',html:'<div class="danger"><span class="formula">5x and 8y ❌</span></div>'},
+        {cap:'Extra variable makes it unlike',html:'<div class="danger"><span class="formula">7.9y and 4.5yz ❌</span></div>'}
+      ]},
+      addsub:{idx:0,playing:true,ms:2500,stage:'#addsubStage',steps:[
+        {cap:'Question',html:'<div class="formula">Simplify: 7f + 4 - 3f + 8</div>'},
+        {cap:'Identify like terms',html:'<span class="term x">7f</span><span class="term c">+4</span><span class="term x">-3f</span><span class="term c">+8</span>'},
+        {cap:'Rearrange by type',html:'<div class="formula">(7f - 3f) + (4 + 8)</div>'},
+        {cap:'Add or subtract coefficients',html:'<div class="formula">(7 - 3)f + 12</div>'},
+        {cap:'Final answer',html:'<div class="success"><div class="formula">4f + 12</div></div>'}
+      ]},
+      multiply:{idx:0,playing:true,ms:2400,stage:'#multiplyStage',steps:[
+        {cap:'Question',html:'<div class="formula">4b × 3d</div>'},
+        {cap:'Product form',html:'<div class="formula">4 × b × 3 × d</div>'},
+        {cap:'Group numbers and variables',html:'<div class="formula">(4 × 3) × b × d</div>'},
+        {cap:'Multiply',html:'<div class="success"><div class="formula">12bd</div></div>'}
+      ]},
+      divide:{idx:0,playing:true,ms:2400,stage:'#divideStage',steps:[
+        {cap:'Question',html:'<div class="formula">18a²b² ÷ 3ab</div>'},
+        {cap:'Fraction form',html:'<div class="formula">18a²b² / 3ab</div>'},
+        {cap:'Split',html:'<div class="formula">18/3 × a²/a × b²/b</div>'},
+        {cap:'Cancel out',html:'<div><span class="term x">18/3 = 6</span><span class="term y">a²/a = a</span><span class="term c">b²/b = b</span></div>'},
+        {cap:'Final answer',html:'<div class="success"><div class="formula">6ab</div></div>'}
+      ]}
+    };
+
+    function save(){localStorage.setItem(storeKey,JSON.stringify({completed:[...state.completed],badges:[...state.badges],stats:state.stats,slide:state.slide}));}
+    function load(){try{const s=JSON.parse(localStorage.getItem(storeKey)||'{}');(s.completed||[]).forEach(x=>state.completed.add(x));(s.badges||[]).forEach(x=>state.badges.add(x));if(s.stats)state.stats=s.stats;if(Number.isInteger(s.slide))state.slide=Math.min(s.slide,slides.length-1)}catch(e){}}
+    function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1600)}
+    function confetti(){for(let i=0;i<24;i++){const el=document.createElement('div');el.className='confetti';el.style.left=Math.random()*100+'vw';el.style.background=['#f59e0b','#22c55e','#3b82f6','#ec4899','#8b5cf6'][i%5];el.style.animationDelay=(Math.random()*0.25)+'s';document.body.appendChild(el);setTimeout(()=>el.remove(),2200)}}
+    function complete(id,badge){state.completed.add(id);if(badge)state.badges.add(badge);updateTop();save();}
+    function updateTop(){const visited=[...state.completed].filter(x=>String(x).startsWith('slide-')).length;const pct=Math.min(100,Math.round((visited/slides.length)*100));$('#progressFill').style.width=pct+'%';$('#slideNo').textContent=state.slide+1;$('#slideTotal').textContent=slides.length;$('#slideTitle').textContent=slides[state.slide].dataset.title;$('#prevBtn').disabled=state.slide===0;$('#nextBtn').disabled=state.slide===slides.length-1;$('#badgeRow').innerHTML=[...state.badges].map(b=>`<span class="badge">${b}</span>`).join('')||'<span class="tiny">Badges will appear here.</span>';updateStats();}
+    function goSlide(i){state.slide=Math.max(0,Math.min(slides.length-1,i));state.completed.add('slide-'+state.slide);slides.forEach((s,n)=>s.classList.toggle('active',n===state.slide));updateTop();save();startVisibleDemos();handleInteractiveNotes();if(state.slide===1)complete('parts','📚 Algebra Language');}
+    $('#homeBtn').addEventListener('click',()=>goSlide(0));$('#prevBtn').addEventListener('click',()=>goSlide(state.slide-1));$('#nextBtn').addEventListener('click',()=>goSlide(state.slide+1));
+    document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea'))return;if(e.key==='ArrowRight')goSlide(state.slide+1);if(e.key==='ArrowLeft')goSlide(state.slide-1);if(e.key.toLowerCase()==='h')goSlide(0);});
+
+
+    function clearNoteHighlights(){ $$('#noteExplorer .active-note').forEach(el=>el.classList.remove('active-note')); $$('#noteChipRow .note-chip').forEach(el=>el.classList.remove('active')); }
+    function showNoteStepByIndex(idx){ const step=noteSteps[idx]; if(!step) return; noteTourIndex=idx; clearNoteHighlights(); step.targets.forEach(sel=>$$('#noteExplorer '+sel).forEach(el=>el.classList.add('active-note'))); const chip=$(`#noteChipRow .note-chip[data-note-step="${step.key}"]`); if(chip) chip.classList.add('active'); const box=$('#noteMessage'); if(box) box.innerHTML='💡 '+step.message; }
+    function startNoteTour(){ noteTourPlaying=true; if(noteTourTimer) clearInterval(noteTourTimer); showNoteStepByIndex(noteTourIndex); noteTourTimer=setInterval(()=>{ noteTourIndex=(noteTourIndex+1)%noteSteps.length; showNoteStepByIndex(noteTourIndex); },2600); }
+    function pauseNoteTour(){ noteTourPlaying=false; if(noteTourTimer) clearInterval(noteTourTimer); noteTourTimer=null; }
+    function resetNoteTour(){ pauseNoteTour(); noteTourIndex=0; showNoteStepByIndex(0); }
+    function handleInteractiveNotes(){ const onSlide=!!$('.slide.active #noteExplorer'); if(onSlide){ if(noteTourPlaying && !noteTourTimer) startNoteTour(); else if(!noteTourPlaying) showNoteStepByIndex(noteTourIndex); } else { pauseNoteTour(); } }
+    function sequenceMarkup(steps,idx,compact=false){
+      return `<div class="sequence-track ${compact?'compact':''}">`+steps.map((step,i)=>{
+        const shown=i<=idx,active=i===idx;
+        if(!shown)return '';
+        return `${i>0?'<div class="seq-arrow">↓</div>':''}<div class="seq-row ${active?'active':'done'}"><div class="seq-num">${i+1}</div><div class="seq-body"><div class="seq-cap">${step.cap||('Step '+(i+1))}</div><div class="seq-html">${step.html}</div></div></div>`;
+      }).join('')+`</div>`;
+    }
+    function renderDemo(name){
+      const d=demoDefs[name], stage=$(d.stage); if(!stage)return;
+      stage.innerHTML=sequenceMarkup(d.steps,d.idx);
+      const status=d.idx===d.steps.length-1&&!d.playing?'Complete':`Step ${d.idx+1} of ${d.steps.length}`;
+      $$(`[data-controls="${name}"]`).forEach(c=>{c.innerHTML=`<button class="btn btn-primary" data-demo-btn="${name}" data-act="toggle">${d.playing?'⏸ Pause':'▶ Play'}</button><button class="btn btn-secondary" data-demo-btn="${name}" data-act="prev">◀ Step</button><button class="btn btn-secondary" data-demo-btn="${name}" data-act="next">Step ▶</button><button class="btn btn-secondary" data-demo-btn="${name}" data-act="replay">↺ Replay</button><div class="demo-status">${status}</div><div class="step-dots">${d.steps.map((_,i)=>`<span class="dot ${i===d.idx?'active':''}"></span>`).join('')}</div>`});
+    }
+    function scheduleDemo(name){const d=demoDefs[name];if(d.timer)clearInterval(d.timer);if(d.playing)d.timer=setInterval(()=>advanceDemo(name),d.ms);}
+    function advanceDemo(name){const d=demoDefs[name];if(!d.playing)return;if(d.idx<d.steps.length-1){d.idx++;renderDemo(name);}else{d.playing=false;if(d.timer)clearInterval(d.timer);renderDemo(name);}}
+    function startVisibleDemos(){Object.values(demoDefs).forEach(d=>{if(d.timer)clearInterval(d.timer);});const visible=$$('.slide.active [data-demo]').map(x=>x.dataset.demo);visible.forEach(name=>{const d=demoDefs[name];if(d.idx===d.steps.length-1&&!d.playing){d.idx=0;d.playing=true;}renderDemo(name);scheduleDemo(name);});}
+    document.addEventListener('click',e=>{const b=e.target.closest('[data-demo-btn]');if(!b)return;const name=b.dataset.demoBtn,act=b.dataset.act,d=demoDefs[name];if(act==='toggle'){if(!d.playing&&d.idx===d.steps.length-1)d.idx=0;d.playing=!d.playing;}if(act==='replay'){d.idx=0;d.playing=true;}if(act==='prev'){d.playing=false;d.idx=Math.max(0,d.idx-1);}if(act==='next'){d.playing=false;d.idx=Math.min(d.steps.length-1,d.idx+1);}renderDemo(name);scheduleDemo(name);});
+
+    $('#playNoteTourBtn')?.addEventListener('click',()=>{startNoteTour();}); $('#pauseNoteTourBtn')?.addEventListener('click',()=>{pauseNoteTour();}); $('#resetNoteTourBtn')?.addEventListener('click',()=>{resetNoteTour();}); $$('#noteChipRow .note-chip').forEach((chip,idx)=>chip.addEventListener('click',()=>{pauseNoteTour(); showNoteStepByIndex(idx);}));
+    function pick(arr){return arr[Math.floor(Math.random()*arr.length)]}
+    function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
+    function prettyMathHtml(raw){let s=escapeHtml(String(raw??'')); s=s.replace(/([A-Za-z])\^(\d+)/g,'$1<sup>$2</sup>'); s=s.replace(/(\d+)\/(\d+)(?=[A-Za-z]|\s|$|[()+=\-−×÷])/g,'<span class="math-frac"><span class="top">$1</span><span class="bar"></span><span class="bottom">$2</span></span>'); s=s.replace(/√(\d+)/g,'<span class="math-root"><span class="root-sign">√</span><span class="radicand">$1</span></span>'); return '<span class="math-render">'+s+'</span>'; }
+    function termClass(kind){return kind==='x'?'x':kind==='y'?'y':kind==='const'?'c':'o'}
+    function renderSort(){state.currentSort=pick(sortProblems);$('#sortExpression').innerHTML=prettyMathHtml(state.currentSort.expr);$('#sortFeedback').textContent='';$('#sortFeedback').className='feedback';$$('#dropGrid .dropzone').forEach(z=>{z.className='dropzone';$('.drop-content',z).innerHTML='';});const shuffled=[...state.currentSort.terms].sort(()=>Math.random()-.5);$('#termBank').innerHTML=shuffled.map(([label,kind],i)=>`<span class="term ${termClass(kind)} draggable" tabindex="0" data-kind="${kind}" data-id="s${i}">${label}</span>`).join('');setupDrag();}
+    function checkSort(){let ok=true,placed=0;$$('#dropGrid .dropzone').forEach(z=>{let zoneOK=true;$$('.term',z).forEach(t=>{placed++;if(t.dataset.kind!==z.dataset.accept){zoneOK=false;ok=false;}});z.classList.toggle('good',zoneOK&&$$('.term',z).length>0);z.classList.toggle('bad',!zoneOK);});if(placed<state.currentSort.terms.length){$('#sortFeedback').className='feedback no';$('#sortFeedback').textContent='There are still cards in the term bank.';return}if(ok){$('#sortFeedback').className='feedback ok';$('#sortFeedback').innerHTML=`✅ Correct! ${state.currentSort.steps}`;complete('sort','🧺 Sort Master');confetti();}else{$('#sortFeedback').className='feedback no';$('#sortFeedback').textContent='Some cards are in the wrong basket. Check the variable part.';}}
+    $('#newSortBtn').addEventListener('click',renderSort);$('#checkSortBtn').addEventListener('click',checkSort);$('#showSortAnswer').addEventListener('click',()=>{$('#sortFeedback').className='feedback hint';$('#sortFeedback').innerHTML=`🪜 Full step sequence:<br>${solutionStepsMarkup(state.currentSort.steps)}<strong>Answer:</strong> ${prettyMathHtml(state.currentSort.answer)}`});
+
+    function renderMatch(){state.selected=null;const set=matchSets[state.currentMatchSet%matchSets.length];const shuffledTerms=[...set].sort(()=>Math.random()-.5);const shuffledDefs=[...set].sort(()=>Math.random()-.5);$('#matchBank').innerHTML=shuffledTerms.map(([term],i)=>`<span class="term o draggable match-card" tabindex="0" data-match="${escapeHtml(term)}" data-id="m${i}">${term}</span>`).join('');$('#matchTargets').innerHTML=shuffledDefs.map(([term,def])=>`<div class="definition"><strong>${def}</strong><div class="match-drop dropzone" data-accept="${escapeHtml(term)}"></div></div>`).join('');$('#matchFeedback').textContent='';$('#matchFeedback').className='feedback';setupDrag();}
+    function checkMatch(){let ok=true,placed=0,total=$$('.match-drop').length;$$('.match-drop').forEach(z=>{const card=$('.match-card',z);z.classList.remove('good','bad');if(card){placed++;if(card.dataset.match===z.dataset.accept)z.classList.add('good');else{z.classList.add('bad');ok=false}}else ok=false;});if(placed<total){$('#matchFeedback').className='feedback no';$('#matchFeedback').textContent='Complete every definition first.';return}if(ok){$('#matchFeedback').className='feedback ok';$('#matchFeedback').textContent='✅ All matches are correct!';complete('match','🎨 Match Pro');confetti();}else{$('#matchFeedback').className='feedback no';$('#matchFeedback').textContent='Some matches are not correct yet.';}}
+    $('#checkMatchBtn').addEventListener('click',checkMatch);$('#resetMatchBtn').addEventListener('click',renderMatch);$('#newMatchBtn').addEventListener('click',()=>{state.currentMatchSet++;renderMatch();});
+
+    let drag=null;
+    function setupDrag(){ $$('.draggable,.term[data-challenge]').forEach(el=>{if(el.dataset.ready)return;el.dataset.ready='1';el.addEventListener('pointerdown',startDrag);el.addEventListener('click',tapSelect);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selectTerm(el)}});}); $$('.dropzone,.match-drop').forEach(z=>{if(z.dataset.dropReady)return;z.dataset.dropReady='1';z.addEventListener('click',()=>{if(state.selected)moveToDrop(state.selected,z);});}); }
+    function selectTerm(el){$$('.term.selected').forEach(t=>t.classList.remove('selected'));state.selected=el;el.classList.add('selected');toast('Card selected. Tap a basket or answer space.');}
+    function tapSelect(e){if(drag&&drag.moved)return;selectTerm(e.currentTarget);}
+    function startDrag(e){const el=e.currentTarget;if(el.dataset.challenge)return;if(e.button&&e.button!==0)return;drag={el,startX:e.clientX,startY:e.clientY,parent:el.parentNode,next:el.nextSibling,ox:e.offsetX,oy:e.offsetY,moved:false};document.addEventListener('pointermove',moveDrag);document.addEventListener('pointerup',endDrag,{once:true});}
+    function moveDrag(e){if(!drag)return;const dx=Math.abs(e.clientX-drag.startX),dy=Math.abs(e.clientY-drag.startY);if(!drag.moved&&dx+dy>8){drag.moved=true;const r=drag.el.getBoundingClientRect();drag.el.style.width=r.width+'px';drag.el.style.position='fixed';drag.el.style.left=r.left+'px';drag.el.style.top=r.top+'px';drag.el.style.zIndex=9999;drag.el.style.pointerEvents='none';drag.el.style.transform='scale(1.05)';}
+      if(drag.moved){e.preventDefault();drag.el.style.left=(e.clientX-drag.ox)+'px';drag.el.style.top=(e.clientY-drag.oy)+'px';$$('.dropzone,.match-drop').forEach(z=>z.classList.remove('hover'));const z=document.elementFromPoint(e.clientX,e.clientY)?.closest('.dropzone,.match-drop');if(z)z.classList.add('hover');}}
+    function endDrag(e){document.removeEventListener('pointermove',moveDrag);$$('.dropzone,.match-drop').forEach(z=>z.classList.remove('hover'));if(!drag)return;const d=drag;const target=document.elementFromPoint(e.clientX,e.clientY)?.closest('.dropzone,.match-drop');resetDragStyle(d.el);if(d.moved&&target)moveToDrop(d.el,target);else if(d.moved){if(d.next)d.parent.insertBefore(d.el,d.next);else d.parent.appendChild(d.el);}setTimeout(()=>drag=null,0);}
+    function resetDragStyle(el){el.style.position='';el.style.left='';el.style.top='';el.style.width='';el.style.zIndex='';el.style.pointerEvents='';el.style.transform='';}
+    function moveToDrop(el,target){if(target.classList.contains('match-drop')&&$('.match-card',target))$('#matchBank').appendChild($('.match-card',target));const content=target.classList.contains('dropzone')&&!target.classList.contains('match-drop')?($('.drop-content',target)||target):target;content.appendChild(el);el.classList.remove('selected');state.selected=null;}
+
+    function norm(s){return String(s||'').toLowerCase().trim().split('=').pop().replace(/[−–—]/g,'-').replace(/[×·*]/g,'').replace(/÷/g,'/').replace(/[²]/g,'^2').replace(/[³]/g,'^3').replace(/[⁴]/g,'^4').replace(/\s+/g,'');}
+    function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b]}return a||1}
+    function frac(n,d=1){if(d<0){n=-n;d=-d}if(n===0)return{n:0,d:1};const g=gcd(n,d);return{n:n/g,d:d/g}}
+    function addF(a,b){return frac(a.n*b.d+b.n*a.d,a.d*b.d)}
+    function parseCoeff(s){if(!s||s==='+')return frac(1);if(s==='-')return frac(-1);if(s.includes('/')){const[a,b]=s.split('/').map(Number);if(!Number.isFinite(a)||!Number.isFinite(b)||b===0)return null;return frac(a,b)}const num=Number(s);if(!Number.isFinite(num))return null;if(!Number.isInteger(num)){const scale=1000000;return frac(Math.round(num*scale),scale)}return frac(num)}
+    function parseMonomial(raw){let s=norm(raw);if(!s)return null;let sign='';if(s[0]==='+'||s[0]==='-'){sign=s[0];s=s.slice(1)}const firstLetter=s.search(/[a-z]/);let coeffPart,varPart;if(firstLetter<0){coeffPart=sign+s;varPart='';}else{coeffPart=sign+s.slice(0,firstLetter);varPart=s.slice(firstLetter)}const c=parseCoeff(coeffPart);if(!c)return null;const vars={};let i=0;while(i<varPart.length){const ch=varPart[i];if(!/[a-z]/.test(ch))return null;i++;let exp='';if(varPart[i]==='^'){i++;while(/\d/.test(varPart[i]))exp+=varPart[i++];}else{while(/\d/.test(varPart[i]))exp+=varPart[i++];}const e=exp?Number(exp):1;if(!Number.isFinite(e))return null;vars[ch]=(vars[ch]||0)+e;}const key=Object.keys(vars).sort().map(v=>v+(vars[v]===1?'':'^'+vars[v])).join('');return{c,key}}
+    function canonicalPoly(raw){let s=norm(raw);if(!s)return null;if(!/^[+-]/.test(s))s='+'+s;const parts=s.match(/[+-][^+-]+/g);if(!parts)return null;const map={};for(const p of parts){const m=parseMonomial(p);if(!m)return null;map[m.key]=addF(map[m.key]||frac(0),m.c)}const keys=Object.keys(map).filter(k=>map[k].n!==0).sort();if(!keys.length)return'0';return keys.map(k=>{const c=map[k];const cstr=c.d===1?String(c.n):c.n+'/'+c.d;return cstr+'|'+k}).join(';')}
+    function equivalent(user,correct){const u=norm(user),c=norm(correct);if(u===c)return true;const cu=canonicalPoly(user),cc=canonicalPoly(correct);return!!cu&&!!cc&&cu===cc}
+
+    function solutionStepsMarkup(stepText){
+      const raw=String(stepText||'').replace(/²/g,'^2').replace(/³/g,'^3');
+      let pieces=raw.split('=').map(s=>s.trim()).filter(Boolean);
+      if(pieces.length<2)pieces=[raw];
+      const steps=pieces.map((p,i)=>({cap:i===0?'Original expression':(i===pieces.length-1?'Final answer':'Next transformation'),html:prettyMathHtml(i===0?p:'= '+p)}));
+      return sequenceMarkup(steps,steps.length-1,true);
+    }
+
+    function renderKeypad(){const keys=['7','8','9','+','4','5','6','-','1','2','3','^','0','x','y','a','b','c','d','f','j','k','m','n','p','q','r','s','t','u','v','w','/','(',')','=','⌫','Clear'];$('#keypad').innerHTML=keys.map(k=>`<button type="button" class="${k==='Clear'?'wide':''}" data-key="${k}">${k}</button>`).join('');}
+    $('#keypad').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const inp=$('#answerInput'),k=b.dataset.key;if(k==='Clear'){inp.value='';inp.focus();return}if(k==='⌫'){inp.value=inp.value.slice(0,-1);inp.focus();return}const start=inp.selectionStart??inp.value.length,end=inp.selectionEnd??inp.value.length;inp.value=inp.value.slice(0,start)+k+inp.value.slice(end);inp.focus();inp.setSelectionRange(start+k.length,start+k.length);});
+    function setProblem(){const list=problems[state.mode];state.currentProblem=pick(list);$('#problemSkill').textContent=state.currentProblem.skill;$('#problemText').innerHTML=prettyMathHtml(state.currentProblem.q);$('#answerInput').value='';$('#answerInput').className='answer';$('#answerFeedback').textContent='';$('#answerFeedback').className='feedback';}
+    function checkAnswer(){const input=$('#answerInput'),ans=input.value.trim();if(!ans){$('#answerFeedback').className='feedback no';$('#answerFeedback').textContent='Please type an answer first.';return}state.stats.tried++;if(equivalent(ans,state.currentProblem.a)){state.stats.correct++;state.stats.streak++;input.classList.add('correct');input.classList.remove('wrong');$('#answerFeedback').className='feedback ok';$('#answerFeedback').innerHTML=`✅ Correct! Watch the full sequence:<br>${solutionStepsMarkup(state.currentProblem.steps)}`;complete('typing','⌨️ Equation Ace');if(state.stats.streak>=3)state.badges.add('🔥 3 Streak');confetti();}else{state.stats.streak=0;input.classList.add('wrong');input.classList.remove('correct');$('#answerFeedback').className='feedback no';$('#answerFeedback').innerHTML='❌ Try again. Check signs and combine only like terms.';}updateTop();save();}
+    function updateStats(){const s=state.stats;$('#statTried').textContent=s.tried;$('#statCorrect').textContent=s.correct;$('#statStreak').textContent=s.streak;$('#statRate').textContent=s.tried?Math.round(s.correct/s.tried*100)+'%':'0%'}
+    $('#checkAnswerBtn').addEventListener('click',checkAnswer);$('#answerInput').addEventListener('keydown',e=>{if(e.key==='Enter')checkAnswer();});$('#newProblemBtn').addEventListener('click',setProblem);$('#clearAnswerBtn').addEventListener('click',()=>{$('#answerInput').value='';$('#answerInput').focus();});$('#hintBtn').addEventListener('click',()=>{$('#answerFeedback').className='feedback hint';$('#answerFeedback').textContent='💡 '+state.currentProblem.hint;});$('#stepsBtn').addEventListener('click',()=>{$('#answerFeedback').className='feedback hint';$('#answerFeedback').innerHTML='🪜 Full step sequence:<br>'+solutionStepsMarkup(state.currentProblem.steps);});$$('#modeRow .mode').forEach(ch=>ch.addEventListener('click',()=>{$$('#modeRow .mode').forEach(c=>c.classList.remove('active'));ch.classList.add('active');state.mode=ch.dataset.mode;setProblem();}));
+
+    function renderChallenge(){const terms=[['7x','x'],['3y','y'],['-9','const'],['2x','x'],['-y','y'],['4','const']];$('#challengeTerms').innerHTML=terms.map(([t,k])=>`<button type="button" class="term ${termClass(k)}" data-kind="${k}" data-challenge="1">${t}</button>`).join('');$$('#challengeTerms .term').forEach(t=>t.addEventListener('click',()=>t.classList.toggle('selected')));}
+    $('#checkChallengeBtn').addEventListener('click',()=>{const ans=$('#challengeAnswer').value,explain=$('#challengeExplain').value.trim(),selected=$$('#challengeTerms .term.selected').length;if(!equivalent(ans,'9x+2y-5')){$('#challengeFeedback').className='feedback no';$('#challengeFeedback').textContent='The simplified answer is not correct yet. Group x, y and constants.';return}if(selected<3){$('#challengeFeedback').className='feedback hint';$('#challengeFeedback').textContent='Answer correct. Select some like-term cards too for the full challenge.';return}if(explain.length<12){$('#challengeFeedback').className='feedback hint';$('#challengeFeedback').textContent='Answer correct. Add a short explanation sentence.';return}$('#challengeFeedback').className='feedback ok';$('#challengeFeedback').textContent='🏆 Excellent! You completed Concrete → Visual → Abstract.';complete('challenge','🏆 Algebra Finisher');confetti();});
+    $('#resetAllBtn').addEventListener('click',()=>{localStorage.removeItem(storeKey);state.completed.clear();state.badges.clear();state.stats={tried:0,correct:0,streak:0};updateTop();toast('Progress reset.');});
+
+    function init(){load();renderSort();renderMatch();renderKeypad();setProblem();renderChallenge();updateTop();resetNoteTour();goSlide(state.slide);complete('home',null);}
+    init();
+  </script>
+</body>
+    <a href="index.html" style="display:inline-block; margin:16px; padding:10px 16px; background:#4f46e5; color:white; border-radius:8px; text-decoration:none;">
+        Home
+    </a>
+
+    <header class="hero-section">
+</html>
+</html>
