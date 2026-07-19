@@ -6,6 +6,194 @@
     <title>Hab Pembelajaran ALGEBRA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        body { font-family: 'Inter', sans-serif; }
+        .topic-card { transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; }
+        .topic-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-900">
+    <div class="container mx-auto p-6 md:p-10">
+        <header class="text-center mb-12">
+            <h1 class="text-5xl md:text-6xl font-extrabold text-indigo-800 mb-4 leading-tight">ALGEBRA</h1>
+            <p class="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto">
+                Selamat datang ke hab pembelajaran Algebra! Terokai pelbagai topik penting dalam Algebra untuk mengukuhkan pemahaman anda.
+            </p>
+        </header>
+
+        <section class="mb-12 bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-3xl font-bold text-indigo-700 mb-6 text-center">Peta Minda Algebra</h2>
+            <div class="flex justify-center">
+                <a href="peta_minda.html" class="inline-flex items-center justify-center rounded-lg bg-indigo-700 px-6 py-3 text-lg font-semibold text-white shadow-lg transition hover:bg-indigo-800">
+                    Buka Peta Minda Algebra
+                </a>
+            </div>
+            <p class="text-center text-gray-600 mt-4">Peta minda ini memberikan gambaran keseluruhan topik-topik utama dalam Algebra.</p>
+        </section>
+
+        <section class="mb-12 rounded-xl bg-white p-6 shadow-md md:p-8" aria-labelledby="result-title">
+            <div class="mx-auto max-w-3xl">
+                <h2 id="result-title" class="mb-2 text-center text-3xl font-bold text-emerald-700">Hantar Keputusan Pembelajaran</h2>
+                <p class="mb-7 text-center text-gray-600">Lengkapkan maklumat selepas menamatkan latihan, kemudian tekan butang Hantar ke Zapier.</p>
+
+                <form id="resultForm" class="grid grid-cols-1 gap-5 md:grid-cols-2">
+                    <div>
+                        <label for="studentName" class="mb-2 block font-semibold text-gray-700">Nama pelajar</label>
+                        <input id="studentName" name="studentName" type="text" required autocomplete="name"
+                               class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                               placeholder="Contoh: Nur Aisyah">
+                    </div>
+
+                    <div>
+                        <label for="studentId" class="mb-2 block font-semibold text-gray-700">No. pelajar</label>
+                        <input id="studentId" name="studentId" type="text" required
+                               class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                               placeholder="Contoh: A12345">
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label for="topic" class="mb-2 block font-semibold text-gray-700">Topik</label>
+                        <select id="topic" name="topic" required
+                                class="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200">
+                            <option value="">Pilih topik</option>
+                            <option>Operations of Algebra</option>
+                            <option>Algebra Equations</option>
+                            <option>Quadratic Equations</option>
+                            <option>Simultaneous Equation</option>
+                            <option>Formulae</option>
+                            <option>Polynomial</option>
+                            <option>Partial Fractions</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="score" class="mb-2 block font-semibold text-gray-700">Markah diperoleh</label>
+                        <input id="score" name="score" type="number" min="0" step="1" required
+                               class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                               placeholder="Contoh: 8">
+                    </div>
+
+                    <div>
+                        <label for="totalMarks" class="mb-2 block font-semibold text-gray-700">Jumlah markah</label>
+                        <input id="totalMarks" name="totalMarks" type="number" min="1" step="1" required
+                               class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                               placeholder="Contoh: 10">
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <button id="submitResult" type="submit"
+                                class="w-full rounded-lg bg-emerald-600 px-6 py-3 text-lg font-bold text-white shadow-lg transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-gray-400">
+                            Hantar ke Zapier
+                        </button>
+                        <p id="submitStatus" class="mt-4 hidden rounded-lg p-4 text-center font-semibold" role="status" aria-live="polite"></p>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <a href="operation_algebra.html" class="topic-card block bg-white rounded-lg shadow-md hover:shadow-xl p-6 border-l-4 border-indigo-500">
+                <h2 class="text-2xl font-semibold text-indigo-700 mb-2">Operations of Algebra</h2>
+                <p class="text-gray-600">Pelajari asas-asas operasi algebra seperti penambahan, penolakan, pendaraban, dan pembahagian ungkapan algebra.</p>
+            </a>
+            <a href="algebra_equations.html" class="topic-card block bg-white rounded-lg shadow-md hover:shadow-xl p-6 border-l-4 border-red-500">
+                <h2 class="text-2xl font-semibold text-red-700 mb-2">Algebra Equations</h2>
+                <p class="text-gray-600">Terokai pelbagai jenis persamaan algebra dan kaedah penyelesaiannya.</p>
+            </a>
+            <a href="quadratic_equations.html" class="topic-card block bg-white rounded-lg shadow-md hover:shadow-xl p-6 border-l-4 border-yellow-500">
+                <h2 class="text-2xl font-semibold text-yellow-700 mb-2">Quadratic Equations</h2>
+                <p class="text-gray-600">Kuasai persamaan kuadratik, termasuk kaedah pemfaktoran, rumus kuadratik, dan penyelesaian graf.</p>
+            </a>
+            <a href="simultaneous_equation.html" class="topic-card block bg-white rounded-lg shadow-md hover:shadow-xl p-6 border-l-4 border-purple-500">
+                <h2 class="text-2xl font-semibold text-purple-700 mb-2">Simultaneous Equation</h2>
+                <p class="text-gray-600">Pelajari cara menyelesaikan sistem persamaan serentak menggunakan kaedah penggantian dan penghapusan.</p>
+            </a>
+            <a href="formulae.html" class="topic-card block bg-white rounded-lg shadow-md hover:shadow-xl p-6 border-l-4 border-pink-500">
+                <h2 class="text-2xl font-semibold text-pink-700 mb-2">Formulae</h2>
+                <p class="text-gray-600">Fahami dan gunakan pelbagai formula algebra dalam konteks penyelesaian masalah.</p>
+            </a>
+            <a href="polynomial/index.html" class="topic-card block bg-white rounded-lg shadow-md hover:shadow-xl p-6 border-l-4 border-blue-500">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-2">Polynomial</h2>
+                <p class="text-gray-600">Terokai sifat-sifat polinomial, operasi, dan kaedah pemfaktoran.</p>
+            </a>
+            <a href="partial_fraction.html" class="topic-card block bg-white rounded-lg shadow-md hover:shadow-xl p-6 border-l-4 border-teal-500">
+                <h2 class="text-2xl font-semibold text-teal-700 mb-2">Partial Fractions</h2>
+                <p class="text-gray-600">Pelajari teknik pecahan separa untuk memudahkan integrasi dan manipulasi ungkapan rasional.</p>
+            </a>
+        </section>
+    </div>
+
+    <script>
+        const ZAPIER_WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/28253519/446ufzf/';
+        const resultForm = document.getElementById('resultForm');
+        const submitButton = document.getElementById('submitResult');
+        const submitStatus = document.getElementById('submitStatus');
+
+        function showStatus(message, success) {
+            submitStatus.textContent = message;
+            submitStatus.className = success
+                ? 'mt-4 rounded-lg bg-emerald-100 p-4 text-center font-semibold text-emerald-800'
+                : 'mt-4 rounded-lg bg-red-100 p-4 text-center font-semibold text-red-800';
+        }
+
+        async function hantarKeZapier(event) {
+            event.preventDefault();
+
+            const score = Number(document.getElementById('score').value);
+            const totalMarks = Number(document.getElementById('totalMarks').value);
+
+            if (score > totalMarks) {
+                showStatus('Markah diperoleh tidak boleh melebihi jumlah markah.', false);
+                return;
+            }
+
+            const percentage = Math.round((score / totalMarks) * 100);
+            const data = new URLSearchParams({
+                nama_pelajar: document.getElementById('studentName').value.trim(),
+                no_pelajar: document.getElementById('studentId').value.trim(),
+                topik: document.getElementById('topic').value,
+                markah: String(score),
+                jumlah_markah: String(totalMarks),
+                peratus: String(percentage),
+                tarikh_hantar: new Date().toLocaleString('ms-MY', { timeZone: 'Asia/Kuala_Lumpur' }),
+                sumber: 'Hab Pembelajaran ALGEBRA'
+            });
+
+            submitButton.disabled = true;
+            submitButton.textContent = 'Sedang menghantar...';
+            submitStatus.classList.add('hidden');
+
+            try {
+                const response = await fetch(ZAPIER_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+                    body: data.toString()
+                });
+
+                if (!response.ok) throw new Error('Webhook rejected the submission');
+
+                showStatus(`Keputusan berjaya dihantar: ${score}/${totalMarks} (${percentage}%).`, true);
+                resultForm.reset();
+            } catch (error) {
+                console.error('Ralat Zapier:', error);
+                showStatus('Keputusan tidak berjaya dihantar. Semak sambungan internet dan cuba lagi.', false);
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Hantar ke Zapier';
+            }
+        }
+
+        resultForm.addEventListener('submit', hantarKeZapier);
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hab Pembelajaran ALGEBRA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
         body {
             font-family: 'Inter', sans-serif;
         }
